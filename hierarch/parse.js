@@ -71,10 +71,6 @@ const go = (change = null) => {
             // raise an error if there is more than one match.
             // check using `change.code` and `source_name`
 
-            matches.forEach(m =>
-                console.log(m.captures.map(c => [c.name, c.node.startIndex, c.node.endIndex, program.parsed.getText(c.node)]))
-            )
-
             matches.forEach(m => {
                 program.replace_in_program_by_node(m.captures.filter(c => c.name === "opening-name")[0].node, "code")
                 program.replace_in_program_by_node(m.captures.filter(c => c.name === "closing-name")[0].node, "code")
@@ -82,14 +78,10 @@ const go = (change = null) => {
 
             matches.forEach(m => {
                 // replace children of the element
-                program.replace_in_program_by_node(
-                    m.captures.filter(c => c.name === "children")[0].node,
-                    change.upgrade
-                )
+                program.replace_in_program_by_node(m.captures.filter(c => c.name === "children")[0].node, change.upgrade)
                 // drop opening element attributes
                 program.replace_in_program_by_node(m.captures.filter(c => c.name === "source")[0].node, "", { beginningOffset: -1 })
                 program.replace_in_program_by_node(m.captures.filter(c => c.name === "code")[0].node, "", { beginningOffset: -1 })
-                console.log(m.captures.map(c => [c.name, c.node.startIndex, c.node.endIndex, program.parsed.getText(c.node)]))
             })
         }
 
