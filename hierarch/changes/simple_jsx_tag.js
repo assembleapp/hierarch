@@ -12,8 +12,8 @@ const simple_jsx_tag = {
             ).forEach(m => callback(m))
         },
         change_nodes: program => ({
-            "opening-name": `Lens.change source="${program.name}" code="abcd"`,
-            "closing-name": "Lens.change",
+            "opening-name": `Lens.Change source="${program.name}" code="abcd"`,
+            "closing-name": "Lens.Change",
         }),
         change_indices: [
         ],
@@ -31,8 +31,8 @@ const simple_jsx_tag = {
 
             (#eq? @source_ "source")
             (#eq? @code_ "code")
-            (#eq? @opening-name "Lens.change")
-            (#eq? @closing-name "Lens.change")
+            (#eq? @opening-name "Lens.Change")
+            (#eq? @closing-name "Lens.Change")
         ) @element`,
         change_nodes: program => ({
             "opening-name": "code",

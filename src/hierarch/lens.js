@@ -1,12 +1,13 @@
 import React from "react"
 import styled from "styled-components"
 
-class change extends React.Component {
+class Change extends React.Component {
     state = { value: null }
 
     render = () => (
         <Field
         key={this.props.children}
+        ref={(e) => e ? e.focus() : null}
         type="text"
         value={this.state.value || this.props.children}
         onChange={(e) => {
@@ -51,6 +52,6 @@ font: inherit;
 width: ${p => `${p.value.length * 0.65}rem`};
 `
 
-const Lens = { change }
+const Lens = { Change }
 
 export default Lens

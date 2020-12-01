@@ -80,7 +80,7 @@ const go = (change = null) => {
 
         var remade = program.source
 
-        fs.writeFile(sourceAddress, remade, err => console.log(err))
+        fs.writeFile(sourceAddress, remade, err => { if(error) console.log(err) })
     })
 }
 
