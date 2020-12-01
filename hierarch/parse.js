@@ -1,6 +1,33 @@
 var fs = require('fs')
 var Program = require("./program")
 
+const dependency = {
+    prepare: {
+        query: `
+        (import_statement (import_clause (identifier) @identifier) source: (string) @source
+            (#match? @source "./hierarch/lens")
+            (#eq? @identifier "Lens")
+        )
+        `,
+        change_nodes: {},
+        change_indices: [
+            [0, 0, "import Lens from './hierarch/lens'\n"],
+        ],
+        clause: matches => !matches.length,
+    },
+    apply: {
+        query: `
+        (import_statement (import_clause (identifier) @identifier) source: (string) @source
+            (#match? @source "./hierarch/lens")
+            (#eq? @identifier "Lens")
+        ) @import
+        `,
+        change: {
+            import: ["", { endingOffset: -1 }],
+        }
+    }
+}
+
 const go = (change = null) => {
     var sourceAddress = __dirname + '/../src/App.js'
     var source_name = sourceAddress.split("../").slice(-1)[0]
@@ -12,13 +39,8 @@ const go = (change = null) => {
         var program = new Program(source)
 
         // search for, and perhaps insert, necessary import statement
-        var matches = program.query(`
-            (import_statement (import_clause (identifier) @identifier) source: (string) @source)
-        `).map(x => x.captures.map(c => program.parsed.getText(c.node)))
-        if(!matches.some(dependency =>
-            dependency[0] === "Lens" &&
-            dependency[1].match(/^['"]\.\/hierarch\/lens['"]$/))
-        ) {
+        var matches = program.query(dependency.prepare.query)
+        if(matches.length === 0) {
             program.replace_in_program_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
         }
 
@@ -31,7 +53,7 @@ const go = (change = null) => {
             program.reparse()
             matches = program.query(`
                 (import_statement (import_clause (identifier) @identifier) source: (string) @source
-                (#eq? @source "'./hierarch/lens'")
+                (#match? @source "./hierarch/lens")
                 (#eq? @identifier "Lens")
                 ) @import
             `)
