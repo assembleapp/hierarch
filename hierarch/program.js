@@ -37,6 +37,7 @@ class Program {
     }
 
     query(query) {
+        this.reparse()
         return new Parser.Query(JavaScript, query).matches(this.parsed.rootNode)
     }
 }

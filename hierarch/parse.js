@@ -9,11 +9,11 @@ const dependency = {
             (#eq? @identifier "Lens")
         )
         `,
+        clause: matches => !matches.length,
         change_nodes: {},
         change_indices: [
             [0, 0, "import Lens from './hierarch/lens'\n"],
         ],
-        clause: matches => !matches.length,
     },
     apply: {
         query: `
@@ -22,8 +22,8 @@ const dependency = {
             (#eq? @identifier "Lens")
         ) @import
         `,
-        change: {
-            import: ["", { endingOffset: -1 }],
+        change_nodes: {
+            import: ["", { endingOffset: 1 }],
         }
     }
 }
@@ -40,7 +40,7 @@ const go = (change = null) => {
 
         // search for, and perhaps insert, necessary import statement
         var matches = program.query(dependency.prepare.query)
-        if(matches.length === 0) {
+        if(dependency.prepare.clause(matches)) {
             program.replace_in_program_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
         }
 
@@ -50,20 +50,23 @@ const go = (change = null) => {
             change.source === source_name &&
             change.upgrade
         ) {
-            program.reparse()
-            matches = program.query(`
-                (import_statement (import_clause (identifier) @identifier) source: (string) @source
-                (#match? @source "./hierarch/lens")
-                (#eq? @identifier "Lens")
-                ) @import
-            `)
+            matches = program.query(dependency.apply.query)
             matches.forEach(m => {
-                program.replace_in_program_by_node(m.captures.filter(c => c.name === "import")[0].node, "", { endingOffset: 1 })
+                var keys = Object.keys(dependency.apply.change_nodes)
+                keys.forEach((k) => {
+                    var captures = m.captures.filter(c => c.name === k)
+                    captures.forEach(c => {
+                        program.replace_in_program_by_node(
+                            c.node,
+                            dependency.apply.change_nodes[k][0], // upgrade
+                            dependency.apply.change_nodes[k][1], // options
+                        )
+                    })
+                })
             })
         }
 
         // single out an element to change
-        program.reparse()
         matches = program.query(`
         (jsx_element
             open_tag: (jsx_opening_element name: (identifier) @opening-name)
@@ -89,7 +92,6 @@ const go = (change = null) => {
             change.source === source_name &&
             change.upgrade
         ) {
-            program.reparse()
             matches = program.query(`(jsx_element
                 open_tag: (
                     jsx_opening_element
