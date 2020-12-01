@@ -48,7 +48,7 @@ display: inline;
 color: inherit;
 border-bottom: 1px dashed pink;
 font: inherit;
-width: ${p => `${p.value}rem`};
+width: ${p => `${p.value.length * 0.65}rem`};
 `
 
 const Lens = { change }
