@@ -87,8 +87,9 @@ const go = (change = null) => {
                     change.upgrade
                 )
                 // drop opening element attributes
-                program.replace_in_program_by_node(m.captures.filter(c => c.name === "source")[0].node)
-                program.replace_in_program_by_node(m.captures.filter(c => c.name === "code")[0].node)
+                program.replace_in_program_by_node(m.captures.filter(c => c.name === "source")[0].node, "", { beginningOffset: -1 })
+                program.replace_in_program_by_node(m.captures.filter(c => c.name === "code")[0].node, "", { beginningOffset: -1 })
+                console.log(m.captures.map(c => [c.name, c.node.startIndex, c.node.endIndex, program.parsed.getText(c.node)]))
             })
         }
 

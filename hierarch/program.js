@@ -9,8 +9,12 @@ class Program {
         this.parsed = this.parser.parse(this.source)
     }
 
-    replace_in_program_by_node(node, upgrade = "") {
-        this.replace_in_program_by_indices(node.startIndex, node.endIndex, upgrade)
+    replace_in_program_by_node(node, upgrade = "", options = {}) {
+        this.replace_in_program_by_indices(
+            node.startIndex + (options.beginningOffset || 0),
+            node.endIndex + (options.endingOffset || 0),
+            upgrade,
+        )
     }
 
     replace_in_program_by_indices(begin, end, upgrade = "") {
