@@ -2,7 +2,8 @@ const Parser = require("tree-sitter")
 const JavaScript = require("tree-sitter-javascript")
 
 class Program {
-    constructor(source) {
+    constructor(name, source) {
+        this.name = name
         this.source = source
         this.parser = new Parser()
         this.parser.setLanguage(JavaScript)
