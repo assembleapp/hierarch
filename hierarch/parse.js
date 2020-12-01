@@ -8,64 +8,44 @@ var sourceAddress = __dirname + '/../src/App.js'
 var source_name = sourceAddress.split("../").slice(-1)[0]
 
 const run_change = (program, plan, change) => {
-    //prepare
-    var matches = program.query(plan.prepare.query)
-    var clause = plan.prepare.clause || ((matches, program, callback) => { matches.forEach(m => callback(m))})
+    var approach = plan.prepare
+
+    if(change &&
+        change.code &&
+        change.source === source_name &&
+        change.upgrade
+    ) var approach = plan.apply
+
+    var clause = approach.clause || ((matches, _program, callback) => { matches.forEach(m => callback(m))})
+
+    matches = program.query(approach.query)
     clause(matches, program, m => {
-        plan.prepare.change_indices.forEach(x => {
+        // change by indices
+        approach.change_indices.forEach(x => {
             // beginning, ending, upgrade
             program.replace_by_indices(x[0], x[1], x[2])
         })
 
         // change by nodes
-        var keys = Object.keys(plan.prepare.change_nodes(program))
+        var keys = Object.keys(approach.change_nodes(program))
         keys.forEach((k) => {
             var captures = m.captures.filter(c => c.name === k)
             captures.forEach(c => {
-                var upgrade = plan.prepare.change_nodes(program)[k]
+                var upgrade = approach.change_nodes(program)[k]
                 var options = {}
+
                 if(upgrade instanceof Array) {
                     options = upgrade[1]
                     upgrade = upgrade[0]
                 }
+
+                if(typeof upgrade === "function")
+                    upgrade = upgrade(change)
+
                 program.replace_by_node(c.node, upgrade, options)
             })
         })
     })
-
-    // apply
-    if(change &&
-        change.code &&
-        change.source === source_name &&
-        change.upgrade
-    ) {
-        matches = program.query(plan.apply.query)
-        var clause = plan.apply.clause || ((matches, program, callback) => { matches.forEach(m => callback(m))})
-        clause(matches, program, m => {
-            // change by indices
-            plan.apply.change_indices.forEach(x => {
-                // beginning, ending, upgrade
-                program.replace_by_indices(x[0], x[1], x[2])
-            })
-
-            // change by nodes
-            var keys = Object.keys(plan.apply.change_nodes(program))
-            keys.forEach((k) => {
-                var captures = m.captures.filter(c => c.name === k)
-                captures.forEach(c => {
-                    var upgrade = plan.apply.change_nodes(program)[k]
-                    var options = {}
-                    if(upgrade instanceof Array) {
-                        options = upgrade[1]
-                        upgrade = upgrade[0]
-                    }
-                    if(typeof upgrade === "function")
-                        upgrade = upgrade(change)
-                    program.replace_by_node(c.node, upgrade, options)
-                })
-            })
-        })
-    }
 }
 
 const go = (change = null) => {
