@@ -33,7 +33,6 @@ class Program {
     }
 
     query(query) {
-        console.log("Querying code using:", query)
         return new Parser.Query(JavaScript, query).matches(this.parsed.rootNode)
     }
 }
