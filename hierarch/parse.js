@@ -1,36 +1,41 @@
 var fs = require('fs')
 var Program = require("./program")
+var dependency = require("./changes/lens_dependency")
 
-const dependency = {
-    prepare: {
-        query: `
-        (import_statement (import_clause (identifier) @identifier) source: (string) @source
-            (#match? @source "./hierarch/lens")
-            (#eq? @identifier "Lens")
-        )
-        `,
-        clause: matches => !matches.length,
-        change_nodes: {},
-        change_indices: [
-            [0, 0, "import Lens from './hierarch/lens'\n"],
-        ],
-    },
-    apply: {
-        query: `
-        (import_statement (import_clause (identifier) @identifier) source: (string) @source
-            (#match? @source "./hierarch/lens")
-            (#eq? @identifier "Lens")
-        ) @import
-        `,
-        change_nodes: {
-            import: ["", { endingOffset: 1 }],
-        }
+var sourceAddress = __dirname + '/../src/App.js'
+var source_name = sourceAddress.split("../").slice(-1)[0]
+
+const run_change = (program, plan, change) => {
+    //prepare
+    var matches = program.query(plan.prepare.query)
+    if(plan.prepare.clause(matches)) {
+        program.replace_in_program_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
+    }
+
+    // apply
+    if(change &&
+        change.code &&
+        change.source === source_name &&
+        change.upgrade
+    ) {
+        matches = program.query(plan.apply.query)
+        matches.forEach(m => {
+            var keys = Object.keys(plan.apply.change_nodes)
+            keys.forEach((k) => {
+                var captures = m.captures.filter(c => c.name === k)
+                captures.forEach(c => {
+                    program.replace_in_program_by_node(
+                        c.node,
+                        plan.apply.change_nodes[k][0], // upgrade
+                        plan.apply.change_nodes[k][1], // options
+                    )
+                })
+            })
+        })
     }
 }
 
 const go = (change = null) => {
-    var sourceAddress = __dirname + '/../src/App.js'
-    var source_name = sourceAddress.split("../").slice(-1)[0]
 
     fs.readFile(sourceAddress, 'utf8', (error, response) => {
         if(error) return console.log(error)
@@ -38,33 +43,7 @@ const go = (change = null) => {
 
         var program = new Program(source)
 
-        // search for, and perhaps insert, necessary import statement
-        var matches = program.query(dependency.prepare.query)
-        if(dependency.prepare.clause(matches)) {
-            program.replace_in_program_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
-        }
-
-        // remove import once change occurs
-        if(change &&
-            change.code &&
-            change.source === source_name &&
-            change.upgrade
-        ) {
-            matches = program.query(dependency.apply.query)
-            matches.forEach(m => {
-                var keys = Object.keys(dependency.apply.change_nodes)
-                keys.forEach((k) => {
-                    var captures = m.captures.filter(c => c.name === k)
-                    captures.forEach(c => {
-                        program.replace_in_program_by_node(
-                            c.node,
-                            dependency.apply.change_nodes[k][0], // upgrade
-                            dependency.apply.change_nodes[k][1], // options
-                        )
-                    })
-                })
-            })
-        }
+        run_change(program, dependency, change)
 
         // single out an element to change
         matches = program.query(`
