@@ -22,6 +22,24 @@ const go = (change = null) => {
             program.replace_in_program_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
         }
 
+        // remove import once change occurs
+        if(change &&
+            change.code &&
+            change.source === source_name &&
+            change.upgrade
+        ) {
+            program.reparse()
+            matches = program.query(`
+                (import_statement (import_clause (identifier) @identifier) source: (string) @source
+                (#eq? @source "'./hierarch/lens'")
+                (#eq? @identifier "Lens")
+                ) @import
+            `)
+            matches.forEach(m => {
+                program.replace_in_program_by_node(m.captures.filter(c => c.name === "import")[0].node, "", { endingOffset: 1 })
+            })
+        }
+
         // single out an element to change
         program.reparse()
         matches = program.query(`
