@@ -14,7 +14,7 @@ const run_change = (program, plan, change) => {
     clause(matches, program, m => {
         plan.prepare.change_indices.forEach(x => {
             // beginning, ending, upgrade
-            program.replace_in_program_by_indices(x[0], x[1], x[2])
+            program.replace_by_indices(x[0], x[1], x[2])
         })
 
         // change by nodes
@@ -28,7 +28,7 @@ const run_change = (program, plan, change) => {
                     options = upgrade[1]
                     upgrade = upgrade[0]
                 }
-                program.replace_in_program_by_node(c.node, upgrade, options)
+                program.replace_by_node(c.node, upgrade, options)
             })
         })
     })
@@ -45,7 +45,7 @@ const run_change = (program, plan, change) => {
             // change by indices
             plan.apply.change_indices.forEach(x => {
                 // beginning, ending, upgrade
-                program.replace_in_program_by_indices(x[0], x[1], x[2])
+                program.replace_by_indices(x[0], x[1], x[2])
             })
 
             // change by nodes
@@ -61,7 +61,7 @@ const run_change = (program, plan, change) => {
                     }
                     if(typeof upgrade === "function")
                         upgrade = upgrade(change)
-                    program.replace_in_program_by_node(c.node, upgrade, options)
+                    program.replace_by_node(c.node, upgrade, options)
                 })
             })
         })
