@@ -4,13 +4,10 @@ const simple_jsx_tag = {
         (jsx_element
             open_tag: (jsx_opening_element name: (identifier) @opening-name)
             close_tag: (jsx_closing_element name: (identifier) @closing-name)
+            (#eq? @opening-name @closing-name)
+            (#eq? @opening-name "code")
         )
         `,
-        clause: (matches, program, callback) => {
-            matches.filter(x =>
-                x.captures.every(c => program.parsed.getText(c.node) === "code")
-            ).forEach(m => callback(m))
-        },
         change_nodes: program => ({
             "opening-name": `Lens.Change source="${program.name}" code="abcd"`,
             "closing-name": "Lens.Change",
