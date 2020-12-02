@@ -67,7 +67,63 @@ const hierarchy = (address, callback) => {
 
         var program = new Program(source_name, source)
 
-        callback(program.parsed.rootNode.toString())
+        var query = program.query(`
+        (jsx_element
+            open_tag: (jsx_opening_element name: (_) @name)
+        )`)
+
+        var branches = {}
+        query.forEach(m => m.captures.forEach(c => {
+            node = c.node
+            var node_id = `${node.type}:${node.startIndex}-${node.endIndex}`
+            if(node.type === "identifier")
+                node_id = node_id + "/" + program.parsed.getText(node)
+
+            while(node.parent) {
+                var upper = node.parent
+
+                // record hierarchy
+                var upper_id = `${upper.type}:${upper.startIndex}-${upper.endIndex}`
+
+                if(node_id.split("/")[1]) {
+                    var mapping = {
+                        "identifier": ["jsx_opening_element", "jsx_closing_element", "function_declaration"],
+                        "jsx_closing_element": ["jsx_element"],
+                        "jsx_opening_element": ["jsx_element"],
+                    }
+                    if(Object.keys(mapping).includes(node.type) &&
+                        mapping[node.type].includes(upper.type)
+                    ) {
+                        upper_id = upper_id + "/" + node_id.split("/")[1]
+                    }
+                }
+
+                var upper_already_included_key = Object.keys(branches)
+                    .filter(k => k.split("/")[0] === upper_id.split("/")[0])[0]
+
+                if(upper_already_included_key) {
+                    if(!upper_id.split("/")[1] && upper_already_included_key.split("/")[1]) {
+                        upper_id = upper_id + "/" + upper_already_included_key.split("/")[1]
+                    }
+                    if(upper_id.split("/")[1] && !upper_already_included_key.split("/")[1]) {
+                        branches[upper_id] = branches[upper_already_included_key]
+                        delete branches[upper_already_included_key]
+                    }
+                }
+
+                branches[upper_id] = branches[upper_id]
+                ? branches[upper_id].indexOf(node_id) === -1
+                  ? branches[upper_id].concat(node_id)
+                  : branches[upper_id]
+                : [node_id]
+
+                node = upper
+                node_id = upper_id
+            }
+        }))
+        console.log(branches)
+
+        callback(JSON.stringify(branches, null, 2))
     })
 }
 

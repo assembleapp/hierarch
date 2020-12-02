@@ -35,15 +35,15 @@ class Sidebar extends React.Component {
             <span>Hierarch</span>
             <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
 
-            <code>
+            <pre>
                 {this.state.hierarchy[this.state.address]}
-            </code>
+            </pre>
         </Layout>
     )
 }
 
 const Layout = styled.div`
-width: 15rem;
+width: 22rem;
 height: auto;
 position: absolute;
 top: 0;
@@ -51,6 +51,7 @@ bottom: 0;
 right: 0;
 background: rgba(212, 212, 212, 40%);
 padding: 0.5rem;
+overflow-y: scroll;
 `
 
 const Close = styled.span`
