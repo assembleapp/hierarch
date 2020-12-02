@@ -67,10 +67,7 @@ const hierarchy = (address, callback) => {
 
         var program = new Program(source_name, source)
 
-        var query = program.query(`
-        (jsx_element
-            open_tag: (jsx_opening_element name: (_) @name)
-        )`)
+        var query = program.query(`(identifier) @name`)
 
         var branches = {}
         query.forEach(m => m.captures.forEach(c => {
@@ -87,9 +84,21 @@ const hierarchy = (address, callback) => {
 
                 if(node_id.split("/")[1]) {
                     var mapping = {
-                        "identifier": ["jsx_opening_element", "jsx_closing_element", "function_declaration"],
+                        "identifier": [
+                            "jsx_opening_element",
+                            "jsx_closing_element",
+                            "function_declaration",
+                            "member_expression",
+                            "variable_declarator",
+                            "export_statement",
+                            "import_clause",
+                            "import_specifier",
+                            "named_imports",
+                        ],
                         "jsx_closing_element": ["jsx_element"],
                         "jsx_opening_element": ["jsx_element"],
+                        "member_expression": ["call_expression"],
+                        "variable_declarator": ["lexical_declaration"],
                     }
                     if(Object.keys(mapping).includes(node.type) &&
                         mapping[node.type].includes(upper.type)
