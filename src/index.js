@@ -4,9 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import Hierarch from "./hierarch"
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <Hierarch/>
   </React.StrictMode>,
   document.getElementById('root')
 );
