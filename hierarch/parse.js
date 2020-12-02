@@ -16,10 +16,10 @@ const run_change = (program, plan, change) => {
         change.upgrade
     ) var approach = plan.apply
 
-    var clause = approach.clause || ((matches, _program, callback) => { matches.forEach(m => callback(m))})
+    var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
 
     matches = program.query(approach.query)
-    clause(matches, program, m => {
+    clause(matches, m => {
         // change by indices
         approach.change_indices.forEach(x => {
             // beginning, ending, upgrade

@@ -6,7 +6,7 @@ const dependency = {
             (#eq? @identifier "Lens")
         )
         `,
-        clause: (matches, program, callback) => { matches.length ? null : callback(null) },
+        clause: (matches, callback) => { matches.length ? null : callback(null) },
         change_nodes: program => ({}),
         change_indices: [
             [0, 0, "import Lens from './hierarch/lens'\n"],
