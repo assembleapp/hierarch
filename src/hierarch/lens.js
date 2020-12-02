@@ -48,8 +48,9 @@ border: none;
 display: inline;
 color: inherit;
 border-bottom: 1px dashed pink;
-font: inherit;
-width: ${p => `${p.value.length * 0.65}rem`};
+font-family: monospace;
+font-size: inherit;
+width: ${p => `${p.value.length}ch`};
 `
 
 const Lens = { Change }
