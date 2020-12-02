@@ -61,4 +61,14 @@ const run_change = (program, plan, change) => {
     })
 }
 
-module.exports = go
+const hierarchy = (address, callback) => {
+    fs.readFile(address, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var program = new Program(source_name, source)
+
+        callback(program.parsed.rootNode.toString())
+    })
+}
+
+module.exports = { go, hierarchy }

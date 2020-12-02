@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const escape = require("escape-html")
 const responder = express.Router()
 
-const go = require("./parse")
+const { go, hierarchy } = require("./parse")
 
 responder.use(bodyParser.json())
 
@@ -30,6 +30,10 @@ responder.post("/change", (call, response) => {
         code: call.body.code,
     })
     response.send(JSON.stringify(call.body))
+})
+
+responder.get("/hierarchy", (call, response) => {
+    hierarchy(call.query.address, (body) => response.send(body))
 })
 
 module.exports = responder
