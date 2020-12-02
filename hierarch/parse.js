@@ -7,6 +7,19 @@ var jsx_tag = require("./changes/simple_jsx_tag")
 var sourceAddress = __dirname + '/../src/App.js'
 var source_name = sourceAddress.split("../").slice(-1)[0]
 
+const go = (change = null) => {
+    fs.readFile(sourceAddress, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var program = new Program(source_name, source)
+        run_change(program, dependency, change)
+        run_change(program, jsx_tag, change)
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+    })
+}
+
 const run_change = (program, plan, change) => {
     var approach = plan.prepare
 
@@ -45,22 +58,6 @@ const run_change = (program, plan, change) => {
                 program.replace_by_node(c.node, upgrade, options)
             })
         })
-    })
-}
-
-const go = (change = null) => {
-    fs.readFile(sourceAddress, 'utf8', (error, response) => {
-        if(error) return console.log(error)
-        var source = response
-
-        var program = new Program(source_name, source)
-
-        run_change(program, dependency, change)
-        run_change(program, jsx_tag, change)
-
-        var remade = program.source
-
-        fs.writeFile(sourceAddress, remade, err => { if(error) console.log(err) })
     })
 }
 
