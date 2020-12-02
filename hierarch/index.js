@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require("body-parser")
+const escape = require("escape-html")
 const responder = express.Router()
 
 const go = require("./parse")
@@ -23,7 +24,11 @@ responder.post("/go", (call, response) => {
 })
 
 responder.post("/change", (call, response) => {
-    go(call.body)
+    go({
+        upgrade: escape(call.body.upgrade),
+        source: call.body.source,
+        code: call.body.code,
+    })
     response.send(JSON.stringify(call.body))
 })
 
