@@ -4,7 +4,11 @@ import Logo from "./logo"
 
 const Hierarch = () => (
     <Corner>
-        <Logo size={20} repeat={2000} />
+        <Logo size={20} repeat={2000} onClick={() => {
+            fetch("http://0.0.0.0:4321/lens", {
+                method: "POST",
+            })
+        }} />
     </Corner>
 )
 

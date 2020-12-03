@@ -61,4 +61,17 @@ const run_change = (program, plan, change) => {
     })
 }
 
-module.exports = go
+const lens = () => {
+    fs.readFile(sourceAddress, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var program = new Program(source_name, source)
+
+        console.log(program.parsed.rootNode.toString())
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(error)})
+    })
+}
+
+module.exports = { go, lens }

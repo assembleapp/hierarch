@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const escape = require("escape-html")
 const responder = express.Router()
 
-const go = require("./parse")
+const { go, lens } = require("./parse")
 
 responder.use(bodyParser.json())
 
@@ -21,6 +21,11 @@ responder.get("/sources", (call, response) => {
 responder.post("/go", (call, response) => {
     go()
     response.send("gone.")
+})
+
+responder.post("/lens", (call, response) => {
+    lens()
+    response.send("done.")
 })
 
 responder.post("/change", (call, response) => {
