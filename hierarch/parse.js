@@ -67,7 +67,32 @@ const lens = () => {
 
         var program = new Program(source_name, source)
 
-        console.log(program.parsed.rootNode.toString())
+        // add lens in program
+        var matches = program.query(`
+        (
+            variable_declarator
+            (identifier) @name
+            "="
+            (call_expression
+                function: (member_expression
+                    object: (_) @object
+                    (#eq? @object "styled")
+                )
+            ) @expression
+        )
+        `)
+
+        var elements = matches.map(m => {
+            // if(m.captures.length !== 1) throw `more than 1 capture; ${m}`
+            return m.captures.map(c => {
+                return [
+                    c.name,
+                    c.node.toString(),
+                    program.parsed.getText(c.node),
+                ]
+            })
+        })
+        console.log(elements)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(error)})
