@@ -119,7 +119,8 @@ const lens = () => {
         // console.log(elements)
 
         const css_node = matches.slice(-1)[0].captures.slice(-1)[0].node
-        program.parse_node_as_language(css_node, "css")
+        console.log(program.parse_range_as_language(css_node.startIndex + 1, css_node.endIndex - 1, "css").rootNode.toString())
+        program.use_language('js')
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(error)})

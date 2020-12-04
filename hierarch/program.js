@@ -39,18 +39,22 @@ class Program {
         this.source = changed_source
     }
 
-    parse_node_as_language(node, lang) {
+    parse_range_as_language(begin, end, lang) {
         console.log("Parsing:\n")
-        console.log(this.source.slice(node.startIndex + 1, node.endIndex - 1))
+        console.log(this.source.slice(begin, end))
         this.parser.setLanguage(languages[lang])
         return this.parser.parse(this.source, null, {
             includedRanges: [{
-                startIndex: node.startIndex + 1,
-                endIndex: node.endIndex - 1,
-                startPosition: getExtent(this.source.slice(0, node.startIndex + 1)),
-                endPosition: getExtent(this.source.slice(0, node.endIndex - 1)),
+                startIndex: begin,
+                endIndex: end,
+                startPosition: getExtent(this.source.slice(0, begin)),
+                endPosition: getExtent(this.source.slice(0, end)),
             }]
         })
+    }
+
+    use_language(lang) {
+        this.parser.setLanguage(languages[lang])
     }
 
     reparse(options = {}) {
