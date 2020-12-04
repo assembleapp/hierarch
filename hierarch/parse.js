@@ -115,7 +115,11 @@ const lens = () => {
                 ]
             })
         })
-        console.log(elements)
+
+        // console.log(elements)
+
+        const css_node = matches.slice(-1)[0].captures.slice(-1)[0].node
+        program.parse_node_as_language(css_node, "css")
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(error)})

@@ -1,5 +1,11 @@
 const Parser = require("tree-sitter")
 const JavaScript = require("tree-sitter-javascript")
+const Css = require("tree-sitter-css")
+
+const languages = {
+    js: JavaScript,
+    css: Css,
+}
 
 class Program {
     constructor(name, source) {
@@ -33,8 +39,22 @@ class Program {
         this.source = changed_source
     }
 
-    reparse() {
-        this.parsed = this.parser.parse(this.source, this.parsed)
+    parse_node_as_language(node, lang) {
+        console.log("Parsing:\n")
+        console.log(this.source.slice(node.startIndex + 1, node.endIndex - 1))
+        this.parser.setLanguage(languages[lang])
+        return this.parser.parse(this.source, null, {
+            includedRanges: [{
+                startIndex: node.startIndex + 1,
+                endIndex: node.endIndex - 1,
+                startPosition: getExtent(this.source.slice(0, node.startIndex + 1)),
+                endPosition: getExtent(this.source.slice(0, node.endIndex - 1)),
+            }]
+        })
+    }
+
+    reparse(options = {}) {
+        this.parsed = this.parser.parse(this.source, this.parsed, options)
     }
 
     query(query) {
