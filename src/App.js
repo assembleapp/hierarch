@@ -60,7 +60,9 @@ font-size: calc(10px + 2vmin);
 color: white;
 `
 
-const Link = styled.a`
+const Link = styled.a.attrs({
+  a: "b"
+})`
 color: #61dafb;
 `
 

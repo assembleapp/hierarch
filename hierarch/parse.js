@@ -68,19 +68,42 @@ const lens = () => {
         var program = new Program(source_name, source)
 
         // add lens in program
-        var matches = program.query(`
-        (
+        var matches = program.query([`(
             variable_declarator
             (identifier) @name
             "="
             (call_expression
                 function: (member_expression
-                    object: (_) @object
+                    object: (identifier) @object
+                    property: (property_identifier) @property
                     (#eq? @object "styled")
                 )
-            ) @expression
-        )
-        `)
+                arguments: (template_string) @css
+            )
+        )`,
+        `(
+            variable_declarator
+            (identifier) @name
+            "="
+            (call_expression
+                function: (call_expression
+                    function: (member_expression
+                        object: (member_expression
+                            object: (identifier) @object
+                            property: (property_identifier) @property
+                            (#eq? @object "styled")
+                        )
+                        property: (property_identifier) @attrs
+                        (#eq? @attrs "attrs")
+                    )
+                    arguments: (arguments
+                        (object) @attributes
+                    )
+                )
+                arguments: (template_string) @css
+            )
+        )`
+        ])
 
         var elements = matches.map(m => {
             // if(m.captures.length !== 1) throw `more than 1 capture; ${m}`
