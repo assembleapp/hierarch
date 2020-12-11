@@ -7,7 +7,7 @@ const dependency = {
         )
         `,
         clause: (matches, callback) => { matches.length ? null : callback(null) },
-        change_nodes: program => ({}),
+        change_nodes: _ => ({}),
         change_indices: [
             [0, 0, "import Lens from './hierarch/lens'\n"],
         ],
@@ -19,7 +19,7 @@ const dependency = {
             (#eq? @identifier "Lens")
         ) @import
         `,
-        change_nodes: program => ({
+        change_nodes: _ => ({
             import: ["", { endingOffset: 1 }],
         }),
         change_indices: [],

@@ -31,7 +31,7 @@ const simple_jsx_tag = {
             (#eq? @opening-name "Lens.Change")
             (#eq? @closing-name "Lens.Change")
         ) @element`,
-        change_nodes: program => ({
+        change_nodes: _ => ({
             "opening-name": "code",
             "closing-name": "code",
             "children": (change) => change.upgrade,
