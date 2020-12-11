@@ -95,10 +95,27 @@ const hierarchy = (address, callback) => {
                 )
             }
 
-            return "<" + name + (c.node.type === "jsx_self_closing_element" ? "/" : "") + ">"
+            return [
+                c.node.startIndex,
+                c.node.endIndex,
+                "<" + name + (c.node.type === "jsx_self_closing_element" ? "/" : "") + ">",
+            ]
         })
 
-        callback(JSON.stringify(elements, null, 2))
+        var hierarchy = { program: [0, program.source.length, {}] }
+        var upper_chain = [hierarchy]
+        var prior = "program"
+        elements.forEach(e => {
+            var upper = upper_chain.slice(-1)[0]
+            if(e[0] > upper[prior][0] && e[1] < upper[prior][1]) {
+                upper[prior][2] = Object.assign(
+                    upper[prior][2],
+                    { [e[2]]: [e[0], e[1], {}] },
+                )
+            }
+        })
+
+        callback(JSON.stringify(hierarchy, null, 2))
     })
 }
 
