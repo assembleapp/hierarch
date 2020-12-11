@@ -108,10 +108,7 @@ const hierarchy = (address, callback) => {
         elements.forEach(e => {
             var upper = upper_chain.slice(-1)[0]
             if(e[0] > upper[prior][0] && e[1] < upper[prior][1]) {
-                upper[prior][2] = Object.assign(
-                    upper[prior][2],
-                    { [e[2]]: [e[0], e[1], {}] },
-                )
+                upper[prior][2][e[2]] = [e[0], e[1], {}]
             }
         })
 
