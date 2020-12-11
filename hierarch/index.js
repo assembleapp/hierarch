@@ -14,13 +14,9 @@ responder.use(function(req, res, next) {
     next();
 });
 
-responder.get("/sources", (call, response) => {
-    response.send("/app/javascript/packs/splash.js")
-})
-
-responder.post("/go", (call, response) => {
+responder.post("/lens", (call, response) => {
     apply_lens([call.body.begin, call.body.end])
-    response.send("gone.")
+    response.send("applied.")
 })
 
 responder.post("/change", (call, response) => {

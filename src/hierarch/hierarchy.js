@@ -30,12 +30,9 @@ const Hierarchical = ({name, begin, end, changeable}) => (
 )
 
 const use_lens = (begin, end) => {
-    fetch("http://0.0.0.0:4321/go", {
+    fetch("http://0.0.0.0:4321/lens", {
         method: "POST",
-        body: JSON.stringify({
-            begin,
-            end
-        }),
+        body: JSON.stringify({ begin, end }),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
