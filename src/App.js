@@ -6,24 +6,10 @@ function App() {
     <Layout>
       <Header>
         <Logo src={logo} alt="logo" />
-        <p onClick={() => {
-          fetch("http://0.0.0.0:4321/go", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-          })
-          .then(response => response.text())
-          .then(response => console.log(response))
-        }}>
-          Edit <code>src/App.js</code> and save to reload.
+        <p>
+          Edit <code>src/App</code> and save to reload.
         </p>
-        <Link
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link href="https://reactjs.org" target="_blank" rel="noopener noreferrer" >
           Learn React
         </Link>
       </Header>
