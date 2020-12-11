@@ -13,11 +13,13 @@ const apply_lens = (range) => {
 
         var program = new Program(source_name, source)
 
+        var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
         console.log(range)
-        console.log(program.source.slice(range[0], range[1] - range[0]))
+        console.log(program.parsed.getText(lens_node))
+        // console.log(program.source.slice(range[0], range[1] - range[0]))
 
-        run_change(program, dependency, null)
-        run_change(program, jsx_tag, null)
+        // run_change(program, dependency, null)
+        // run_change(program, jsx_tag, null)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
@@ -145,6 +147,8 @@ const hierarchy = (address, callback) => {
             upper_chain = upper_chain.concat([e])
         })
 
+        // console.log(program.parsed.rootNode.toString())
+        // console.log(JSON.stringify(hierarchy, null, 2))
         callback(JSON.stringify(hierarchy, null, 2))
     })
 }
