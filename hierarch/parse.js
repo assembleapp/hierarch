@@ -130,7 +130,7 @@ const hierarchy = (address, callback) => {
             } else if (c.node.type === "jsx_self_closing_element") {
                 name = program.parsed.getText(c.node.firstNamedChild)
             } else if (c.node.type === "jsx_text") {
-                name = "..."
+                name = program.parsed.getText(c.node).trim() // or "..."
             } else {
                 throw (
                     "oh no! our query has responded on an undesired node;\n" +
