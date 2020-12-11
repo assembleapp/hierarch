@@ -23,11 +23,22 @@ const apply_lens = (range) => {
         }
 
         if(lens_node.type === "jsx_text") {
-            program.replace_by_node(
-                lens_node,
-                `<Lens.Change source="${program.name}" code="abcd" >
-                    ${program.parsed.getText(lens_node)}
-                </Lens.Change>`
+            var child = program.parsed.getText(lens_node)
+
+            // account for spacing
+            var begin = lens_node.startIndex + child.search(/\S/)
+            var end = lens_node.endIndex - child.split("").reverse().join("").search(/\S/)
+            var concise_child = program.source.slice(begin, end)
+
+            // double-check in console logs
+            console.log("|" + program.source.slice(begin, end) + "|")
+
+            program.replace_by_indices(
+                begin,
+                end,
+                `<Lens.Change source="${program.name}" code="abcd" >${
+                    concise_child
+                }</Lens.Change>`
             )
         }
 
