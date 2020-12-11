@@ -18,7 +18,7 @@ const apply_lens = (range) => {
         console.log(program.parsed.getText(lens_node))
         // console.log(program.source.slice(range[0], range[1] - range[0]))
 
-        // run_change(program, dependency, null)
+        run_change(program, dependency, null)
         // run_change(program, jsx_tag, null)
 
         program.reparse()
