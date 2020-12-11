@@ -14,11 +14,21 @@ const apply_lens = (range) => {
         var program = new Program(source_name, source)
 
         var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
+
         if(lens_node.startIndex !== range[0] || lens_node.endIndex !== range[1]) {
             console.log(program.parsed.getText(lens_node))
             console.log(range)
             console.log([lens_node.startIndex, lens_node.endIndex])
             throw("oh no! applying a lens on an improper node.")
+        }
+
+        if(lens_node.type === "jsx_text") {
+            program.replace_by_node(
+                lens_node,
+                `<Lens.Change source="${program.name}" code="abcd" >
+                    ${program.parsed.getText(lens_node)}
+                </Lens.Change>`
+            )
         }
 
         run_change(program, dependency, null)
@@ -90,7 +100,7 @@ const hierarchy = (address, callback) => {
         var program = new Program(source_name, source)
 
         var query = program.query(`
-        [(jsx_element) (jsx_self_closing_element)] @element
+        [(jsx_element) (jsx_self_closing_element) (jsx_text)] @element
         `)
 
         var elements = query.map(m => {
@@ -108,6 +118,8 @@ const hierarchy = (address, callback) => {
                 name = program.parsed.getText(c.node.firstNamedChild.firstNamedChild)
             } else if (c.node.type === "jsx_self_closing_element") {
                 name = program.parsed.getText(c.node.firstNamedChild)
+            } else if (c.node.type === "jsx_text") {
+                name = "..."
             } else {
                 throw (
                     "oh no! our query has responded on an undesired node;\n" +
@@ -117,12 +129,18 @@ const hierarchy = (address, callback) => {
                 )
             }
 
+            var appendages = {
+                jsx_self_closing_element: ["<", "/>"],
+                jsx_element: ["<", ">"],
+            }[c.node.type] || ["", ""]
+
+            name = appendages[0] + name + appendages[1]
             return [
                 c.node.startIndex,
                 c.node.endIndex,
                 [],
-                "<" + name + (c.node.type === "jsx_self_closing_element" ? "/" : "") + ">",
-                c.node.type === "jsx_element"
+                name,
+                c.node.type === "jsx_text"
             ]
         })
 
