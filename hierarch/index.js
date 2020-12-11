@@ -19,6 +19,7 @@ responder.get("/sources", (call, response) => {
 })
 
 responder.post("/go", (call, response) => {
+    console.log(call.body)
     go()
     response.send("gone.")
 })

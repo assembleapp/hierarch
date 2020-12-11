@@ -98,18 +98,18 @@ const hierarchy = (address, callback) => {
             return [
                 c.node.startIndex,
                 c.node.endIndex,
+                [],
                 "<" + name + (c.node.type === "jsx_self_closing_element" ? "/" : "") + ">",
+                c.node.type === "jsx_element"
             ]
         })
 
-        var hierarchy = [0, program.source.length, [], "program"]
+        var hierarchy = [0, program.source.length, [], "program", false]
         var upper_chain = [hierarchy]
         elements.forEach(e => {
-            // console.log("hierarchy", hierarchy)
             var upper = upper_chain.slice(-1)[0]
-            var adding = [e[0], e[1], [], e[2]]
 
-            if(adding[0] < upper[0]) {
+            if(e[0] < upper[0]) {
                 throw(
                     "oh no! our hierarchy is being processed out of order;\n" +
                     JSON.stringify(elements, null, 2) +
@@ -118,17 +118,14 @@ const hierarchy = (address, callback) => {
                 )
             }
 
-            while(adding[1] > upper[1]) {
+            while(e[1] > upper[1]) {
                 upper_chain = upper_chain.slice(0, upper_chain.length - 1)
                 upper = upper_chain.slice(-1)[0]
             }
 
-            // console.log("adding", adding, "to", upper)
-            upper[2] = upper[2].concat([adding])
-            // console.log("added ", upper[2][upper[2].length-1], "to", upper)
-            upper_chain = upper_chain.concat([adding])
-            // console.log("chain", upper_chain)
-            // console.log()
+            upper[2] = upper[2].concat([e])
+            upper[4] = false
+            upper_chain = upper_chain.concat([e])
         })
 
         callback(JSON.stringify(hierarchy, null, 2))

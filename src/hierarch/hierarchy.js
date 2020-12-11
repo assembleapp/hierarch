@@ -10,32 +10,39 @@ const display_hierarchy_index = (index, hierarchy) => (
     hierarchy[2].map(h => (
         <>
         {("  ".repeat(index))}
-        <Hierarchical name={h[3]} begin={h[0]} end={h[1]} under={h[2]} />
+        <Hierarchical name={h[3]} begin={h[0]} end={h[1]} changeable={h[4]} />
         {"\n"}
         {display_hierarchy_index(index + 1, h)}
         </>
     ))
 )
 
-const Hierarchical = ({name, begin, end, under}) => (
-    under.length === 0
+const Hierarchical = ({name, begin, end, changeable}) => (
+    changeable
     ? <a
       key={`${begin}-${end}`}
       href="#"
-      onClick={() => {
-        fetch("http://0.0.0.0:4321/go", {
-          method: "POST",
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-          },
-        })
-        .then(response => response.text())
-        .then(response => console.log(response))
-      }}>{name}</a>
+      onClick={() => use_lens(begin, end)}
+      >{name}</a>
     : <span
         key={`${begin}-${end}`}
       >{name}</span>
 )
+
+const use_lens = (begin, end) => {
+    fetch("http://0.0.0.0:4321/go", {
+        method: "POST",
+        body: JSON.stringify({
+            begin,
+            end
+        }),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.text())
+    .then(response => console.log(response))
+}
 
 export default Hierarchy
