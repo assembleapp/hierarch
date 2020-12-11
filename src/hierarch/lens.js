@@ -28,8 +28,12 @@ class Change extends React.Component {
                     'Content-Type': 'application/json',
                 },
             })
-            .then(response => response.text())
-            .then(response => console.log(response))
+            // .then(response => response.text())
+            // .then(response => console.log(response))
+            .then(() => {
+                if(window.assemble && window.assemble.repull)
+                    window.assemble.repull()
+            })
 
             e.preventDefault();
             e.stopPropagation();

@@ -5,7 +5,18 @@ class Hierarchy extends React.Component {
         hierarchy: [0,0,[],"",false],
     }
 
-    componentDidMount = () => this.pullHierarchy()
+    componentDidMount = () => {
+        if(!window.assemble) {
+            window.assemble = {}
+            window.assemble.repull = this.pullHierarchy.bind(this)
+        }
+        this.pullHierarchy()
+    }
+
+    componentWillUnmount = () => {
+        window.assemble.repull = null
+        if(!Object.keys(window.assemble).length) window.assemble = null
+    }
 
     pullHierarchy = () => {
         fetch(`http://0.0.0.0:4321/hierarchy?address=${this.props.address}`, {
@@ -63,6 +74,7 @@ const use_lens = (begin, end) => {
     })
     .then(response => response.text())
     .then(response => console.log(response))
+    .then(() => { if(window.assemble && window.assemble.repull) window.assemble.repull() })
 }
 
 export default Hierarchy
