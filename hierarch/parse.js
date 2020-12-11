@@ -102,14 +102,33 @@ const hierarchy = (address, callback) => {
             ]
         })
 
-        var hierarchy = { program: [0, program.source.length, {}] }
+        var hierarchy = [0, program.source.length, [], "program"]
         var upper_chain = [hierarchy]
-        var prior = "program"
         elements.forEach(e => {
+            // console.log("hierarchy", hierarchy)
             var upper = upper_chain.slice(-1)[0]
-            if(e[0] > upper[prior][0] && e[1] < upper[prior][1]) {
-                upper[prior][2][e[2]] = [e[0], e[1], {}]
+            var adding = [e[0], e[1], [], e[2]]
+
+            if(adding[0] < upper[0]) {
+                throw(
+                    "oh no! our hierarchy is being processed out of order;\n" +
+                    JSON.stringify(elements, null, 2) +
+                    "\n---\n" +
+                    JSON.stringify(hierarchy, null, 2)
+                )
             }
+
+            while(adding[1] > upper[1]) {
+                upper_chain = upper_chain.slice(0, upper_chain.length - 1)
+                upper = upper_chain.slice(-1)[0]
+            }
+
+            // console.log("adding", adding, "to", upper)
+            upper[2] = upper[2].concat([adding])
+            // console.log("added ", upper[2][upper[2].length-1], "to", upper)
+            upper_chain = upper_chain.concat([adding])
+            // console.log("chain", upper_chain)
+            // console.log()
         })
 
         callback(JSON.stringify(hierarchy, null, 2))
