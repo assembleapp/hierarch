@@ -70,7 +70,7 @@ const run_change = (program, plan, change) => {
                 }
 
                 if(typeof upgrade === "function")
-                    upgrade = upgrade(change)
+                    upgrade = upgrade(change, c)
 
                 program.replace_by_node(c.node, upgrade, options)
             })
