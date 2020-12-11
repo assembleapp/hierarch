@@ -1,10 +1,33 @@
 import React from "react"
 
-const Hierarchy = ({ h }) => (
-    <pre>
-        {display_hierarchy_index(0, h)}
-    </pre>
-)
+class Hierarchy extends React.Component {
+    state = {
+        hierarchy: [0,0,[],"",false],
+    }
+
+    componentDidMount = () => this.pullHierarchy()
+
+    pullHierarchy = () => {
+        fetch(`http://0.0.0.0:4321/hierarchy?address=${this.props.address}`, {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.text())
+        .then(response => this.setState({
+            hierarchy: JSON.parse(response),
+        }))
+    }
+
+    render = () => (
+        <pre>
+            {display_hierarchy_index(0, this.state.hierarchy)}
+        </pre>
+    )
+}
+
 
 const display_hierarchy_index = (index, hierarchy) => (
     hierarchy[2].map(h => (
