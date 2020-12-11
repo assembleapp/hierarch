@@ -7,7 +7,24 @@ var jsx_tag = require("./changes/simple_jsx_tag")
 var sourceAddress = __dirname + '/../src/App.js'
 var source_name = sourceAddress.split("../").slice(-1)[0]
 
-const go = (change = null) => {
+const apply_lens = (range) => {
+    fs.readFile(sourceAddress, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var program = new Program(source_name, source)
+
+        console.log(range)
+        console.log(program.source.slice(range[0], range[1] - range[0]))
+
+        run_change(program, dependency, null)
+        run_change(program, jsx_tag, null)
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+    })
+}
+
+const apply_change = (change = null) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
@@ -132,4 +149,4 @@ const hierarchy = (address, callback) => {
     })
 }
 
-module.exports = { go, hierarchy }
+module.exports = { apply_lens, apply_change, hierarchy }

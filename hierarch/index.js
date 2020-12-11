@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const escape = require("escape-html")
 const responder = express.Router()
 
-const { go, hierarchy } = require("./parse")
+const { apply_lens, apply_change, hierarchy } = require("./parse")
 
 responder.use(bodyParser.json())
 
@@ -19,13 +19,12 @@ responder.get("/sources", (call, response) => {
 })
 
 responder.post("/go", (call, response) => {
-    console.log(call.body)
-    go()
+    apply_lens([call.body.begin, call.body.end])
     response.send("gone.")
 })
 
 responder.post("/change", (call, response) => {
-    go({
+    apply_change({
         upgrade: escape(call.body.upgrade),
         source: call.body.source,
         code: call.body.code,
