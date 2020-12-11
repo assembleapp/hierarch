@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import Icon from "@mdi/react"
 import { mdiClose } from "@mdi/js"
+import Hierarchy from "./hierarchy"
 
 class Sidebar extends React.Component {
     state = {
@@ -22,12 +23,12 @@ class Sidebar extends React.Component {
             },
         })
         .then(response => response.text())
-        .then(response => { console.log(response); this.setState({
+        .then(response => this.setState({
             hierarchy: Object.assign(
                 {},
                 this.state.hierarchy,
-                { [address]: response },
-        )})})
+                { [address]: JSON.parse(response) },
+        )}))
     }
 
     render = () => (
@@ -35,9 +36,7 @@ class Sidebar extends React.Component {
             <span>Hierarch</span>
             <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
 
-            <pre>
-                {this.state.hierarchy[this.state.address]}
-            </pre>
+            <Hierarchy h={this.state.hierarchy[this.state.address] || [0,0,[],""]} />
         </Layout>
     )
 }

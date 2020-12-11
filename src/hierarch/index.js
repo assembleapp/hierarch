@@ -8,14 +8,7 @@ class Hierarch extends React.Component {
 
     render = () => (
         this.state.open
-        ? <Sidebar close={() => this.setState({ open: false })}>
-            * a
-                - b
-                - c
-                    . 1
-                    . 2
-                    . 3
-        </Sidebar>
+        ? <Sidebar close={() => this.setState({ open: false })} />
         : <Corner>
             <Logo
                 size={20}
