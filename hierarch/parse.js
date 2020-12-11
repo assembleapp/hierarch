@@ -14,9 +14,12 @@ const apply_lens = (range) => {
         var program = new Program(source_name, source)
 
         var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
-        console.log(range)
-        console.log(program.parsed.getText(lens_node))
-        // console.log(program.source.slice(range[0], range[1] - range[0]))
+        if(lens_node.startIndex !== range[0] || lens_node.endIndex !== range[1]) {
+            console.log(program.parsed.getText(lens_node))
+            console.log(range)
+            console.log([lens_node.startIndex, lens_node.endIndex])
+            throw("oh no! applying a lens on an improper node.")
+        }
 
         run_change(program, dependency, null)
         // run_change(program, jsx_tag, null)
