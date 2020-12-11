@@ -71,11 +71,21 @@ const hierarchy = (address, callback) => {
         [(jsx_element) (jsx_self_closing_element)] @element
         `)
 
-        var elements = query.map(m => m.captures.map(c => {
+        var elements = query.map(m => {
+            if(m.captures.length !== 1) {
+                throw(
+                    "oh no! our query has responded using a non-unique capture;\n" +
+                    JSON.stringify(m.captures.map(c => program.parsed.getText(c.node)))
+                )
+            }
+
+            var c = m.captures[0]
+            var name = null
+
             if(c.node.type === "jsx_element") {
-                return program.parsed.getText(c.node.firstNamedChild.firstNamedChild)
+                name = program.parsed.getText(c.node.firstNamedChild.firstNamedChild)
             } else if (c.node.type === "jsx_self_closing_element") {
-                return program.parsed.getText(c.node.firstNamedChild)
+                name = program.parsed.getText(c.node.firstNamedChild)
             } else {
                 throw (
                     "oh no! our query has responded on an undesired node;\n" +
@@ -84,8 +94,9 @@ const hierarchy = (address, callback) => {
                     program.parsed.getText(c.node)
                 )
             }
-        }
-        ))
+
+            return "<" + name + (c.node.type === "jsx_self_closing_element" ? "/" : "") + ">"
+        })
 
         callback(JSON.stringify(elements, null, 2))
     })
