@@ -67,72 +67,27 @@ const hierarchy = (address, callback) => {
 
         var program = new Program(source_name, source)
 
-        var query = program.query(`(identifier) @name`)
+        var query = program.query(`
+        [(jsx_element) (jsx_self_closing_element)] @element
+        `)
 
-        var branches = {}
-        query.forEach(m => m.captures.forEach(c => {
-            node = c.node
-            var node_id = `${node.type}:${node.startIndex}-${node.endIndex}`
-            if(node.type === "identifier")
-                node_id = node_id + "/" + program.parsed.getText(node)
-
-            while(node.parent) {
-                var upper = node.parent
-
-                // record hierarchy
-                var upper_id = `${upper.type}:${upper.startIndex}-${upper.endIndex}`
-
-                if(node_id.split("/")[1]) {
-                    var mapping = {
-                        "identifier": [
-                            "jsx_opening_element",
-                            "jsx_closing_element",
-                            "function_declaration",
-                            "member_expression",
-                            "variable_declarator",
-                            "export_statement",
-                            "import_clause",
-                            "import_specifier",
-                            "named_imports",
-                        ],
-                        "jsx_closing_element": ["jsx_element"],
-                        "jsx_opening_element": ["jsx_element"],
-                        "member_expression": ["call_expression"],
-                        "variable_declarator": ["lexical_declaration"],
-                    }
-                    if(Object.keys(mapping).includes(node.type) &&
-                        mapping[node.type].includes(upper.type)
-                    ) {
-                        upper_id = upper_id + "/" + node_id.split("/")[1]
-                    }
-                }
-
-                var upper_already_included_key = Object.keys(branches)
-                    .filter(k => k.split("/")[0] === upper_id.split("/")[0])[0]
-
-                if(upper_already_included_key) {
-                    if(!upper_id.split("/")[1] && upper_already_included_key.split("/")[1]) {
-                        upper_id = upper_id + "/" + upper_already_included_key.split("/")[1]
-                    }
-                    if(upper_id.split("/")[1] && !upper_already_included_key.split("/")[1]) {
-                        branches[upper_id] = branches[upper_already_included_key]
-                        delete branches[upper_already_included_key]
-                    }
-                }
-
-                branches[upper_id] = branches[upper_id]
-                ? branches[upper_id].indexOf(node_id) === -1
-                  ? branches[upper_id].concat(node_id)
-                  : branches[upper_id]
-                : [node_id]
-
-                node = upper
-                node_id = upper_id
+        var elements = query.map(m => m.captures.map(c => {
+            if(c.node.type === "jsx_element") {
+                return program.parsed.getText(c.node.firstNamedChild.firstNamedChild)
+            } else if (c.node.type === "jsx_self_closing_element") {
+                return program.parsed.getText(c.node.firstNamedChild)
+            } else {
+                throw (
+                    "oh no! our query has responded on an undesired node;\n" +
+                    c.node.toString() +
+                    "\n---\n" +
+                    program.parsed.getText(c.node)
+                )
             }
-        }))
-        console.log(branches)
+        }
+        ))
 
-        callback(JSON.stringify(branches, null, 2))
+        callback(JSON.stringify(elements, null, 2))
     })
 }
 
