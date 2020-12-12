@@ -4,13 +4,14 @@ var Program = require("./program")
 var dependency = require("./changes/lens_dependency")
 var jsx_tag = require("./changes/simple_jsx_tag")
 
+// ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
-var source_name = sourceAddress.split("../").slice(-1)[0]
 
 const apply_lens = (range) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
+        var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
 
         var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
@@ -54,6 +55,7 @@ const apply_change = (change = null) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
+        var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
         run_change(program, dependency, change)
         run_change(program, jsx_tag, change)
@@ -68,7 +70,7 @@ const run_change = (program, plan, change) => {
 
     if(change &&
         change.code &&
-        change.source === source_name &&
+        change.source === program.name &&
         change.upgrade
     ) var approach = plan.apply
 
@@ -108,6 +110,7 @@ const hierarchy = (address, callback) => {
     fs.readFile(address, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
+        var source_name = address.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
 
         var query = program.query(`
