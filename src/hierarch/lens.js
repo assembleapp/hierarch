@@ -99,6 +99,7 @@ border: 1px solid darkgrey;
 border-radius: 50%;
 ${p => p.x > 0 ? "right" : "left"}: -0.5rem;
 ${p => p.y > 0 ? "top" : "bottom"}: -0.5rem;
+cursor: ${p => p.x === p.y ? "nesw" : "nwse"}-resize;
 `
 
 const Lens = { Change, Resize }
