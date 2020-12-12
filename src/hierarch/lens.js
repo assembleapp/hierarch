@@ -67,12 +67,39 @@ class Resize extends React.Component {
         const Component = styled(this.props.class)`
         height: ${(p) => p.height};
         width: ${(p) => p.width};
-        resize: both;
         `
 
-        return (<Component {...this.state} {...this.props} />)
+        return (
+            <ResizeBox {...this.state}>
+                <Corner x={-1} y={-1} />
+                <Corner x={-1} y={1} />
+                <Corner x={1} y={-1} />
+                <Corner x={1} y={1} />
+                <Component {...this.state} {...this.props} />
+            </ResizeBox>
+        )
     }
 }
+
+const ResizeBox = styled.div`
+border: 1px dashed #a0a0c0;
+overflow: hidden;
+height: ${(p) => p.height};
+width: ${(p) => p.width};
+position: relative;
+overflow: visible;
+`
+
+const Corner = styled.span`
+position: absolute;
+height: 1rem;
+width: 1rem;
+background-color: rgba(128,128,212,0.2);
+border: 1px solid darkgrey;
+border-radius: 50%;
+${p => p.x > 0 ? "right" : "left"}: -0.5rem;
+${p => p.y > 0 ? "top" : "bottom"}: -0.5rem;
+`
 
 const Lens = { Change, Resize }
 
