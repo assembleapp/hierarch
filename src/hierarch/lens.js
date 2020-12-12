@@ -71,15 +71,24 @@ class Resize extends React.Component {
 
         return (
             <ResizeBox {...this.state}>
-                <Corner x={-1} y={-1} />
-                <Corner x={-1} y={1} />
-                <Corner x={1} y={-1} />
-                <Corner x={1} y={1} />
+                <Corner onResize={w => this.setState({ width: w })} x={-1} y={-1} />
+                <Corner onResize={w => this.setState({ width: w })} x={-1} y={1} />
+                <Corner onResize={w => this.setState({ width: w })} x={1} y={-1} />
+                <Corner onResize={w => this.setState({ width: w })} x={1} y={1} />
                 <Component {...this.state} {...this.props} />
             </ResizeBox>
         )
     }
 }
+
+const resize = p => e => {
+    p.onResize(e.pageX - e.target.parentElement.getBoundingClientRect().left + 'px')
+}
+
+const stopResize = resizer => () => {
+    window.removeEventListener('mousemove', resizer)
+}
+
 
 const ResizeBox = styled.div`
 border: 1px dashed #a0a0c0;
@@ -90,7 +99,14 @@ position: relative;
 overflow: visible;
 `
 
-const Corner = styled.span`
+const Corner = styled.span.attrs(p => ({
+    onMouseDown: (e) => {
+        e.preventDefault()
+        var resizer = resize(p)
+        window.addEventListener('mousemove', resizer)
+        window.addEventListener('mouseup', stopResize(resizer))
+    }
+}))`
 position: absolute;
 height: 1rem;
 width: 1rem;
