@@ -57,6 +57,23 @@ font-size: inherit;
 width: ${p => `${p.value.length}ch`};
 `
 
-const Lens = { Change }
+class Resize extends React.Component {
+    state = {
+        height: "10rem",
+        width: "10rem",
+    }
+
+    render = () => {
+        const Component = styled(this.props.class)`
+        height: ${(p) => p.height};
+        width: ${(p) => p.width};
+        resize: both;
+        `
+
+        return (<Component {...this.state} {...this.props} />)
+    }
+}
+
+const Lens = { Change, Resize }
 
 export default Lens

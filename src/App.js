@@ -1,11 +1,12 @@
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
+import Lens from "./hierarch/lens"
 
 function App() {
   return (
     <Layout>
       <Header>
-        <Logo src={logo} alt="logo" />
+        <Lens.Resize class={Logo} src={logo} alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
