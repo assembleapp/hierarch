@@ -6,7 +6,7 @@ class Hierarchy extends React.Component {
     }
 
     componentDidMount = () => {
-        if(!window.assemble) {
+        if(!window.assemble || !window.assemble.repull) {
             window.assemble = {}
             window.assemble.repull = this.pullHierarchy.bind(this)
         }
@@ -38,7 +38,6 @@ class Hierarchy extends React.Component {
         </pre>
     )
 }
-
 
 const display_hierarchy_index = (index, hierarchy) => (
     hierarchy[2].map(h => (
