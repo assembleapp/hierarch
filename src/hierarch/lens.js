@@ -78,13 +78,33 @@ class Resize extends React.Component {
 
         return (
             <ResizeBox {...this.state}>
-                <Corner resize={dimensions => this.setState(dimensions)} x={-1} y={-1} />
-                <Corner resize={dimensions => this.setState(dimensions)} x={-1} y={1} />
-                <Corner resize={dimensions => this.setState(dimensions)} x={1} y={-1} />
-                <Corner resize={dimensions => this.setState(dimensions)} x={1} y={1} />
+                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={-1} y={-1} />
+                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={-1} y={1} />
+                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={1} y={-1} />
+                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={1} y={1} />
                 <Component {...this.state} {...this.props} />
             </ResizeBox>
         )
+    }
+
+    recordSize = () => {
+        fetch("http://0.0.0.0:4321/resize", {
+            method: "POST",
+            body: JSON.stringify({
+                width: this.state.width,
+                height: this.state.height,
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        // .then(response => response.text())
+        // .then(response => console.log(response))
+        .then(() => {
+            if(window.assemble && window.assemble.repull)
+                window.assemble.repull()
+        })
     }
 }
 
@@ -131,12 +151,12 @@ const resize = p => e => {
         // new_y = element_original_y + (mouseY - original_mouseY)
     }
 
-
     p.resize({width: `${new_width}px`, height: `${new_height}px`})
 }
 
-const stopResize = resizer => () => {
+const endResize = (resizer, recordSize) => () => {
     window.removeEventListener('mousemove', resizer)
+    window.removeEventListener('mouseup', recordSize)
 }
 
 
@@ -158,7 +178,8 @@ const Corner = styled.span.attrs(p => ({
         element_original_height = e.target.parentElement.getBoundingClientRect().height
         var resizer = resize(p)
         window.addEventListener('mousemove', resizer)
-        window.addEventListener('mouseup', stopResize(resizer))
+        window.addEventListener('mouseup', p.recordSize)
+        window.addEventListener('mouseup', endResize(resizer, p.recordSize))
     }
 }))`
 position: absolute;

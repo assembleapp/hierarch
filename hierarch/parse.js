@@ -106,6 +106,20 @@ const run_change = (program, plan, change) => {
     })
 }
 
+const apply_resize = (change) => {
+    fs.readFile(sourceAddress, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var source_name = sourceAddress.split("../").slice(-1)[0]
+        var program = new Program(source_name, source)
+
+        console.log(program.parsed.rootNode.toString())
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+    })
+}
+
 const hierarchy = (address, callback) => {
     fs.readFile(address, 'utf8', (error, source) => {
         if(error) return console.log(error)
@@ -188,4 +202,4 @@ const hierarchy = (address, callback) => {
     })
 }
 
-module.exports = { apply_lens, apply_change, hierarchy }
+module.exports = { apply_lens, apply_change, apply_resize, hierarchy }
