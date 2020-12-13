@@ -59,16 +59,18 @@ width: ${p => `${p.value.length}ch`};
 
 class Resize extends React.Component {
     state = {
-        height: "10rem",
-        width: "10rem",
+        height: null,
+        width: null,
     }
 
     constructor(p) {
         super(p)
-        this.component = styled(p.original)`
-        height: 100%;
-        width: 100%;
-        `
+        this.component = styled(p.original).attrs(p => {
+            var styles = {}
+            styles.height = p.height || null
+            styles.width = p.width || null
+            return { style: styles }
+        })``
     }
 
     render = () => {
@@ -138,12 +140,7 @@ const stopResize = resizer => () => {
 }
 
 
-const ResizeBox = styled.div.attrs(p => ({
-    style: {
-        height: p.height,
-        width: p.width,
-    }
-}))`
+const ResizeBox = styled.div`
 border: 1px dashed #a0a0c0;
 overflow: hidden;
 position: relative;
