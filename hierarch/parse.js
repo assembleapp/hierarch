@@ -31,9 +31,6 @@ const apply_lens = (range) => {
             var end = lens_node.endIndex - child.split("").reverse().join("").search(/\S/)
             var concise_child = program.source.slice(begin, end)
 
-            // double-check in console logs
-            console.log("|" + program.source.slice(begin, end) + "|")
-
             program.replace_by_indices(
                 begin,
                 end,
@@ -170,7 +167,6 @@ const apply_resize = (change) => {
             ${original_name && `(#eq? @name "${original_name}")` || ""}
         )`
         ])
-        debug_query(matches, program)
 
         const css_string = matches.slice(-1)[0].captures.slice(-1)[0].node
         var css_node = program.parse_range_as_language(css_string.startIndex + 1, css_string.endIndex - 1, "css").rootNode
@@ -198,7 +194,6 @@ const apply_resize = (change) => {
         } else {
             program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nwidth: ${change.width};`)
         }
-        // console.log(program.parsed.rootNode.toString())
         program.use_language('js')
 
         program.reparse()
@@ -282,8 +277,6 @@ const hierarchy = (address, callback) => {
             upper_chain = upper_chain.concat([e])
         })
 
-        // console.log(program.parsed.rootNode.toString())
-        // console.log(JSON.stringify(hierarchy, null, 2))
         callback(JSON.stringify(hierarchy, null, 2))
     })
 }
