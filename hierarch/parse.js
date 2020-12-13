@@ -104,6 +104,8 @@ const run_change = (program, plan, change) => {
             })
         })
     })
+
+    program.reparse()
 }
 
 const apply_resize = (change) => {
@@ -171,18 +173,31 @@ const apply_resize = (change) => {
         debug_query(matches, program)
 
         const css_string = matches.slice(-1)[0].captures.slice(-1)[0].node
-        // console.log(css_string.children[1].toString())
         var css_node = program.parse_range_as_language(css_string.startIndex + 1, css_string.endIndex - 1, "css").rootNode
-        // console.log(css_node.toString())
-        console.log("parsed!")
+
         var query = program.query(`
         (stylesheet
             (declaration (property_name) @prop (_) @value)
             (#eq? @prop "height")
         )
         `, css_node, 'css')
-        console.log("queried!")
-        debug_query(query, program)
+        if(query[0] && query[0].captures[1]) {
+            program.replace_by_node(query[0].captures[1].node, change.height)
+        } else {
+            program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nheight: ${change.height};`)
+        }
+
+        var query = program.query(`
+        (stylesheet
+            (declaration (property_name) @prop (_) @value)
+            (#eq? @prop "width")
+        )
+        `, css_node, 'css')
+        if(query[0] && query[0].captures[1]) {
+            program.replace_by_node(query[0].captures[1].node, change.width)
+        } else {
+            program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nwidth: ${change.width};`)
+        }
         // console.log(program.parsed.rootNode.toString())
         program.use_language('js')
 
