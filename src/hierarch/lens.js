@@ -71,36 +71,58 @@ class Resize extends React.Component {
 
         return (
             <ResizeBox {...this.state}>
-                <Corner onResize={w => this.setState({ width: w })} x={-1} y={-1} />
-                <Corner onResize={w => this.setState({ width: w })} x={-1} y={1} />
-                <Corner onResize={w => this.setState({ width: w })} x={1} y={-1} />
-                <Corner onResize={w => this.setState({ width: w })} x={1} y={1} />
+                <Corner onResize={dimensions => this.setState(dimensions)} x={-1} y={-1} />
+                <Corner onResize={dimensions => this.setState(dimensions)} x={-1} y={1} />
+                <Corner onResize={dimensions => this.setState(dimensions)} x={1} y={-1} />
+                <Corner onResize={dimensions => this.setState(dimensions)} x={1} y={1} />
                 <Component {...this.state} {...this.props} />
             </ResizeBox>
         )
     }
 }
 
+var original_mouseX = 0
+var original_mouseY = 0
+var element_original_x = 0
+var element_original_y = 0
+var element_original_width = 0
+var element_original_height = 0
+
 const resize = p => e => {
-    p.onResize(e.pageX - e.target.parentElement.getBoundingClientRect().left + 'px')
-    /*
-    bottom-right:
-  new_width = element_original_width + (mouseX - original_mouseX)
-  new_height = element_original_height + (mouseY - original_mouseY)
-bottom-left:
-  new_width = element_original_width - (mouseX - original_mouseX)
-  new_height = element_original_height + (mouseY - original_mouseY)
-  new_x = element_original_x - (mouseX - original_mouseX)
-top-right:
-  new_width = element_original_width + (mouseX - original_mouseX)
-  new_height = element_original_height - (mouseY - original_mouseY)
-  new_y = element_original_y + (mouseY - original_mouseY)
-top-left:
-  new_width = element_original_width - (mouseX - original_mouseX)
-  new_height = element_original_height - (mouseY - original_mouseY)
-  new_x = element_original_x + (mouseX - original_mouseX)
-  new_y = element_original_y + (mouseY - original_mouseY)
-  */
+    var mouseX = e.pageX
+    var mouseY = e.pageY
+    var new_width = 0
+    var new_height = 0
+    var new_x = 0
+    var new_y = 0
+
+
+    // bottom-right:
+    if(p.x > 0 && p.y > 0) {
+        new_width = element_original_width + (mouseX - original_mouseX)
+        new_height = element_original_height + (mouseY - original_mouseY)
+    }
+    // bottom-left:
+    if(p.x < 0 && p.y > 0) {
+        new_width = element_original_width - (mouseX - original_mouseX)
+        new_height = element_original_height + (mouseY - original_mouseY)
+        new_x = element_original_x - (mouseX - original_mouseX)
+    }
+    // top-right:
+    if(p.x > 0 && p.y < 0) {
+        new_width = element_original_width + (mouseX - original_mouseX)
+        new_height = element_original_height - (mouseY - original_mouseY)
+        new_y = element_original_y + (mouseY - original_mouseY)
+    }
+    // top-left:
+    if(p.x < 0 && p.y > 0) {
+        new_width = element_original_width - (mouseX - original_mouseX)
+        new_height = element_original_height - (mouseY - original_mouseY)
+        new_x = element_original_x + (mouseX - original_mouseX)
+        new_y = element_original_y + (mouseY - original_mouseY)
+    }
+
+    p.onResize({width: new_width, height: new_height})
 }
 
 const stopResize = resizer => () => {
@@ -120,6 +142,10 @@ overflow: visible;
 const Corner = styled.span.attrs(p => ({
     onMouseDown: (e) => {
         e.preventDefault()
+        original_mouseX = e.pageX
+        original_mouseY = e.pageY
+        element_original_width = e.target.parentElement.getBoundingClientRect().width
+        element_original_height = e.target.parentElement.getBoundingClientRect().height
         var resizer = resize(p)
         window.addEventListener('mousemove', resizer)
         window.addEventListener('mouseup', stopResize(resizer))
