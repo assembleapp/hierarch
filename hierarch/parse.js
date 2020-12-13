@@ -41,7 +41,6 @@ const apply_lens = (range) => {
         }
 
         run_change(program, dependency, null)
-        // run_change(program, jsx_tag, null)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
@@ -103,6 +102,92 @@ const run_change = (program, plan, change) => {
     })
 
     program.reparse()
+}
+
+const use_resize = (range) => {
+    fs.readFile(sourceAddress, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var source_name = sourceAddress.split("../").slice(-1)[0]
+        var program = new Program(source_name, source)
+
+        var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
+
+        if(resize_node.startIndex !== range[0] || resize_node.endIndex !== range[1]) {
+            console.log(program.parsed.getText(resize_node))
+            console.log(range)
+            console.log([resize_node.startIndex, resize_node.endIndex])
+            throw("oh no! applying a lens on an improper node.")
+        }
+
+        if(resize_node.type === "jsx_self_closing_element") {
+            // var child = program.parsed.getText(resize_node)
+            var name_query = program.query(`(jsx_self_closing_element name: (_) @name)`, resize_node)
+            // console.log(name_query)
+            // debug_query(name_query, program)
+            var name = name_query[0].captures[0].node
+            // console.log(child)
+            program.replace_by_node(name, `Lens.Resize original={${program.parsed.getText(name)}}`)
+
+            // program.replace_by_indices(
+            //     begin,
+            //     end,
+            //     `<Lens.Change source="${program.name}" code="abcd" >${
+            //         concise_child
+            //     }</Lens.Change>`
+            // )
+        }
+
+        run_change(program, dependency, null)
+        // run_change(program, jsx_tag, null)
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+    })
+}
+
+const end_resize = (range) => {
+    fs.readFile(sourceAddress, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var source_name = sourceAddress.split("../").slice(-1)[0]
+        var program = new Program(source_name, source)
+
+        var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
+
+        if(resize_node.startIndex !== range[0] || resize_node.endIndex !== range[1]) {
+            console.log(program.parsed.getText(resize_node))
+            console.log(range)
+            console.log([resize_node.startIndex, resize_node.endIndex])
+            throw("oh no! applying a lens on an improper node.")
+        }
+
+        if(resize_node.type === "jsx_self_closing_element") {
+            var query = program.query(`(
+                jsx_self_closing_element
+                name: (_) @name
+                .
+                attribute: (
+                    jsx_attribute
+                    (property_identifier) @prop
+                    (jsx_expression (_) @original)
+                ) @attr
+                (#eq? @name "Lens.Resize")
+                (#eq? @prop "original")
+            )`, resize_node)
+
+            var name = query[0].captures.filter(c => c.name === "name")[0].node
+            var original = query[0].captures.filter(c => c.name === "original")[0].node
+            var attr = query[0].captures.filter(c => c.name === "attr")[0].node
+
+            program.replace_by_indices(name.startIndex, attr.endIndex, program.parsed.getText(original))
+        }
+
+        run_change(program, dependency, {code: '_', source: program.name, upgrade: '_'})
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+    })
 }
 
 const apply_resize = (change) => {
@@ -238,18 +323,26 @@ const hierarchy = (address, callback) => {
                 )
             }
 
+            var permissions = []
+                .concat(c.node.type === "jsx_text" ? "g-4:change" : [])
+                .concat(c.node.type === "jsx_self_closing_element" ?
+                  name === "Lens.Resize"
+                  ? "g-4:resize:end"
+                  : "g-4:resize"
+                : [])
+
             var appendages = {
                 jsx_self_closing_element: ["<", "/>"],
                 jsx_element: ["<", ">"],
             }[c.node.type] || ["", ""]
-
             name = appendages[0] + name + appendages[1]
+
             return [
                 c.node.startIndex,
                 c.node.endIndex,
                 [],
                 name,
-                c.node.type === "jsx_text"
+                permissions
             ]
         })
 
@@ -273,7 +366,7 @@ const hierarchy = (address, callback) => {
             }
 
             upper[2] = upper[2].concat([e])
-            upper[4] = false
+            upper[4] = []
             upper_chain = upper_chain.concat([e])
         })
 
@@ -283,7 +376,6 @@ const hierarchy = (address, callback) => {
 
 const debug_query = (query, program) => {
     var elements = query.map(m => {
-        // if(m.captures.length !== 1) throw `more than 1 capture; ${m}`
         return m.captures.map(c => {
             return [
                 c.name,
@@ -295,4 +387,4 @@ const debug_query = (query, program) => {
     console.log(elements)
 }
 
-module.exports = { apply_lens, apply_change, apply_resize, hierarchy }
+module.exports = { apply_lens, apply_change, use_resize, end_resize, apply_resize, hierarchy }

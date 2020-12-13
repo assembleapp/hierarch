@@ -3,7 +3,14 @@ const bodyParser = require("body-parser")
 const escape = require("escape-html")
 const responder = express.Router()
 
-const { apply_lens, apply_change, apply_resize, hierarchy } = require("./parse")
+const {
+    apply_lens,
+    apply_change,
+    use_resize,
+    end_resize,
+    apply_resize,
+    hierarchy,
+} = require("./parse")
 
 responder.use(bodyParser.json())
 
@@ -26,6 +33,16 @@ responder.post("/change", (call, response) => {
         code: call.body.code,
     })
     response.send(JSON.stringify(call.body))
+})
+
+responder.post("/use_resize", (call, response) => {
+    use_resize([call.body.begin, call.body.end])
+    response.send("applied.")
+})
+
+responder.post("/end_resize", (call, response) => {
+    end_resize([call.body.begin, call.body.end])
+    response.send("applied.")
 })
 
 responder.post("/resize", (call, response) => {
