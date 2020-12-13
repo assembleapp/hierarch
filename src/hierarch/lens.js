@@ -83,6 +83,24 @@ class Resize extends React.Component {
 
 const resize = p => e => {
     p.onResize(e.pageX - e.target.parentElement.getBoundingClientRect().left + 'px')
+    /*
+    bottom-right:
+  new_width = element_original_width + (mouseX - original_mouseX)
+  new_height = element_original_height + (mouseY - original_mouseY)
+bottom-left:
+  new_width = element_original_width - (mouseX - original_mouseX)
+  new_height = element_original_height + (mouseY - original_mouseY)
+  new_x = element_original_x - (mouseX - original_mouseX)
+top-right:
+  new_width = element_original_width + (mouseX - original_mouseX)
+  new_height = element_original_height - (mouseY - original_mouseY)
+  new_y = element_original_y + (mouseY - original_mouseY)
+top-left:
+  new_width = element_original_width - (mouseX - original_mouseX)
+  new_height = element_original_height - (mouseY - original_mouseY)
+  new_x = element_original_x + (mouseX - original_mouseX)
+  new_y = element_original_y + (mouseY - original_mouseY)
+  */
 }
 
 const stopResize = resizer => () => {
