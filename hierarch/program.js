@@ -39,7 +39,16 @@ class Program {
 
     query(query) {
         this.reparse()
-        return new Parser.Query(JavaScript, query).matches(this.parsed.rootNode)
+        try {
+            if(query instanceof Array) {
+                return query.map(q => (
+                    new Parser.Query(JavaScript, q).matches(this.parsed.rootNode)
+                )).flat(1)
+            }
+            return new Parser.Query(JavaScript, query).matches(this.parsed.rootNode)
+        } catch(e) {
+            console.log(e)
+        }
     }
 }
 

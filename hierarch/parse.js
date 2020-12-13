@@ -113,7 +113,55 @@ const apply_resize = (change) => {
         var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
 
-        console.log(program.parsed.rootNode.toString())
+        var matches = program.query([
+        `(
+            variable_declarator
+            (identifier) @name
+            "="
+            (call_expression
+                function: (member_expression
+                    object: (identifier) @object
+                    property: (property_identifier) @property
+                    (#eq? @object "styled")
+                )
+                arguments: (template_string) @css
+            )
+        )`,
+        `(
+            variable_declarator
+            (identifier) @name
+            "="
+            (call_expression
+                function: (call_expression
+                    function: (member_expression
+                        object: (member_expression
+                            object: (identifier) @object
+                            property: (property_identifier) @property
+                            (#eq? @object "styled")
+                        )
+                        property: (property_identifier) @attrs
+                        (#eq? @attrs "attrs")
+                    )
+                    arguments: (arguments
+                        (object) @attributes
+                    )
+                )
+                arguments: (template_string) @css
+            )
+        )`
+        ])
+
+        var elements = matches.map(m => {
+            // if(m.captures.length !== 1) throw `more than 1 capture; ${m}`
+            return m.captures.map(c => {
+                return [
+                    c.name,
+                    c.node.toString(),
+                    program.parsed.getText(c.node),
+                ]
+            })
+        })
+        console.log(elements)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
