@@ -93,36 +93,38 @@ const resize = p => e => {
     var mouseY = e.pageY
     var new_width = 0
     var new_height = 0
-    var new_x = 0
-    var new_y = 0
+    // var new_x = 0
+    // var new_y = 0
 
+    var width_scaling_factor = 2
 
     // bottom-right:
     if(p.x > 0 && p.y > 0) {
-        new_width = element_original_width + (mouseX - original_mouseX)
-        new_height = element_original_height + (mouseY - original_mouseY)
+        new_width = element_original_width + width_scaling_factor * (mouseX - original_mouseX)
+        new_height = element_original_height - (mouseY - original_mouseY)
     }
     // bottom-left:
     if(p.x < 0 && p.y > 0) {
-        new_width = element_original_width - (mouseX - original_mouseX)
-        new_height = element_original_height + (mouseY - original_mouseY)
-        new_x = element_original_x - (mouseX - original_mouseX)
+        new_width = element_original_width - width_scaling_factor * (mouseX - original_mouseX)
+        new_height = element_original_height - (mouseY - original_mouseY)
+        // new_x = element_original_x - (mouseX - original_mouseX)
     }
     // top-right:
     if(p.x > 0 && p.y < 0) {
-        new_width = element_original_width + (mouseX - original_mouseX)
-        new_height = element_original_height - (mouseY - original_mouseY)
-        new_y = element_original_y + (mouseY - original_mouseY)
+        new_width = element_original_width + width_scaling_factor * (mouseX - original_mouseX)
+        new_height = element_original_height + (mouseY - original_mouseY)
+        // new_y = element_original_y + (mouseY - original_mouseY)
     }
     // top-left:
-    if(p.x < 0 && p.y > 0) {
-        new_width = element_original_width - (mouseX - original_mouseX)
-        new_height = element_original_height - (mouseY - original_mouseY)
-        new_x = element_original_x + (mouseX - original_mouseX)
-        new_y = element_original_y + (mouseY - original_mouseY)
+    if(p.x < 0 && p.y < 0) {
+        new_width = element_original_width - width_scaling_factor * (mouseX - original_mouseX)
+        new_height = element_original_height + (mouseY - original_mouseY)
+        // new_x = element_original_x + (mouseX - original_mouseX)
+        // new_y = element_original_y + (mouseY - original_mouseY)
     }
 
-    p.onResize({width: new_width, height: new_height})
+
+    p.onResize({width: `${new_width}px`, height: `${new_height}px`})
 }
 
 const stopResize = resizer => () => {
@@ -144,6 +146,8 @@ const Corner = styled.span.attrs(p => ({
         e.preventDefault()
         original_mouseX = e.pageX
         original_mouseY = e.pageY
+        element_original_x = e.target.parentElement.getBoundingClientRect().left
+        element_original_y = e.target.parentElement.getBoundingClientRect().bottom
         element_original_width = e.target.parentElement.getBoundingClientRect().width
         element_original_height = e.target.parentElement.getBoundingClientRect().height
         var resizer = resize(p)
