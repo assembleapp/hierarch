@@ -6,7 +6,7 @@ function App() {
   return (
     <Layout>
       <Header>
-        <Lens.Resize class={Logo} src={logo} alt="logo" />
+        <Lens.Resize original={Logo} src={logo} alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>

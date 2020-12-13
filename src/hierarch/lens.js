@@ -63,18 +63,23 @@ class Resize extends React.Component {
         width: "10rem",
     }
 
-    render = () => {
-        const Component = styled(this.props.class)`
-        height: ${(p) => p.height};
-        width: ${(p) => p.width};
+    constructor(p) {
+        super(p)
+        this.component = styled(p.original)`
+        height: 100%;
+        width: 100%;
         `
+    }
+
+    render = () => {
+        const Component = this.component
 
         return (
             <ResizeBox {...this.state}>
-                <Corner onResize={dimensions => this.setState(dimensions)} x={-1} y={-1} />
-                <Corner onResize={dimensions => this.setState(dimensions)} x={-1} y={1} />
-                <Corner onResize={dimensions => this.setState(dimensions)} x={1} y={-1} />
-                <Corner onResize={dimensions => this.setState(dimensions)} x={1} y={1} />
+                <Corner resize={dimensions => this.setState(dimensions)} x={-1} y={-1} />
+                <Corner resize={dimensions => this.setState(dimensions)} x={-1} y={1} />
+                <Corner resize={dimensions => this.setState(dimensions)} x={1} y={-1} />
+                <Corner resize={dimensions => this.setState(dimensions)} x={1} y={1} />
                 <Component {...this.state} {...this.props} />
             </ResizeBox>
         )
@@ -83,8 +88,8 @@ class Resize extends React.Component {
 
 var original_mouseX = 0
 var original_mouseY = 0
-var element_original_x = 0
-var element_original_y = 0
+// var element_original_x = 0
+// var element_original_y = 0
 var element_original_width = 0
 var element_original_height = 0
 
@@ -97,34 +102,35 @@ const resize = p => e => {
     // var new_y = 0
 
     var width_scaling_factor = 2
+    var height_scaling_factor = 1
 
     // bottom-right:
     if(p.x > 0 && p.y > 0) {
         new_width = element_original_width + width_scaling_factor * (mouseX - original_mouseX)
-        new_height = element_original_height - (mouseY - original_mouseY)
+        new_height = element_original_height - height_scaling_factor * (mouseY - original_mouseY)
     }
     // bottom-left:
     if(p.x < 0 && p.y > 0) {
         new_width = element_original_width - width_scaling_factor * (mouseX - original_mouseX)
-        new_height = element_original_height - (mouseY - original_mouseY)
+        new_height = element_original_height - height_scaling_factor * (mouseY - original_mouseY)
         // new_x = element_original_x - (mouseX - original_mouseX)
     }
     // top-right:
     if(p.x > 0 && p.y < 0) {
         new_width = element_original_width + width_scaling_factor * (mouseX - original_mouseX)
-        new_height = element_original_height + (mouseY - original_mouseY)
+        new_height = element_original_height + height_scaling_factor * (mouseY - original_mouseY)
         // new_y = element_original_y + (mouseY - original_mouseY)
     }
     // top-left:
     if(p.x < 0 && p.y < 0) {
         new_width = element_original_width - width_scaling_factor * (mouseX - original_mouseX)
-        new_height = element_original_height + (mouseY - original_mouseY)
+        new_height = element_original_height + height_scaling_factor * (mouseY - original_mouseY)
         // new_x = element_original_x + (mouseX - original_mouseX)
         // new_y = element_original_y + (mouseY - original_mouseY)
     }
 
 
-    p.onResize({width: `${new_width}px`, height: `${new_height}px`})
+    p.resize({width: `${new_width}px`, height: `${new_height}px`})
 }
 
 const stopResize = resizer => () => {
@@ -132,11 +138,14 @@ const stopResize = resizer => () => {
 }
 
 
-const ResizeBox = styled.div`
+const ResizeBox = styled.div.attrs(p => ({
+    style: {
+        height: p.height,
+        width: p.width,
+    }
+}))`
 border: 1px dashed #a0a0c0;
 overflow: hidden;
-height: ${(p) => p.height};
-width: ${(p) => p.width};
 position: relative;
 overflow: visible;
 `
@@ -146,8 +155,8 @@ const Corner = styled.span.attrs(p => ({
         e.preventDefault()
         original_mouseX = e.pageX
         original_mouseY = e.pageY
-        element_original_x = e.target.parentElement.getBoundingClientRect().left
-        element_original_y = e.target.parentElement.getBoundingClientRect().bottom
+        // element_original_x = e.target.parentElement.getBoundingClientRect().left
+        // element_original_y = e.target.parentElement.getBoundingClientRect().bottom
         element_original_width = e.target.parentElement.getBoundingClientRect().width
         element_original_height = e.target.parentElement.getBoundingClientRect().height
         var resizer = resize(p)
