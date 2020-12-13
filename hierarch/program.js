@@ -44,8 +44,8 @@ class Program {
     }
 
     parse_range_as_language(begin, end, lang) {
-        console.log("Parsing:\n")
-        console.log(this.source.slice(begin, end))
+        // console.log("Parsing:\n")
+        // console.log(this.source.slice(begin, end))
         this.parser.setLanguage(languages[lang])
         return this.parser.parse(this.source, null, {
             includedRanges: [{
@@ -61,15 +61,18 @@ class Program {
         this.parser.setLanguage(languages[lang])
     }
 
-    query(query) {
-        this.reparse()
+    query(query, node = this.parsed.rootNode, lang = 'js') {
+        // this.reparse()
         try {
+            console.log('querying in', lang)
+            console.log('querying', query)
+            console.log('querying', node.toString())
             if(query instanceof Array) {
                 return query.map(q => (
-                    new Parser.Query(JavaScript, q).matches(this.parsed.rootNode)
+                    new Parser.Query(languages[lang], q).matches(node)
                 )).flat(1)
             }
-            return new Parser.Query(JavaScript, query).matches(this.parsed.rootNode)
+            return new Parser.Query(languages[lang], query).matches(node)
         } catch(e) {
             console.log(e)
         }

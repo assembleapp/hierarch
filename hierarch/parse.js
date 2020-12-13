@@ -168,10 +168,22 @@ const apply_resize = (change) => {
             ${original_name && `(#eq? @name "${original_name}")` || ""}
         )`
         ])
-
         debug_query(matches, program)
-        const css_node = matches.slice(-1)[0].captures.slice(-1)[0].node
-        console.log(program.parse_range_as_language(css_node.startIndex + 1, css_node.endIndex - 1, "css").rootNode.toString())
+
+        const css_string = matches.slice(-1)[0].captures.slice(-1)[0].node
+        // console.log(css_string.children[1].toString())
+        var css_node = program.parse_range_as_language(css_string.startIndex + 1, css_string.endIndex - 1, "css").rootNode
+        // console.log(css_node.toString())
+        console.log("parsed!")
+        var query = program.query(`
+        (stylesheet
+            (declaration (property_name) @prop (_) @value)
+            (#eq? @prop "height")
+        )
+        `, css_node, 'css')
+        console.log("queried!")
+        debug_query(query, program)
+        // console.log(program.parsed.rootNode.toString())
         program.use_language('js')
 
         program.reparse()
