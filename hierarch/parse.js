@@ -113,6 +113,22 @@ const apply_resize = (change) => {
         var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
 
+        var original_matches = program.query(`
+        (
+            jsx_self_closing_element
+            name: (_) @name
+            attribute: (jsx_attribute (property_identifier) @prop (jsx_expression (_) @original))
+            (#eq? @name "Lens.Resize")
+            (#eq? @prop "original")
+        )
+        `)
+        if(original_matches.length > 1) {
+            debug_query(original_matches, program)
+            throw `oh no! more than 1 match`
+        }
+        var original_name = program.parsed.getText(original_matches[0].captures.filter(c => c.name === "original")[0].node)
+        // console.log(original_name)
+
         var matches = program.query([
         `(
             variable_declarator
@@ -126,6 +142,7 @@ const apply_resize = (change) => {
                 )
                 arguments: (template_string) @css
             )
+            ${original_name && `(#eq? @name "${original_name}")` || ""}
         )`,
         `(
             variable_declarator
@@ -148,20 +165,11 @@ const apply_resize = (change) => {
                 )
                 arguments: (template_string) @css
             )
+            ${original_name && `(#eq? @name "${original_name}")` || ""}
         )`
         ])
 
-        var elements = matches.map(m => {
-            // if(m.captures.length !== 1) throw `more than 1 capture; ${m}`
-            return m.captures.map(c => {
-                return [
-                    c.name,
-                    c.node.toString(),
-                    program.parsed.getText(c.node),
-                ]
-            })
-        })
-        console.log(elements)
+        debug_query(matches, program)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
@@ -248,6 +256,20 @@ const hierarchy = (address, callback) => {
         // console.log(JSON.stringify(hierarchy, null, 2))
         callback(JSON.stringify(hierarchy, null, 2))
     })
+}
+
+const debug_query = (query, program) => {
+    var elements = query.map(m => {
+        // if(m.captures.length !== 1) throw `more than 1 capture; ${m}`
+        return m.captures.map(c => {
+            return [
+                c.name,
+                c.node.toString(),
+                program.parsed.getText(c.node),
+            ]
+        })
+    })
+    console.log(elements)
 }
 
 module.exports = { apply_lens, apply_change, apply_resize, hierarchy }
