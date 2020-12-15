@@ -8,8 +8,9 @@ import Hierarch from "./hierarch"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
-    <Hierarch/>
+    <Hierarch>
+      <App />
+    </Hierarch>
   </React.StrictMode>,
   document.getElementById('root')
 );

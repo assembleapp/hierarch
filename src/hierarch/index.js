@@ -7,7 +7,11 @@ class Hierarch extends React.Component {
     state = { open: false }
 
     render = () => (
-        this.state.open
+        <>
+        <Page>
+            {this.props.children}
+        </Page>
+        {this.state.open
         ? <Sidebar close={() => this.setState({ open: false })} />
         : <Corner>
             <Logo
@@ -16,9 +20,18 @@ class Hierarch extends React.Component {
                 onClick={() => this.setState({ open: true })}
             />
         </Corner>
+        }
+        </>
     )
 }
 
+const Page = styled.div`
+  height: 80vh;
+  width: 80vw;
+  margin: 10vh 10vw;
+  overflow: hidden;
+  transform: scale(0.8);
+`
 
 const Corner = styled.div`
 position: absolute;
