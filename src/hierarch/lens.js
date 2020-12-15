@@ -9,9 +9,9 @@ class Change extends React.Component {
         key={this.props.children}
         ref={(e) => e ? e.focus() : null}
         type="text"
-        value={this.state.value || this.props.children}
+        value={this.state.value === null ? this.props.children : this.state.value}
         onChange={(e) => {
-            this.setState({ value: e.target.value })
+            this.setState({ value: e.target.value || "" })
         }}
         onKeyDown={(e) => {
             if(e.key !== "Enter") return true
