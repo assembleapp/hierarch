@@ -22,10 +22,6 @@ class Sidebar extends React.Component {
 const Layout = styled.div`
 width: 22rem;
 height: auto;
-position: absolute;
-top: 0;
-bottom: 0;
-right: 0;
 background: rgba(212, 212, 212, 40%);
 padding: 0.5rem;
 overflow-y: scroll;

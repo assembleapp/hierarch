@@ -7,28 +7,36 @@ class Hierarch extends React.Component {
     state = { open: false }
 
     render = () => (
+        this.state.open
+        ?
+        <Grid>
+            <Page>
+                {this.props.children}
+            </Page>
+            <Sidebar close={() => this.setState({ open: false })} />
+        </Grid>
+        :
         <>
-        <Page>
-            {this.props.children}
-        </Page>
-        {this.state.open
-        ? <Sidebar close={() => this.setState({ open: false })} />
-        : <Corner>
+        {this.props.children}
+        <Corner>
             <Logo
                 size={20}
                 repeat={2000}
                 onClick={() => this.setState({ open: true })}
             />
         </Corner>
-        }
         </>
     )
 }
 
+const Grid = styled.div`
+display: grid;
+grid-template-columns: 1fr auto;
+width: 100vw;
+margin: 0;
+`
+
 const Page = styled.div`
-  height: 80vh;
-  width: 80vw;
-  margin: 10vh 10vw;
   overflow: hidden;
   transform: scale(0.8);
 `
