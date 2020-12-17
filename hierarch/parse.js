@@ -2,7 +2,6 @@ var fs = require('fs')
 var Program = require("./program")
 
 var dependency = require("./changes/lens_dependency")
-var jsx_tag = require("./changes/simple_jsx_tag")
 
 // ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
@@ -54,7 +53,66 @@ const apply_change = (change = null) => {
         var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
         run_change(program, dependency, change)
-        run_change(program, jsx_tag, change)
+
+        var approach = {}
+
+        if(change &&
+            change.code &&
+            change.source === program.name &&
+            change.upgrade
+        ) var approach = {
+            query: `(jsx_element
+                open_tag: (
+                    jsx_opening_element
+                    name: (_) @opening-name
+                    attribute: (jsx_attribute (property_identifier) @_source "=" (_) @source)
+                    attribute: (jsx_attribute (property_identifier) @_code "=" (_) @code)
+                    )
+                .
+                (jsx_text) @children
+                .
+                close_tag: (jsx_closing_element name: (_) @closing-name)
+                (#eq? @_source "source")
+                (#eq? @_code "code")
+                (#eq? @opening-name "Lens.Change")
+                (#eq? @closing-name "Lens.Change")
+            ) @element`,
+            change_nodes: _ => ({
+                element: (change, _) => change.upgrade,
+            }),
+            change_indices: [],
+        }
+
+        var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
+
+        matches = program.query(approach.query)
+        clause(matches, m => {
+            // change by indices
+            approach.change_indices.forEach(x => {
+                // beginning, ending, upgrade
+                program.replace_by_indices(x[0], x[1], x[2])
+            })
+
+            // change by nodes
+            var keys = Object.keys(approach.change_nodes(program))
+            keys.forEach((k) => {
+                var captures = m.captures.filter(c => c.name === k)
+                captures.forEach(c => {
+                    var upgrade = approach.change_nodes(program)[k]
+                    var options = {}
+
+                    if(upgrade instanceof Array) {
+                        options = upgrade[1]
+                        upgrade = upgrade[0]
+                    }
+
+                    if(typeof upgrade === "function")
+                        upgrade = upgrade(change, c)
+
+                    program.replace_by_node(c.node, upgrade, options)
+                })
+            })
+        })
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
@@ -139,7 +197,6 @@ const use_resize = (range) => {
         }
 
         run_change(program, dependency, null)
-        // run_change(program, jsx_tag, null)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
