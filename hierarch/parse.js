@@ -199,49 +199,6 @@ const apply_change = (change = null) => {
     })
 }
 
-const run_change = (program, plan, change) => {
-    var approach = plan.prepare
-
-    if(change &&
-        change.code &&
-        change.source === program.name &&
-        change.upgrade
-    ) var approach = plan.apply
-
-    var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
-
-    matches = program.query(approach.query)
-    clause(matches, m => {
-        // change by indices
-        approach.change_indices.forEach(x => {
-            // beginning, ending, upgrade
-            program.replace_by_indices(x[0], x[1], x[2])
-        })
-
-        // change by nodes
-        var keys = Object.keys(approach.change_nodes(program))
-        keys.forEach((k) => {
-            var captures = m.captures.filter(c => c.name === k)
-            captures.forEach(c => {
-                var upgrade = approach.change_nodes(program)[k]
-                var options = {}
-
-                if(upgrade instanceof Array) {
-                    options = upgrade[1]
-                    upgrade = upgrade[0]
-                }
-
-                if(typeof upgrade === "function")
-                    upgrade = upgrade(change, c)
-
-                program.replace_by_node(c.node, upgrade, options)
-            })
-        })
-    })
-
-    program.reparse()
-}
-
 const use_resize = (range) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
