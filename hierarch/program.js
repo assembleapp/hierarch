@@ -16,6 +16,8 @@ class Program {
         this.parsed = this.parser.parse(this.source)
     }
 
+    display = (node) => this.parsed.getText(node)
+
     replace_by_node(node, upgrade = "", options = {}) {
         this.replace_by_indices(
             node.startIndex + (options.beginningOffset || 0),

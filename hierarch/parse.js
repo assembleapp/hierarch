@@ -14,14 +14,14 @@ const apply_lens = (range) => {
         var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
 
         if(lens_node.startIndex !== range[0] || lens_node.endIndex !== range[1]) {
-            console.log(program.parsed.getText(lens_node))
+            console.log(program.display(lens_node))
             console.log(range)
             console.log([lens_node.startIndex, lens_node.endIndex])
             throw("oh no! applying a lens on an improper node.")
         }
 
         if(lens_node.type === "jsx_text") {
-            var child = program.parsed.getText(lens_node)
+            var child = program.display(lens_node)
 
             // account for spacing
             var begin = lens_node.startIndex + child.search(/\S/)
@@ -209,20 +209,20 @@ const use_resize = (range) => {
         var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
 
         if(resize_node.startIndex !== range[0] || resize_node.endIndex !== range[1]) {
-            console.log(program.parsed.getText(resize_node))
+            console.log(program.display(resize_node))
             console.log(range)
             console.log([resize_node.startIndex, resize_node.endIndex])
             throw("oh no! applying a lens on an improper node.")
         }
 
         if(resize_node.type === "jsx_self_closing_element") {
-            // var child = program.parsed.getText(resize_node)
+            // var child = program.display(resize_node)
             var name_query = program.query(`(jsx_self_closing_element name: (_) @name)`, resize_node)
             // console.log(name_query)
             // debug_query(name_query, program)
             var name = name_query[0].captures[0].node
             // console.log(child)
-            program.replace_by_node(name, `Lens.Resize original={${program.parsed.getText(name)}}`)
+            program.replace_by_node(name, `Lens.Resize original={${program.display(name)}}`)
 
             // program.replace_by_indices(
             //     begin,
@@ -250,7 +250,7 @@ const end_resize = (range) => {
         var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
 
         if(resize_node.startIndex !== range[0] || resize_node.endIndex !== range[1]) {
-            console.log(program.parsed.getText(resize_node))
+            console.log(program.display(resize_node))
             console.log(range)
             console.log([resize_node.startIndex, resize_node.endIndex])
             throw("oh no! applying a lens on an improper node.")
@@ -274,7 +274,7 @@ const end_resize = (range) => {
             var original = query[0].captures.filter(c => c.name === "original")[0].node
             var attr = query[0].captures.filter(c => c.name === "attr")[0].node
 
-            program.replace_by_indices(name.startIndex, attr.endIndex, program.parsed.getText(original))
+            program.replace_by_indices(name.startIndex, attr.endIndex, program.display(original))
         }
 
         drop_dependency(program)
@@ -304,7 +304,7 @@ const apply_resize = (change) => {
             debug_query(original_matches, program)
             throw `oh no! more than 1 match`
         }
-        var original_name = program.parsed.getText(original_matches[0].captures.filter(c => c.name === "original")[0].node)
+        var original_name = program.display(original_matches[0].captures.filter(c => c.name === "original")[0].node)
         // console.log(original_name)
 
         var matches = program.query([
@@ -395,7 +395,7 @@ const hierarchy = (address, callback) => {
             if(m.captures.length !== 1) {
                 throw(
                     "oh no! our query has responded using a non-unique capture;\n" +
-                    JSON.stringify(m.captures.map(c => program.parsed.getText(c.node)))
+                    JSON.stringify(m.captures.map(c => program.display(c.node)))
                 )
             }
 
@@ -403,17 +403,17 @@ const hierarchy = (address, callback) => {
             var name = null
 
             if(c.node.type === "jsx_element") {
-                name = program.parsed.getText(c.node.firstNamedChild.firstNamedChild)
+                name = program.display(c.node.firstNamedChild.firstNamedChild)
             } else if (c.node.type === "jsx_self_closing_element") {
-                name = program.parsed.getText(c.node.firstNamedChild)
+                name = program.display(c.node.firstNamedChild)
             } else if (c.node.type === "jsx_text") {
-                name = program.parsed.getText(c.node).trim() // or "..."
+                name = program.display(c.node).trim() // or "..."
             } else {
                 throw (
                     "oh no! our query has responded on an undesired node;\n" +
                     c.node.toString() +
                     "\n---\n" +
-                    program.parsed.getText(c.node)
+                    program.display(c.node)
                 )
             }
 
@@ -474,7 +474,7 @@ const debug_query = (query, program) => {
             return [
                 c.name,
                 c.node.toString(),
-                program.parsed.getText(c.node),
+                program.display(c.node),
             ]
         })
     })
