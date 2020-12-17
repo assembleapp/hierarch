@@ -1,8 +1,6 @@
 var fs = require('fs')
 var Program = require("./program")
 
-var dependency = require("./changes/lens_dependency")
-
 // ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
 
@@ -47,8 +45,19 @@ const apply_lens = (range) => {
 }
 
 const add_dependency = (program) => {
-    var plan = dependency
-    var approach = plan.prepare
+    var approach = {
+        query: `
+        (import_statement (import_clause (identifier) @identifier) source: (string) @source
+            (#match? @source "./hierarch/lens")
+            (#eq? @identifier "Lens")
+        )
+        `,
+        clause: (matches, callback) => { matches.length ? null : callback(null) },
+        change_nodes: _ => ({}),
+        change_indices: [
+            [0, 0, "import Lens from './hierarch/lens'\n"],
+        ],
+    }
 
     var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
 
@@ -79,13 +88,40 @@ const add_dependency = (program) => {
     })
 }
 
+const drop_dependency = (program) => {
+    var approach = {
+        query: `
+        (import_statement (import_clause (identifier) @identifier) source: (string) @source
+            (#match? @source "./hierarch/lens")
+            (#eq? @identifier "Lens")
+        ) @import
+        `,
+        change_nodes: _ => ({
+            import: ["", { endingOffset: 1 }],
+        }),
+        change_indices: [],
+    }
+    var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
+
+    matches = program.query(approach.query)
+    clause(matches, m => {
+        var k = "import"
+        var captures = m.captures.filter(c => c.name === k)
+        captures.forEach(c => {
+            var upgrade = ""
+            var options = { endingOffset: 1 }
+
+            program.replace_by_node(c.node, upgrade, options)
+        })
+    })
+}
+
 const apply_change = (change = null) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
         var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
-        run_change(program, dependency, change)
 
         var approach = {}
 
@@ -146,6 +182,17 @@ const apply_change = (change = null) => {
                 })
             })
         })
+
+        program.reparse()
+        if(change &&
+            change.code &&
+            change.source === program.name &&
+            change.upgrade
+        ) {
+            drop_dependency(program)
+        } else {
+            add_dependency(program)
+        }
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
@@ -273,7 +320,7 @@ const end_resize = (range) => {
             program.replace_by_indices(name.startIndex, attr.endIndex, program.parsed.getText(original))
         }
 
-        run_change(program, dependency, {code: '_', source: program.name, upgrade: '_'})
+        drop_dependency(program)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
