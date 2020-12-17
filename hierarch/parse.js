@@ -39,10 +39,43 @@ const apply_lens = (range) => {
             )
         }
 
-        run_change(program, dependency, null)
+        add_dependency(program)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+    })
+}
+
+const add_dependency = (program) => {
+    var plan = dependency
+    var approach = plan.prepare
+
+    var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
+
+    matches = program.query(approach.query)
+    clause(matches, m => {
+        // change by indices
+        approach.change_indices.forEach(x => {
+            // beginning, ending, upgrade
+            program.replace_by_indices(x[0], x[1], x[2])
+        })
+
+        // change by nodes
+        var keys = Object.keys(approach.change_nodes(program))
+        keys.forEach((k) => {
+            var captures = m.captures.filter(c => c.name === k)
+            captures.forEach(c => {
+                var upgrade = approach.change_nodes(program)[k]
+                var options = {}
+
+                if(upgrade instanceof Array) {
+                    options = upgrade[1]
+                    upgrade = upgrade[0]
+                }
+
+                program.replace_by_node(c.node, upgrade, options)
+            })
+        })
     })
 }
 
@@ -196,7 +229,7 @@ const use_resize = (range) => {
             // )
         }
 
-        run_change(program, dependency, null)
+        add_dependency(program)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
