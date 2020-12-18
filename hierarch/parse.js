@@ -46,13 +46,10 @@ const apply_lens = (range) => {
 
 const add_dependency = (program) => {
     var approach = {
-        clause: (matches, callback) => { matches.length ? null : callback(null) },
         change_indices: [
             [0, 0, "import Lens from './hierarch/lens'\n"],
         ],
     }
-
-    var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
 
     matches = program.query(`
     (import_statement (import_clause (identifier) @identifier) source: (string) @source
@@ -60,6 +57,8 @@ const add_dependency = (program) => {
         (#eq? @identifier "Lens")
     )
     `)
+
+    var clause = (matches, callback) => { matches.length ? null : callback(null) }
     clause(matches, m => {
         // change by indices
         approach.change_indices.forEach(x => {
