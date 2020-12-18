@@ -47,7 +47,6 @@ const apply_lens = (range) => {
 const add_dependency = (program) => {
     var approach = {
         clause: (matches, callback) => { matches.length ? null : callback(null) },
-        change_nodes: _ => ({}),
         change_indices: [
             [0, 0, "import Lens from './hierarch/lens'\n"],
         ],
@@ -66,23 +65,6 @@ const add_dependency = (program) => {
         approach.change_indices.forEach(x => {
             // beginning, ending, upgrade
             program.replace_by_indices(x[0], x[1], x[2])
-        })
-
-        // change by nodes
-        var keys = Object.keys(approach.change_nodes(program))
-        keys.forEach((k) => {
-            var captures = m.captures.filter(c => c.name === k)
-            captures.forEach(c => {
-                var upgrade = approach.change_nodes(program)[k]
-                var options = {}
-
-                if(upgrade instanceof Array) {
-                    options = upgrade[1]
-                    upgrade = upgrade[0]
-                }
-
-                program.replace_by_node(c.node, upgrade, options)
-            })
         })
     })
 }
