@@ -98,12 +98,6 @@ const apply_change = (change) => {
             throw 'oh no! improper `change` supplied in `apply_change`. please check caller.'
         }
 
-        var approach = {
-            change_nodes: _ => ({
-                element: (change, _) => change.upgrade,
-            }),
-        }
-
         matches = program.query(`(jsx_element
             open_tag: (
                 jsx_opening_element
@@ -121,12 +115,16 @@ const apply_change = (change) => {
             (#eq? @closing-name "Lens.Change")
         ) @element`)
         matches.forEach(m => {
+            var change_nodes = _ => ({
+                element: (change, _) => change.upgrade,
+            })
+
             // change by nodes
-            var keys = Object.keys(approach.change_nodes(program))
+            var keys = Object.keys(change_nodes(program))
             keys.forEach((k) => {
                 var captures = m.captures.filter(c => c.name === k)
                 captures.forEach(c => {
-                    var upgrade = approach.change_nodes(program)[k]
+                    var upgrade = change_nodes(program)[k]
                     var options = {}
 
                     if(upgrade instanceof Array) {
