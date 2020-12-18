@@ -216,21 +216,10 @@ const use_resize = (range) => {
         }
 
         if(resize_node.type === "jsx_self_closing_element") {
-            // var child = program.display(resize_node)
             var name_query = program.query(`(jsx_self_closing_element name: (_) @name)`, resize_node)
-            // console.log(name_query)
-            // debug_query(name_query, program)
             var name = name_query[0].captures[0].node
-            // console.log(child)
-            program.replace_by_node(name, `Lens.Resize original={${program.display(name)}}`)
 
-            // program.replace_by_indices(
-            //     begin,
-            //     end,
-            //     `<Lens.Change source="${program.name}" code="abcd" >${
-            //         concise_child
-            //     }</Lens.Change>`
-            // )
+            program.replace_by_node(name, `Lens.Resize original={${program.display(name)}}`)
         }
 
         add_dependency(program)
@@ -305,7 +294,6 @@ const apply_resize = (change) => {
             throw `oh no! more than 1 match`
         }
         var original_name = program.display(original_matches[0].captures.filter(c => c.name === "original")[0].node)
-        // console.log(original_name)
 
         var matches = program.query([
         `(
@@ -407,7 +395,8 @@ const hierarchy = (address, callback) => {
             } else if (c.node.type === "jsx_self_closing_element") {
                 name = program.display(c.node.firstNamedChild)
             } else if (c.node.type === "jsx_text") {
-                name = program.display(c.node).trim() // or "..."
+                name = program.display(c.node).trim()
+                // should `name` be exceedingly long, truncate using "..."
             } else {
                 throw (
                     "oh no! our query has responded on an undesired node;\n" +
