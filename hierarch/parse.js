@@ -64,22 +64,14 @@ const add_dependency = (program) => {
 }
 
 const drop_dependency = (program) => {
-    var approach = {
-        query: `
-        (import_statement (import_clause (identifier) @identifier) source: (string) @source
-            (#match? @source "./hierarch/lens")
-            (#eq? @identifier "Lens")
-        ) @import
-        `,
-        change_nodes: _ => ({
-            import: ["", { endingOffset: 1 }],
-        }),
-        change_indices: [],
-    }
-    var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
+    matches = program.query(`
+    (import_statement (import_clause (identifier) @identifier) source: (string) @source
+        (#match? @source "./hierarch/lens")
+        (#eq? @identifier "Lens")
+    ) @import
+    `)
 
-    matches = program.query(approach.query)
-    clause(matches, m => {
+    matches.forEach(m => {
         var k = "import"
         var captures = m.captures.filter(c => c.name === k)
         captures.forEach(c => {
