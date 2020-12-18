@@ -46,9 +46,6 @@ const apply_lens = (range) => {
 
 const add_dependency = (program) => {
     var approach = {
-        change_indices: [
-            [0, 0, "import Lens from './hierarch/lens'\n"],
-        ],
     }
 
     matches = program.query(`
@@ -60,7 +57,9 @@ const add_dependency = (program) => {
 
     if(!matches.length) {
         // change by indices
-        approach.change_indices.forEach(x => {
+        [
+            [0, 0, "import Lens from './hierarch/lens'\n"],
+        ].forEach(x => {
             // beginning, ending, upgrade
             program.replace_by_indices(x[0], x[1], x[2])
         })
