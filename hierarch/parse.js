@@ -120,11 +120,12 @@ const apply_change = (change) => {
             })
 
             // change by nodes
-            var keys = Object.keys(change_nodes())
+            var changeable_nodes = change_nodes()
+            var keys = Object.keys(changeable_nodes)
             keys.forEach((k) => {
                 var captures = m.captures.filter(c => c.name === k)
                 captures.forEach(c => {
-                    var upgrade = change_nodes()[k]
+                    var upgrade = changeable_nodes[k]
                     var options = {}
 
                     if(upgrade instanceof Array) {
