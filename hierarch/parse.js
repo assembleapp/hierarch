@@ -115,16 +115,16 @@ const apply_change = (change) => {
             (#eq? @closing-name "Lens.Change")
         ) @element`)
         matches.forEach(m => {
-            var change_nodes = _ => ({
+            var change_nodes = () => ({
                 element: (change, _) => change.upgrade,
             })
 
             // change by nodes
-            var keys = Object.keys(change_nodes(program))
+            var keys = Object.keys(change_nodes())
             keys.forEach((k) => {
                 var captures = m.captures.filter(c => c.name === k)
                 captures.forEach(c => {
-                    var upgrade = change_nodes(program)[k]
+                    var upgrade = change_nodes()[k]
                     var options = {}
 
                     if(upgrade instanceof Array) {
