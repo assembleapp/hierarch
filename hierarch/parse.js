@@ -121,8 +121,7 @@ const apply_change = (change) => {
                 var upgrade = (change, _) => change.upgrade
                 var options = {}
 
-                if(typeof upgrade === "function")
-                    upgrade = upgrade(change, c)
+                upgrade = upgrade(change, c)
 
                 program.replace_by_node(c.node, upgrade, options)
             })
