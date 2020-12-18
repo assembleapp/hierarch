@@ -58,14 +58,13 @@ const add_dependency = (program) => {
     )
     `)
 
-    var clause = (matches, callback) => { matches.length ? null : callback(null) }
-    clause(matches, m => {
+    matches.length ? null : (m => {
         // change by indices
         approach.change_indices.forEach(x => {
             // beginning, ending, upgrade
             program.replace_by_indices(x[0], x[1], x[2])
         })
-    })
+    })(null)
 }
 
 const drop_dependency = (program) => {
