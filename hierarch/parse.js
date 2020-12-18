@@ -290,7 +290,7 @@ const apply_resize = (change) => {
         )
         `)
         if(original_matches.length > 1) {
-            debug_query(original_matches, program)
+            program.debug_query(original_matches)
             throw `oh no! more than 1 match`
         }
         var original_name = program.display(original_matches[0].captures.filter(c => c.name === "original")[0].node)
@@ -455,19 +455,6 @@ const hierarchy = (address, callback) => {
 
         callback(JSON.stringify(hierarchy, null, 2))
     })
-}
-
-const debug_query = (query, program) => {
-    var elements = query.map(m => {
-        return m.captures.map(c => {
-            return [
-                c.name,
-                c.node.toString(),
-                program.display(c.node),
-            ]
-        })
-    })
-    console.log(elements)
 }
 
 module.exports = { apply_lens, apply_change, use_resize, end_resize, apply_resize, hierarchy }

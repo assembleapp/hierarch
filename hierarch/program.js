@@ -73,6 +73,19 @@ class Program {
             console.log(e)
         }
     }
+
+    debug_query(query) {
+        var elements = query.map(m => {
+            return m.captures.map(c => {
+                return [
+                    c.name,
+                    c.node.toString(),
+                    this.display(c.node),
+                ]
+            })
+        })
+        console.log(elements)
+    }
 }
 
 // source:
