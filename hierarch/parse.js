@@ -58,8 +58,7 @@ const add_dependency = (program) => {
     )
     `)
 
-    if(matches.length) {
-    } else {
+    if(!matches.length) {
         var m = null
         // change by indices
         approach.change_indices.forEach(x => {
