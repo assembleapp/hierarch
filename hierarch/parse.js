@@ -119,11 +119,10 @@ const apply_change = (change) => {
             var captures = m.captures.filter(c => c.name === 'element')
             captures.forEach(c => {
                 var upgrade = (change, _) => change.upgrade
-                var options = {}
 
                 upgrade = upgrade(change, c)
 
-                program.replace_by_node(c.node, upgrade, options)
+                program.replace_by_node(c.node, upgrade, {})
             })
         })
 
