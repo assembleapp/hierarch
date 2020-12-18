@@ -123,15 +123,7 @@ const apply_change = (change) => {
         })
 
         program.reparse()
-        if(change &&
-            change.code &&
-            change.source === program.name &&
-            change.upgrade
-        ) {
-            drop_dependency(program)
-        } else {
-            add_dependency(program)
-        }
+        drop_dependency(program)
 
         program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
