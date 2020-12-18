@@ -116,19 +116,10 @@ const apply_change = (change = null) => {
             change_nodes: _ => ({
                 element: (change, _) => change.upgrade,
             }),
-            change_indices: [],
         }
 
-        var clause = approach.clause || ((matches, callback) => { matches.forEach(m => callback(m))})
-
         matches = program.query(approach.query)
-        clause(matches, m => {
-            // change by indices
-            approach.change_indices.forEach(x => {
-                // beginning, ending, upgrade
-                program.replace_by_indices(x[0], x[1], x[2])
-            })
-
+        matches.forEach(m => {
             // change by nodes
             var keys = Object.keys(approach.change_nodes(program))
             keys.forEach((k) => {
