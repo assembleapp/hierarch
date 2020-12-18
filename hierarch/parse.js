@@ -122,7 +122,7 @@ const apply_change = (change) => {
             // change by nodes
             var captures = m.captures.filter(c => c.name === 'element')
             captures.forEach(c => {
-                var upgrade = changeable_nodes['element']
+                var upgrade = (change, _) => change.upgrade
                 var options = {}
 
                 if(upgrade instanceof Array) {
