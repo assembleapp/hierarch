@@ -121,11 +121,6 @@ const apply_change = (change) => {
                 var upgrade = (change, _) => change.upgrade
                 var options = {}
 
-                if(upgrade instanceof Array) {
-                    options = upgrade[1]
-                    upgrade = upgrade[0]
-                }
-
                 if(typeof upgrade === "function")
                     upgrade = upgrade(change, c)
 
