@@ -83,20 +83,22 @@ const drop_dependency = (program) => {
     })
 }
 
-const apply_change = (change = null) => {
+const apply_change = (change) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
         var source_name = sourceAddress.split("../").slice(-1)[0]
         var program = new Program(source_name, source)
 
-        var approach = {}
+        if(!change ||
+            !change.code ||
+            change.source !== program.name ||
+            !change.upgrade
+        ) {
+            throw 'oh no! improper `change` supplied in `apply_change`. please check caller.'
+        }
 
-        if(change &&
-            change.code &&
-            change.source === program.name &&
-            change.upgrade
-        ) var approach = {
+        var approach = {
             query: `(jsx_element
                 open_tag: (
                     jsx_opening_element
