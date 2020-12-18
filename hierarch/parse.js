@@ -120,7 +120,7 @@ const apply_change = (change) => {
             }
 
             // change by nodes
-            var keys = Object.keys(changeable_nodes)
+            var keys = ['element']
             keys.forEach((k) => {
                 var captures = m.captures.filter(c => c.name === k)
                 captures.forEach(c => {
