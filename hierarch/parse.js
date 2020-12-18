@@ -115,10 +115,6 @@ const apply_change = (change) => {
             (#eq? @closing-name "Lens.Change")
         ) @element`)
         matches.forEach(m => {
-            var changeable_nodes = {
-                element: (change, _) => change.upgrade,
-            }
-
             // change by nodes
             var captures = m.captures.filter(c => c.name === 'element')
             captures.forEach(c => {
