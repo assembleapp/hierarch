@@ -9,8 +9,8 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <Link href="https://reactjs.org" target="_blank" rel="noopener noreferrer" >
-          Learn React
+        <Link href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
+          Learn Hierarch.
         </Link>
       </Header>
     </Layout>
