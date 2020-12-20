@@ -7,7 +7,7 @@ function App() {
       <Header>
         <Logo src={logo} alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Change <code>src/App.js</code> using Hierarch.
         </p>
         <Link href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
           Learn Hierarch.
