@@ -18,8 +18,8 @@ function App() {
 }
 
 const LogoSpin = keyframes`
-from { transform: rotate(0deg); }
-to { transform: rotate(360deg); }
+// from { transform: rotate(0deg); }
+// to { transform: rotate(360deg); }
 `
 
 const Layout = styled.div`
