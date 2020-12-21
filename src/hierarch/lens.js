@@ -43,6 +43,24 @@ class Change extends React.Component {
     )
 }
 
+const Code = styled.code``
+const P = styled.p``
+
+const Box = ({ original, children, ...remainder }) => {
+  const Original = styled(original)`
+  outline: 1px solid red;
+  &:hover {
+    outline-color: blue;
+  }
+  `
+
+  return (
+    <Original {...remainder}>
+      {children}
+    </Original>
+  )
+}
+
 const Field = styled.input.attrs({
     type: "text",
 })`
@@ -195,4 +213,5 @@ cursor: ${p => p.x === p.y ? "nesw" : "nwse"}-resize;
 
 const Lens = { Change, Resize }
 
+export { Code, P, Box }
 export default Lens

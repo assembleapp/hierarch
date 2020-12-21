@@ -1,3 +1,4 @@
+import Lens, { Code, P, Box } from './hierarch/lens'
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
 
@@ -15,24 +16,6 @@ function App() {
       </Box>
     </Box>
   );
-}
-
-const Code = styled.code``
-const P = styled.p``
-
-const Box = ({ original, children, ...remainder }) => {
-  const Original = styled(original)`
-  outline: 1px solid red;
-  &:hover {
-    outline-color: blue;
-  }
-  `
-
-  return (
-    <Original {...remainder}>
-      {children}
-    </Original>
-  )
 }
 
 const LogoSpin = keyframes`
