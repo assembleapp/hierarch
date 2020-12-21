@@ -43,23 +43,31 @@ class Change extends React.Component {
     )
 }
 
-const Code = styled.code``
-const P = styled.p``
 
-const Box = ({ original, children, ...remainder }) => {
-  const Original = styled(original)`
-  outline: 1px solid red;
-  &:hover {
-    outline-color: blue;
+const Box = ({ original, children, code, ...remainder }) => {
+    const Original = styled(original).attrs({
+        onClick: (e) => { debugger; e.stopPropagation() }
+    })`
+    outline: 1px solid red;
+    &:hover {
+      outline-color: blue;
+    }
+    `
+
+    // code: abc123-123132
+    // source file hash - content hash
+
+    // image or block element?
+    // -> resize
+    // has text children?
+    // -> <Change>...</>
+    return (
+      <Original {...remainder}>
+        {children}
+      </Original>
+    )
   }
-  `
 
-  return (
-    <Original {...remainder}>
-      {children}
-    </Original>
-  )
-}
 
 const Field = styled.input.attrs({
     type: "text",
@@ -212,6 +220,9 @@ cursor: ${p => p.x === p.y ? "nesw" : "nwse"}-resize;
 `
 
 const Lens = { Change, Resize }
+
+const Code = styled.code``
+const P = styled.p``
 
 export { Code, P, Box }
 export default Lens

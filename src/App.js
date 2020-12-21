@@ -4,13 +4,13 @@ import logo from './logo.svg';
 
 function App() {
   return (
-    <Box original={Layout}>
-      <Box original={Header}>
-        <Box original={Logo} src={logo} alt="logo" />
-        <Box original={P}>
-          Change <Box original={Code}>src/App.js</Box> using Hierarch.
+    <Box original={Layout} code="abc1">
+      <Box original={Header} code="abc2">
+        <Box original={Logo} code="abc3" src={logo} alt="logo" />
+        <Box original={P} code="abc4">
+          Change <Box original={Code} code="abc5">src/App.js</Box> using Hierarch.
         </Box>
-        <Box original={Link} href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
+        <Box original={Link} code="abc6" href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
           Learn Hierarch.
         </Box>
       </Box>
