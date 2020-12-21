@@ -224,6 +224,10 @@ const apply_resize = (change) => {
             program.debug_query(original_matches)
             throw `oh no! more than 1 match`
         }
+        if(original_matches.length < 1) {
+            program.debug_query(original_matches)
+            throw `oh no! no match`
+        }
         var original_name = program.display(original_matches[0].captures.filter(c => c.name === "original")[0].node)
 
         var matches = program.query([

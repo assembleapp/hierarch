@@ -73,7 +73,9 @@ class Box extends React.Component {
         return (
             this.state.clicked
             ?
-            <div>Clicked!</div>
+            <Resize original={original} {...remainder}>
+                {children}
+            </Resize>
             :
             <Original {...remainder}>
                 {children}
