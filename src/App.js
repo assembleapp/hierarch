@@ -3,13 +3,13 @@ import logo from './logo.svg';
 
 function App() {
   return (
-    <Box Original={Layout}>
-      <Box Original={Header}>
-        <Box Original={Logo} src={logo} alt="logo" />
-        <Box Original={P}>
-          Change <Box Original={Code}>src/App.js</Box> using Hierarch.
+    <Box original={Layout}>
+      <Box original={Header}>
+        <Box original={Logo} src={logo} alt="logo" />
+        <Box original={P}>
+          Change <Box original={Code}>src/App.js</Box> using Hierarch.
         </Box>
-        <Box Original={Link} href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
+        <Box original={Link} href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
           Learn Hierarch.
         </Box>
       </Box>
@@ -20,17 +20,17 @@ function App() {
 const Code = styled.code``
 const P = styled.p``
 
-const Box = ({ Original, children, ...remainder }) => {
-  const B = styled(Original)`
+const Box = ({ original, children, ...remainder }) => {
+  const Original = styled(original)`
   outline: 1px solid red;
   &:hover {
     outline-color: blue;
   }
   `
   return (
-    <B {...remainder}>
+    <Original {...remainder}>
       {children}
-    </B>
+    </Original>
   )
 }
 
