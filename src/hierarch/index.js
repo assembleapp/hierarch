@@ -21,7 +21,7 @@ class Hierarch extends React.Component {
         <Corner>
             <Logo
                 size={20}
-                repeat={2000}
+                repeat={100000}
                 onClick={() => this.setState({ open: true })}
             />
         </Corner>
