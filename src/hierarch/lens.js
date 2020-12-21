@@ -62,7 +62,7 @@ class Box extends React.Component {
         outline-color: blue;
         }
         `
-        // console.log('rendering Box:', code, this.state)
+        console.log('rendering Box:', code, this.state, children)
 
         // code: abc123-123132
         // source file hash - content hash
@@ -77,8 +77,11 @@ class Box extends React.Component {
                 children.length
                 ?
                 <Original {...remainder}>
-                    {/* OH NO! What happens when text is on both sides of a child element? */}
-                    <Change code={code}>{children}</Change>
+                    {children.map(c => (
+                        typeof(c) === 'string'
+                        ? <Change code={code}>{c}</Change>
+                        : c
+                    ))}
                 </Original>
                 :
                 <Resize original={original} code={code} {...remainder} />
