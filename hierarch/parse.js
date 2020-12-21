@@ -216,7 +216,7 @@ const apply_resize = (change) => {
             jsx_self_closing_element
             name: (_) @name
             attribute: (jsx_attribute (property_identifier) @prop (jsx_expression (_) @original))
-            (#eq? @name "Lens.Resize")
+            (#eq? @name "Box")
             (#eq? @prop "original")
         )
         `)

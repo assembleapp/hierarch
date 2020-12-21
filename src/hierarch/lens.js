@@ -62,6 +62,7 @@ class Box extends React.Component {
         outline-color: blue;
         }
         `
+        // console.log('rendering Box:', code, this.state)
 
         // code: abc123-123132
         // source file hash - content hash
@@ -143,8 +144,8 @@ class Resize extends React.Component {
         // .then(response => response.text())
         // .then(response => console.log(response))
         .then(() => {
-            if(window.assemble && window.assemble.repull)
-                window.assemble.repull()
+            // if(window.assemble && window.assemble.repull)
+            //     window.assemble.repull()
         })
     }
 }
@@ -221,7 +222,8 @@ const Corner = styled.span.attrs(p => ({
         window.addEventListener('mousemove', resizer)
         window.addEventListener('mouseup', p.recordSize)
         window.addEventListener('mouseup', endResize(resizer, p.recordSize))
-    }
+    },
+    onClick: (e) => { e.stopPropagation() },
 }))`
 position: absolute;
 height: 1rem;
