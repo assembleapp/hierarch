@@ -3,18 +3,35 @@ import logo from './logo.svg';
 
 function App() {
   return (
-    <Layout>
-      <Header>
-        <Logo src={logo} alt="logo" />
-        <p>
-          Change <code>src/App.js</code> using Hierarch.
-        </p>
-        <Link href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
+    <Box Original={Layout}>
+      <Box Original={Header}>
+        <Box Original={Logo} src={logo} alt="logo" />
+        <Box Original={P}>
+          Change <Box Original={Code}>src/App.js</Box> using Hierarch.
+        </Box>
+        <Box Original={Link} href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
           Learn Hierarch.
-        </Link>
-      </Header>
-    </Layout>
+        </Box>
+      </Box>
+    </Box>
   );
+}
+
+const Code = styled.code``
+const P = styled.p``
+
+const Box = ({ Original, children, ...remainder }) => {
+  const B = styled(Original)`
+  outline: 1px solid red;
+  &:hover {
+    outline-color: blue;
+  }
+  `
+  return (
+    <B {...remainder}>
+      {children}
+    </B>
+  )
 }
 
 const LogoSpin = keyframes`
@@ -28,7 +45,6 @@ text-align: center;
 
 const Logo = styled.img`
 height: 40vmin;
-pointer-events: none;
 
 @media (prefers-reduced-motion: no-preference) {
   animation: ${LogoSpin} infinite 20s linear;
