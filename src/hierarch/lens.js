@@ -74,7 +74,7 @@ class Box extends React.Component {
         return (
             this.state.clicked
             ?
-            <Resize original={original} {...remainder}>
+            <Resize original={original} code={code} {...remainder}>
                 {children}
             </Resize>
             :
@@ -135,6 +135,7 @@ class Resize extends React.Component {
             body: JSON.stringify({
                 width: this.state.width,
                 height: this.state.height,
+                code: this.props.code,
             }),
             headers: {
                 'Accept': 'application/json',

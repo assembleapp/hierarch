@@ -6,7 +6,10 @@ function App() {
   return (
     <Box original={Layout} code="abc1">
       <Box original={Header} code="abc2">
-        <Box original={Logo} code="abc3" src={logo} alt="logo" />
+
+        <Box original={Logo1} code="abc3" src={logo} alt="logo" />
+        <Box original={Logo} code="abc31" src={logo} alt="logo" />
+
         <Box original={P} code="abc4">
           Change <Box original={Code} code="abc5">src/App.js</Box> using Hierarch.
         </Box>
