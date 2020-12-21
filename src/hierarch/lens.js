@@ -43,31 +43,44 @@ class Change extends React.Component {
     )
 }
 
-
-const Box = ({ original, children, code, ...remainder }) => {
-    const Original = styled(original).attrs({
-        onClick: (e) => { debugger; e.stopPropagation() }
-    })`
-    outline: 1px solid red;
-    &:hover {
-      outline-color: blue;
+class Box extends React.Component {
+    state = {
+        clicked: false,
     }
-    `
 
-    // code: abc123-123132
-    // source file hash - content hash
+    render = () => {
+        var { original, children, code, ...remainder } = this.props
 
-    // image or block element?
-    // -> resize
-    // has text children?
-    // -> <Change>...</>
-    return (
-      <Original {...remainder}>
-        {children}
-      </Original>
-    )
-  }
+        const Original = styled(original).attrs({
+            onClick: (e) => {
+                this.setState({clicked: true})
+                e.stopPropagation()
+            }
+        })`
+        outline: 1px solid red;
+        &:hover {
+        outline-color: blue;
+        }
+        `
 
+        // code: abc123-123132
+        // source file hash - content hash
+
+        // image or block element?
+        // -> resize
+        // has text children?
+        // -> <Change>...</>
+        return (
+            this.state.clicked
+            ?
+            <div>Clicked!</div>
+            :
+            <Original {...remainder}>
+                {children}
+            </Original>
+        )
+    }
+}
 
 const Field = styled.input.attrs({
     type: "text",
