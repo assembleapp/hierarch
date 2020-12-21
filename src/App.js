@@ -27,6 +27,7 @@ const Box = ({ original, children, ...remainder }) => {
     outline-color: blue;
   }
   `
+
   return (
     <Original {...remainder}>
       {children}
@@ -52,14 +53,14 @@ height: 40vmin;
 `
 
 const Header = styled.header`
-background-color: #282c34;
+background-color: #bda862;
 min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
 font-size: calc(10px + 2vmin);
-color: white;
+color: #0d408e;
 `
 
 const Link = styled.a`
