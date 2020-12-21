@@ -73,10 +73,16 @@ class Box extends React.Component {
         // -> <Change>...</>
         return (
             this.state.clicked
-            ?
-            <Resize original={original} code={code} {...remainder}>
-                {children}
-            </Resize>
+            ? (
+                children.length
+                ?
+                <Original {...remainder}>
+                    {/* OH NO! What happens when text is on both sides of a child element? */}
+                    <Change code={code}>{children}</Change>
+                </Original>
+                :
+                <Resize original={original} code={code} {...remainder} />
+            )
             :
             <Original {...remainder}>
                 {children}
