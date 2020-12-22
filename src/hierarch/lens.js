@@ -15,30 +15,12 @@ class Change extends React.Component {
         }}
         onKeyDown={(e) => {
             // AHA! This should not happen in this function; pass it on up to the parent.
-            if(e.key !== "Enter") return true
-
-            fetch("http://0.0.0.0:4321/change", {
-                method: "POST",
-                body: JSON.stringify({
-                    // upgrade: ["Change", { code: 'abc5' }, "by clicking and clacking."],
-                    upgrade: this.state.value || this.props.children,
-                    code: this.props.code,
-                }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            })
-            // .then(response => response.text())
-            // .then(response => console.log(response))
-            .then(() => {
-                if(window.assemble && window.assemble.repull)
-                    window.assemble.repull()
-            })
-
-            e.preventDefault();
-            e.stopPropagation();
-            return false
+            if(e.key === "Enter") {
+                this.props.record(this.state.value || this.props.children)
+                e.preventDefault();
+                e.stopPropagation();
+                return false
+            }
         }}
         />
     )
@@ -48,6 +30,8 @@ class Box extends React.Component {
     state = {
         clicked: false,
     }
+
+    changeableBox = React.createRef()
 
     render = () => {
         var { original, children, code, ...remainder } = this.props
@@ -73,10 +57,10 @@ class Box extends React.Component {
             ? (
                 children.length
                 ?
-                <Original {...remainder}>
+                <Original ref={this.changeableBox} {...remainder}>
                     {children.map(c => (
                         typeof(c) === 'string'
-                        ? <Change code={code}>{c}</Change>
+                        ? <Change record={(value) => this.recordChanges(value)} code={code}>{c}</Change>
                         : c
                     ))}
                 </Original>
@@ -88,6 +72,36 @@ class Box extends React.Component {
                 {children}
             </Original>
         )
+    }
+
+    recordChanges(value) {
+        var changeArray = [...this.changeableBox.current.children].map((child, x) => {
+            if([...child.classList].some(klass => klass === Field.toString().slice(1))) {
+                return child.value
+            } else {
+                return { code: this.props.children[x].props.code }
+            }
+        })
+        // console.log(changeArray)
+
+        fetch("http://0.0.0.0:4321/change", {
+            method: "POST",
+            body: JSON.stringify({
+                // upgrade: ["Change", { code: 'abc5' }, "by clicking and clacking."],
+                upgrade: changeArray,
+                code: this.props.code,
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        // .then(response => response.text())
+        // .then(response => console.log(response))
+        .then(() => {
+            if(window.assemble && window.assemble.repull)
+                window.assemble.repull()
+        })
     }
 }
 

@@ -28,7 +28,7 @@ responder.post("/lens", (call, response) => {
 
 responder.post("/change", (call, response) => {
     apply_change({
-        upgrade: escape(call.body.upgrade),
+        upgrade: call.body.upgrade.map(c => typeof(c) === 'string' ? escape(c) : c),
         code: call.body.code,
     })
     response.send(JSON.stringify(call.body))
