@@ -84,6 +84,7 @@ const drop_dependency = (program) => {
 }
 
 const apply_change = (change) => {
+    console.log(change)
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
@@ -92,28 +93,29 @@ const apply_change = (change) => {
 
         if(!change ||
             !change.code ||
-            change.source !== program.name ||
             !change.upgrade
         ) {
             throw 'oh no! improper `change` supplied in `apply_change`. please check caller.'
         }
 
+        console.log("HOLD UP!\nSerious insecure code here; by passing a sneaky `code` param,\nsomeone could hack our parser's query.")
         matches = program.query(`(jsx_element
             open_tag: (
                 jsx_opening_element
                 name: (_) @opening-name
-                attribute: (jsx_attribute (property_identifier) @_source "=" (_) @source)
-                attribute: (jsx_attribute (property_identifier) @_code "=" (_) @code)
+                attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
                 )
-            .
+
             (jsx_text) @children
-            .
+
             close_tag: (jsx_closing_element name: (_) @closing-name)
-            (#eq? @_source "source")
             (#eq? @_code "code")
-            (#eq? @opening-name "Lens.Change")
-            (#eq? @closing-name "Lens.Change")
+            (#match? @code "^.${change.code}.$")
+            (#eq? @opening-name "Box")
+            (#eq? @closing-name "Box")
         ) @element`)
+        program.debug_query(matches)
+        return null
         matches.forEach(m => {
             // change by nodes
             var captures = m.captures.filter(c => c.name === 'element')

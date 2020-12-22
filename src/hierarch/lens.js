@@ -14,13 +14,14 @@ class Change extends React.Component {
             this.setState({ value: e.target.value || "" })
         }}
         onKeyDown={(e) => {
+            // AHA! This should not happen in this function; pass it on up to the parent.
             if(e.key !== "Enter") return true
 
             fetch("http://0.0.0.0:4321/change", {
                 method: "POST",
                 body: JSON.stringify({
+                    // upgrade: ["Change", { code: 'abc5' }, "by clicking and clacking."],
                     upgrade: this.state.value || this.props.children,
-                    source: this.props.source,
                     code: this.props.code,
                 }),
                 headers: {
@@ -67,10 +68,6 @@ class Box extends React.Component {
         // code: abc123-123132
         // source file hash - content hash
 
-        // image or block element?
-        // -> resize
-        // has text children?
-        // -> <Change>...</>
         return (
             this.state.clicked
             ? (
