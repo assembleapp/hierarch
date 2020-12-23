@@ -1,44 +1,8 @@
 var fs = require('fs')
 var Program = require("./program")
-const guard = require("./guard")
 
 // ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
-
-const apply_lens = (range) => {
-    fs.readFile(sourceAddress, 'utf8', (error, source) => {
-        if(error) return console.log(error)
-
-        var source_name = sourceAddress.split("../").slice(-1)[0]
-        var program = new Program(source_name, source)
-
-        var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
-
-        guard.node_range(program, lens_node, range)
-
-        if(lens_node.type === "jsx_text") {
-            var child = program.display(lens_node)
-
-            // account for spacing
-            var begin = lens_node.startIndex + child.search(/\S/)
-            var end = lens_node.endIndex - child.split("").reverse().join("").search(/\S/)
-            var concise_child = program.source.slice(begin, end)
-
-            program.replace_by_indices(
-                begin,
-                end,
-                `<Lens.Change source="${program.name}" code="abcd" >${
-                    concise_child
-                }</Lens.Change>`
-            )
-        }
-
-        add_dependency(program)
-
-        program.reparse()
-        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
-    })
-}
 
 const add_dependency = (program) => {
     matches = program.query(`
@@ -116,70 +80,6 @@ const apply_change = (change) => {
         })
 
         program.reparse()
-        drop_dependency(program)
-
-        program.reparse()
-        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
-    })
-}
-
-const use_resize = (range) => {
-    fs.readFile(sourceAddress, 'utf8', (error, source) => {
-        if(error) return console.log(error)
-
-        var source_name = sourceAddress.split("../").slice(-1)[0]
-        var program = new Program(source_name, source)
-
-        var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
-
-        guard.node_range(program, resize_node, range)
-
-        if(resize_node.type === "jsx_self_closing_element") {
-            var name_query = program.query(`(jsx_self_closing_element name: (_) @name)`, resize_node)
-            var name = name_query[0].captures[0].node
-
-            program.replace_by_node(name, `Lens.Resize original={${program.display(name)}}`)
-        }
-
-        add_dependency(program)
-
-        program.reparse()
-        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
-    })
-}
-
-const end_resize = (range) => {
-    fs.readFile(sourceAddress, 'utf8', (error, source) => {
-        if(error) return console.log(error)
-
-        var source_name = sourceAddress.split("../").slice(-1)[0]
-        var program = new Program(source_name, source)
-
-        var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
-
-        guard.node_range(program, resize_node, range)
-
-        if(resize_node.type === "jsx_self_closing_element") {
-            var query = program.query(`(
-                jsx_self_closing_element
-                name: (_) @name
-                .
-                attribute: (
-                    jsx_attribute
-                    (property_identifier) @prop
-                    (jsx_expression (_) @original)
-                ) @attr
-                (#eq? @name "Lens.Resize")
-                (#eq? @prop "original")
-            )`, resize_node)
-
-            var name = query[0].captures.filter(c => c.name === "name")[0].node
-            var original = query[0].captures.filter(c => c.name === "original")[0].node
-            var attr = query[0].captures.filter(c => c.name === "attr")[0].node
-
-            program.replace_by_indices(name.startIndex, attr.endIndex, program.display(original))
-        }
-
         drop_dependency(program)
 
         program.reparse()
@@ -315,7 +215,7 @@ const hierarchy = (address, callback) => {
         var program = new Program(source_name, source)
 
         var query = program.query(`
-        [(jsx_element) (jsx_self_closing_element) (jsx_text)] @element
+        [(jsx_element) (jsx_self_closing_element)] @element
         `)
 
         var elements = query.map(m => {
@@ -348,9 +248,6 @@ const hierarchy = (address, callback) => {
                     name = program.display(c.node.namedChildren[1].namedChildren[1])
                     // console.log(name, code)
                 }
-            } else if (c.node.type === "jsx_text") {
-                name = program.display(c.node).trim()
-                // should `name` be exceedingly long, truncate using "..."
             } else {
                 throw (
                     "oh no! our query has responded on an undesired node;\n" +
@@ -361,12 +258,10 @@ const hierarchy = (address, callback) => {
             }
 
             var permissions = []
-                .concat(c.node.type === "jsx_text" ? "g-4:change" : [])
-                .concat(c.node.type === "jsx_self_closing_element" ?
-                  name === "Lens.Resize"
-                  ? "g-4:resize:end"
-                  : "g-4:resize"
-                : [])
+                .concat(c.node.type === "jsx_element" ? "g-4:change" : [])
+                .concat(c.node.type === "jsx_self_closing_element" ? "g-4:resize" : [])
+            // console.log(program.display(c.node))
+            // console.log(permissions)
 
             var appendages = {
                 jsx_self_closing_element: ["<", "/>"],
@@ -416,4 +311,4 @@ const hierarchy = (address, callback) => {
     })
 }
 
-module.exports = { apply_lens, apply_change, use_resize, end_resize, apply_resize, hierarchy }
+module.exports = { apply_change, apply_resize, hierarchy }

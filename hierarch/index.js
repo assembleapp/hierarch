@@ -4,10 +4,7 @@ const escape = require("escape-html")
 const responder = express.Router()
 
 const {
-    apply_lens,
     apply_change,
-    use_resize,
-    end_resize,
     apply_resize,
     hierarchy,
 } = require("./parse")
@@ -21,27 +18,12 @@ responder.use(function(req, res, next) {
     next();
 });
 
-responder.post("/lens", (call, response) => {
-    apply_lens([call.body.begin, call.body.end])
-    response.send("applied.")
-})
-
 responder.post("/change", (call, response) => {
     apply_change({
         upgrade: call.body.upgrade.map(c => typeof(c) === 'string' ? escape(c) : c),
         code: call.body.code,
     })
     response.send(JSON.stringify(call.body))
-})
-
-responder.post("/use_resize", (call, response) => {
-    use_resize([call.body.begin, call.body.end])
-    response.send("applied.")
-})
-
-responder.post("/end_resize", (call, response) => {
-    end_resize([call.body.begin, call.body.end])
-    response.send("applied.")
 })
 
 responder.post("/resize", (call, response) => {

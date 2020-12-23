@@ -55,32 +55,25 @@ const Hierarchical = ({name, begin, end, permissions, code}) => (
     <HierarchScope.Consumer>
     {scope => (
         <>
+        {/* {permissions.join(",")} */}
         {
         permissions.indexOf("g-4:change") !== -1
         ? <a
             key={`${begin}-${end}`}
             href="#"
-            onClick={() => use_lens(begin, end)}
-            onMouseOver={() => { scope.signal("display", code) }}
+            onClick={() => scope.signal("change", code)}
+            onMouseOver={() => scope.signal("display", code)}
         >{name}</a>
         : <span
             key={`${begin}-${end}`}
-            onMouseOver={() => { scope.signal("display", code) }}
+            onMouseOver={() => scope.signal("display", code)}
         >{name}</span>
         }
         {permissions.indexOf("g-4:resize") !== -1
         && <a
             href="#"
-            onClick={() => use_resize(begin, end)}
-            onMouseOver={() => { scope.signal("display", code) }}
+            onClick={() => scope.signal("resize", code) }
         >resize</a>
-        }
-        {permissions.indexOf("g-4:resize:end") !== -1
-        && <a
-            href="#"
-            onClick={() => end_resize(begin, end)}
-            onMouseOver={() => { scope.signal("display", code) }}
-        >end resize</a>
         }
         </>
     )}
@@ -89,34 +82,6 @@ const Hierarchical = ({name, begin, end, permissions, code}) => (
 
 const use_lens = (begin, end) => {
     fetch("http://0.0.0.0:4321/lens", {
-        method: "POST",
-        body: JSON.stringify({ begin, end }),
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.text())
-    .then(response => console.log(response))
-    .then(() => { if(window.assemble && window.assemble.repull) window.assemble.repull() })
-}
-
-const use_resize = (begin, end) => {
-    fetch("http://0.0.0.0:4321/use_resize", {
-        method: "POST",
-        body: JSON.stringify({ begin, end }),
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.text())
-    .then(response => console.log(response))
-    .then(() => { if(window.assemble && window.assemble.repull) window.assemble.repull() })
-}
-
-const end_resize = (begin, end) => {
-    fetch("http://0.0.0.0:4321/end_resize", {
         method: "POST",
         body: JSON.stringify({ begin, end }),
         headers: {
