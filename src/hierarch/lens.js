@@ -44,10 +44,7 @@ class Box extends React.Component {
                 e.stopPropagation()
             }
         })`
-        outline: 1px solid red;
-        &:hover {
-        outline-color: blue;
-        }
+        outline: 1px solid ${({display}) => display ? "red" : "blue"};
         `
         // console.log('rendering Box:', code, this.state, children)
 
@@ -67,19 +64,28 @@ class Box extends React.Component {
                     ))}
                 </Original>
                 :
-                <Original {...remainder}>
-                    <HierarchScope.Consumer>
-                        {scope => JSON.stringify(scope)}
-                    </HierarchScope.Consumer>
-                    {children}
-                </Original>
+                <HierarchScope.Consumer>
+                    {scope =>
+                        <Original
+                            {...remainder}
+                            display={scope.signal === "display" && scope.chosen === code}
+                        >
+                            {children}
+                        </Original>
+                    }
+                </HierarchScope.Consumer>
             )
             : (
                 this.state.clicked
                 ?
                 <Resize original={original} code={code} {...remainder} />
                 :
-                <Original {...remainder} />
+                <HierarchScope.Consumer>
+                    {scope => <Original
+                        {...remainder}
+                        display={scope.signal === "display" && scope.chosen === code}
+                    />}
+                </HierarchScope.Consumer>
             )
         )
     }

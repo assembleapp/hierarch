@@ -11,7 +11,7 @@ class Hierarch extends React.Component {
     render = () => (
         this.state.open
         ?
-        <HierarchScope.Provider value={{ chosen: "abc1", signal: "display" }}>
+        <HierarchScope.Provider value={{ chosen: "abc31", signal: "display" }}>
             <Grid>
                 <Page>
                     {this.props.children}
