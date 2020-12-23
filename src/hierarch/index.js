@@ -3,18 +3,22 @@ import styled from "styled-components"
 import Logo from "./logo"
 import Sidebar from "./sidebar"
 
+const HierarchScope = React.createContext({ chosen: null, signal: null })
+
 class Hierarch extends React.Component {
     state = { open: false }
 
     render = () => (
         this.state.open
         ?
-        <Grid>
-            <Page>
-                {this.props.children}
-            </Page>
-            <Sidebar close={() => this.setState({ open: false })} />
-        </Grid>
+        <HierarchScope.Provider value={{ chosen: "abc1", signal: "display" }}>
+            <Grid>
+                <Page>
+                    {this.props.children}
+                </Page>
+                <Sidebar close={() => this.setState({ open: false })} />
+            </Grid>
+        </HierarchScope.Provider>
         :
         <>
         {this.props.children}
@@ -49,4 +53,5 @@ height: 40px;
 width: 40px;
 `
 
+export { HierarchScope }
 export default Hierarch

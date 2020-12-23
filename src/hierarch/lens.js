@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import { HierarchScope } from "./index"
 
 class Change extends React.Component {
     state = { value: null }
@@ -38,6 +39,7 @@ class Box extends React.Component {
 
         const Original = styled(original).attrs({
             onClick: (e) => {
+                // console.log(code, "clicked!")
                 this.setState({clicked: true})
                 e.stopPropagation()
             }
@@ -47,30 +49,38 @@ class Box extends React.Component {
         outline-color: blue;
         }
         `
-        console.log('rendering Box:', code, this.state, children)
+        // console.log('rendering Box:', code, this.state, children)
 
         // code: abc123-123132
         // source file hash - content hash
 
         return (
-            this.state.clicked
+            children
             ? (
-                children.length
+                this.state.clicked
                 ?
                 <Original ref={this.changeableBox} {...remainder}>
                     {children.map(c => (
                         typeof(c) === 'string'
-                        ? <Change record={(value) => this.recordChanges(value)} code={code}>{c}</Change>
+                        ? <Change record={(value) => this.recordChanges(value)}>{c}</Change>
                         : c
                     ))}
                 </Original>
                 :
-                <Resize original={original} code={code} {...remainder} />
+                <Original {...remainder}>
+                    <HierarchScope.Consumer>
+                        {scope => JSON.stringify(scope)}
+                    </HierarchScope.Consumer>
+                    {children}
+                </Original>
             )
-            :
-            <Original {...remainder}>
-                {children}
-            </Original>
+            : (
+                this.state.clicked
+                ?
+                <Resize original={original} code={code} {...remainder} />
+                :
+                <Original {...remainder} />
+            )
         )
     }
 
