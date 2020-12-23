@@ -1,5 +1,6 @@
 var fs = require('fs')
 var Program = require("./program")
+const guard = require("./guard")
 
 // ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
@@ -13,12 +14,7 @@ const apply_lens = (range) => {
 
         var lens_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
 
-        if(lens_node.startIndex !== range[0] || lens_node.endIndex !== range[1]) {
-            console.log(program.display(lens_node))
-            console.log(range)
-            console.log([lens_node.startIndex, lens_node.endIndex])
-            throw("oh no! applying a lens on an improper node.")
-        }
+        guard.node_range(program, lens_node, range)
 
         if(lens_node.type === "jsx_text") {
             var child = program.display(lens_node)
@@ -141,12 +137,7 @@ const use_resize = (range) => {
 
         var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
 
-        if(resize_node.startIndex !== range[0] || resize_node.endIndex !== range[1]) {
-            console.log(program.display(resize_node))
-            console.log(range)
-            console.log([resize_node.startIndex, resize_node.endIndex])
-            throw("oh no! applying a lens on an improper node.")
-        }
+        guard.node_range(program, resize_node, range)
 
         if(resize_node.type === "jsx_self_closing_element") {
             var name_query = program.query(`(jsx_self_closing_element name: (_) @name)`, resize_node)
@@ -171,12 +162,7 @@ const end_resize = (range) => {
 
         var resize_node = program.parsed.rootNode.descendantForIndex(range[0], range[1])
 
-        if(resize_node.startIndex !== range[0] || resize_node.endIndex !== range[1]) {
-            console.log(program.display(resize_node))
-            console.log(range)
-            console.log([resize_node.startIndex, resize_node.endIndex])
-            throw("oh no! applying a lens on an improper node.")
-        }
+        guard.node_range(program, resize_node, range)
 
         if(resize_node.type === "jsx_self_closing_element") {
             var query = program.query(`(
