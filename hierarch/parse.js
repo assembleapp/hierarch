@@ -97,8 +97,9 @@ const apply_change = (change) => {
         var ending_skip = program.display(children.slice(-1)[0].node).split('').reverse().join('').search(/\S/)
 
         console.log(beginning_skip, ending_skip)
-        change.upgrade.forEach((grade, index) => {
+        change.upgrade.reverse().forEach((grade, back_index) => {
             // console.log(grade)
+            var index = children.length - 1 - back_index
             var begin_cursor = children[index].node.startIndex + (index === 0 ? beginning_skip : 0)
             var end_cursor = children[index].node.endIndex - (index === children.length - 1 ? ending_skip : 0)
 

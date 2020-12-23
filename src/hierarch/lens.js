@@ -27,22 +27,42 @@ class Box extends React.Component {
         // code: abc123-123132
         // source file hash - content hash
 
+        // if(code === 'abc4' &&
+        // this.state.clicked //|| (scope.chosen && scope.chosen.signal === "change" && scope.chosen.code === code)
+        // )
+        //     debugger;
+        var focus_count = 0
         return (
         <HierarchScope.Consumer>
-            {scope =>
-                children
+            {scope => {
+                focus_count = 0
+                return children
                 ? (
-                    this.state.clicked || scope.chosen && (scope.chosen.signal === "change" && scope.chosen.code === code)
+                    this.state.clicked || (scope.chosen && scope.chosen.signal === "change" && scope.chosen.code === code)
                     ?
                     <Original ref={this.changeableBox} {...remainder} signal={scope.chosen} code={code} >
                         {children instanceof Array
-                        ? children.map(c => (
-                            typeof(c) === 'string'
-                            ? <Change record={(value) => this.recordChanges(value)}>{c}</Change>
-                            : c
-                        ))
-                        : (typeof(children) === 'string'
-                            ? <Change record={(value) => this.recordChanges(value)}>{children}</Change>
+                        ? children.map(c => {
+                            if(typeof(c) === 'string') {
+                                return <Change
+                                    focus={(e) => {
+                                        if(e && focus_count === 0) {
+                                            e.focus()
+                                            focus_count += 1
+                                        }
+                                    }}
+                                    record={() => this.recordChanges()}
+                                >
+                                    {c}
+                                </Change>
+                            }
+                            return c
+                        })
+                        :
+                        (typeof(children) === 'string'
+                            ? <Change focus={e => e && e.focus()} record={() => this.recordChanges()}>
+                                {children}
+                            </Change>
                             : children
                         )
                         }
@@ -53,7 +73,7 @@ class Box extends React.Component {
                     </Original>
                 )
                 : (
-                    this.state.clicked || scope.chosen && (scope.chosen.signal === "resize" && scope.chosen.code === code)
+                    this.state.clicked || (scope.chosen && scope.chosen.signal === "resize" && scope.chosen.code === code)
                     ?
                     <Resize original={original} code={code} {...remainder} />
                     :
@@ -63,12 +83,12 @@ class Box extends React.Component {
                         code={code}
                     />
                 )
-            }
+            }}
         </HierarchScope.Consumer>
         )
     }
 
-    recordChanges(value) {
+    recordChanges() {
         var changeArray = [...this.changeableBox.current.children].map((child, x) => {
             if([...child.classList].some(klass => klass === Field.toString().slice(1))) {
                 return child.value
@@ -102,25 +122,31 @@ class Box extends React.Component {
 class Change extends React.Component {
     state = { value: null }
 
-    render = () => (
-        <Field
+    render = () => {
+        // console.log("rendering change:",this.props.children)
+        return <Field
+        onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false
+        }}
         key={this.props.children}
-        ref={(e) => e ? e.focus() : null}
         type="text"
+        ref={e => this.props.focus(e)}
         value={this.state.value === null ? this.props.children : this.state.value}
         onChange={(e) => {
             this.setState({ value: e.target.value || "" })
         }}
         onKeyDown={(e) => {
             if(e.key === "Enter") {
-                this.props.record(this.state.value || this.props.children)
+                this.props.record()
                 e.preventDefault();
                 e.stopPropagation();
                 return false
             }
         }}
         />
-    )
+    }
 }
 
 const Field = styled.input.attrs({
