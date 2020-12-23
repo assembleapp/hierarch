@@ -328,11 +328,26 @@ const hierarchy = (address, callback) => {
 
             var c = m.captures[0]
             var name = null
+            var code = null
 
             if(c.node.type === "jsx_element") {
                 name = program.display(c.node.firstNamedChild.firstNamedChild)
+                if(name === "Box") {
+                    // console.log()
+                    // console.log(program.display(c.node))
+                    code = program.display(c.node.namedChildren[0].namedChildren[2].namedChildren[1])
+                    name = program.display(c.node.namedChildren[0].namedChildren[1].namedChildren[1])
+                    // console.log(name, code)
+                }
             } else if (c.node.type === "jsx_self_closing_element") {
                 name = program.display(c.node.firstNamedChild)
+                if(name === "Box") {
+                    // console.log()
+                    // console.log(program.display(c.node))
+                    code = program.display(c.node.namedChildren[2].namedChildren[1])
+                    name = program.display(c.node.namedChildren[1].namedChildren[1])
+                    // console.log(name, code)
+                }
             } else if (c.node.type === "jsx_text") {
                 name = program.display(c.node).trim()
                 // should `name` be exceedingly long, truncate using "..."
@@ -364,7 +379,8 @@ const hierarchy = (address, callback) => {
                 c.node.endIndex,
                 [],
                 name,
-                permissions
+                permissions,
+                code,
             ]
         })
 

@@ -1,4 +1,5 @@
 import React from "react"
+import { HierarchScope } from "./index"
 
 class Hierarchy extends React.Component {
     state = {
@@ -43,32 +44,47 @@ const display_hierarchy_index = (index, hierarchy) => (
     hierarchy[2].map(h => (
         <>
         {("  ".repeat(index))}
-        <Hierarchical name={h[3]} begin={h[0]} end={h[1]} permissions={h[4]} />
+        <Hierarchical name={h[3]} begin={h[0]} end={h[1]} permissions={h[4]} code={h[5]} />
         {"\n"}
         {display_hierarchy_index(index + 1, h)}
         </>
     ))
 )
 
-const Hierarchical = ({name, begin, end, permissions}) => (
-    <>
-    {permissions.indexOf("g-4:change") !== -1
-    ? <a
-        key={`${begin}-${end}`}
-        href="#"
-        onClick={() => use_lens(begin, end)}
-      >{name}</a>
-    : <span
-        key={`${begin}-${end}`}
-      >{name}</span>
-    }
-    {permissions.indexOf("g-4:resize") !== -1
-    && <a href="#" onClick={() => use_resize(begin, end)} >resize</a>
-    }
-    {permissions.indexOf("g-4:resize:end") !== -1
-    && <a href="#" onClick={() => end_resize(begin, end)} >end resize</a>
-    }
-    </>
+const Hierarchical = ({name, begin, end, permissions, code}) => (
+    <HierarchScope.Consumer>
+    {scope => (
+        <>
+        {
+        permissions.indexOf("g-4:change") !== -1
+        ? <a
+            key={`${begin}-${end}`}
+            href="#"
+            onClick={() => use_lens(begin, end)}
+            onMouseOver={() => { scope.signal("display", code) }}
+        >{name}</a>
+        : <span
+            key={`${begin}-${end}`}
+            onMouseOver={() => { scope.signal("display", code) }}
+        >{name}</span>
+        }
+        {permissions.indexOf("g-4:resize") !== -1
+        && <a
+            href="#"
+            onClick={() => use_resize(begin, end)}
+            onMouseOver={() => { scope.signal("display", code) }}
+        >resize</a>
+        }
+        {permissions.indexOf("g-4:resize:end") !== -1
+        && <a
+            href="#"
+            onClick={() => end_resize(begin, end)}
+            onMouseOver={() => { scope.signal("display", code) }}
+        >end resize</a>
+        }
+        </>
+    )}
+    </HierarchScope.Consumer>
 )
 
 const use_lens = (begin, end) => {
