@@ -80,18 +80,4 @@ const Hierarchical = ({name, begin, end, permissions, code}) => (
     </HierarchScope.Consumer>
 )
 
-const use_lens = (begin, end) => {
-    fetch("http://0.0.0.0:4321/lens", {
-        method: "POST",
-        body: JSON.stringify({ begin, end }),
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.text())
-    .then(response => console.log(response))
-    .then(() => { if(window.assemble && window.assemble.repull) window.assemble.repull() })
-}
-
 export default Hierarchy
