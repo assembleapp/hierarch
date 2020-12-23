@@ -303,7 +303,7 @@ const hierarchy = (address, callback) => {
             }
 
             upper[2] = upper[2].concat([e])
-            upper[4] = []
+            // upper[4] = []
             upper_chain = upper_chain.concat([e])
         })
 

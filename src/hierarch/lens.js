@@ -2,31 +2,6 @@ import React from "react"
 import styled from "styled-components"
 import { HierarchScope } from "./index"
 
-class Change extends React.Component {
-    state = { value: null }
-
-    render = () => (
-        <Field
-        key={this.props.children}
-        ref={(e) => e ? e.focus() : null}
-        type="text"
-        value={this.state.value === null ? this.props.children : this.state.value}
-        onChange={(e) => {
-            this.setState({ value: e.target.value || "" })
-        }}
-        onKeyDown={(e) => {
-            // AHA! This should not happen in this function; pass it on up to the parent.
-            if(e.key === "Enter") {
-                this.props.record(this.state.value || this.props.children)
-                e.preventDefault();
-                e.stopPropagation();
-                return false
-            }
-        }}
-        />
-    )
-}
-
 class Box extends React.Component {
     state = {
         clicked: false,
@@ -57,14 +32,20 @@ class Box extends React.Component {
             {scope =>
                 children
                 ? (
-                    this.state.clicked
+                    this.state.clicked || scope.chosen && (scope.chosen.signal === "change" && scope.chosen.code === code)
                     ?
-                    <Original ref={this.changeableBox} {...remainder}>
-                        {children.map(c => (
+                    <Original ref={this.changeableBox} {...remainder} signal={scope.chosen} code={code} >
+                        {children instanceof Array
+                        ? children.map(c => (
                             typeof(c) === 'string'
                             ? <Change record={(value) => this.recordChanges(value)}>{c}</Change>
                             : c
-                        ))}
+                        ))
+                        : (typeof(children) === 'string'
+                            ? <Change record={(value) => this.recordChanges(value)}>{children}</Change>
+                            : children
+                        )
+                        }
                     </Original>
                     :
                     <Original {...remainder} signal={scope.chosen} code={code} >
@@ -72,7 +53,7 @@ class Box extends React.Component {
                     </Original>
                 )
                 : (
-                    this.state.clicked
+                    this.state.clicked || scope.chosen && (scope.chosen.signal === "resize" && scope.chosen.code === code)
                     ?
                     <Resize original={original} code={code} {...remainder} />
                     :
@@ -116,6 +97,30 @@ class Box extends React.Component {
                 window.assemble.repull()
         })
     }
+}
+
+class Change extends React.Component {
+    state = { value: null }
+
+    render = () => (
+        <Field
+        key={this.props.children}
+        ref={(e) => e ? e.focus() : null}
+        type="text"
+        value={this.state.value === null ? this.props.children : this.state.value}
+        onChange={(e) => {
+            this.setState({ value: e.target.value || "" })
+        }}
+        onKeyDown={(e) => {
+            if(e.key === "Enter") {
+                this.props.record(this.state.value || this.props.children)
+                e.preventDefault();
+                e.stopPropagation();
+                return false
+            }
+        }}
+        />
+    )
 }
 
 const Field = styled.input.attrs({
