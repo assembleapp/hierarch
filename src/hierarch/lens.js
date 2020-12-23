@@ -44,7 +44,8 @@ class Box extends React.Component {
                 e.stopPropagation()
             }
         })`
-        outline: 1px solid ${({display}) => display ? "red" : "blue"};
+        ${({signal}) => signal.signal === "display" && "outline: 1px solid blue;"}
+        ${({signal, code}) => signal.signal === "display" && signal.code === code && "outline-color: red;"}
         `
         // console.log('rendering Box:', code, this.state, children)
 
@@ -67,9 +68,11 @@ class Box extends React.Component {
                 <HierarchScope.Consumer>
                     {scope =>
                         <Original
-                            {...remainder}
-                            display={scope.signal === "display" && scope.chosen === code}
+                        {...remainder}
+                        signal={scope.chosen}
+                        code={code}
                         >
+                            {/* {JSON.stringify(scope.chosen)} */}
                             {children}
                         </Original>
                     }
@@ -83,7 +86,8 @@ class Box extends React.Component {
                 <HierarchScope.Consumer>
                     {scope => <Original
                         {...remainder}
-                        display={scope.signal === "display" && scope.chosen === code}
+                        signal={scope.chosen}
+                        code={code}
                     />}
                 </HierarchScope.Consumer>
             )

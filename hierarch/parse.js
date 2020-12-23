@@ -374,6 +374,10 @@ const hierarchy = (address, callback) => {
             }[c.node.type] || ["", ""]
             name = appendages[0] + name + appendages[1]
 
+            // chop quotes.
+            if(code)
+                code = code.split('"').join('')
+
             return [
                 c.node.startIndex,
                 c.node.endIndex,
