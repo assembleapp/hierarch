@@ -49,13 +49,8 @@ const add_dependency = (program) => {
     `)
 
     if(!matches.length) {
-        // change by indices
-        [
-            [0, 0, "import Lens from './hierarch/lens'\n"],
-        ].forEach(x => {
-            // beginning, ending, upgrade
-            program.replace_by_indices(x[0], x[1], x[2])
-        })
+        // beginning, ending, upgrade
+        program.replace_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
     }
 }
 
