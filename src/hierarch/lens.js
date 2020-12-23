@@ -53,44 +53,37 @@ class Box extends React.Component {
         // source file hash - content hash
 
         return (
-            children
-            ? (
-                this.state.clicked
-                ?
-                <Original ref={this.changeableBox} {...remainder}>
-                    {children.map(c => (
-                        typeof(c) === 'string'
-                        ? <Change record={(value) => this.recordChanges(value)}>{c}</Change>
-                        : c
-                    ))}
-                </Original>
-                :
-                <HierarchScope.Consumer>
-                    {scope =>
-                        <Original
+        <HierarchScope.Consumer>
+            {scope =>
+                children
+                ? (
+                    this.state.clicked
+                    ?
+                    <Original ref={this.changeableBox} {...remainder}>
+                        {children.map(c => (
+                            typeof(c) === 'string'
+                            ? <Change record={(value) => this.recordChanges(value)}>{c}</Change>
+                            : c
+                        ))}
+                    </Original>
+                    :
+                    <Original {...remainder} signal={scope.chosen} code={code} >
+                        {children}
+                    </Original>
+                )
+                : (
+                    this.state.clicked
+                    ?
+                    <Resize original={original} code={code} {...remainder} />
+                    :
+                    <Original
                         {...remainder}
                         signal={scope.chosen}
                         code={code}
-                        >
-                            {/* {JSON.stringify(scope.chosen)} */}
-                            {children}
-                        </Original>
-                    }
-                </HierarchScope.Consumer>
-            )
-            : (
-                this.state.clicked
-                ?
-                <Resize original={original} code={code} {...remainder} />
-                :
-                <HierarchScope.Consumer>
-                    {scope => <Original
-                        {...remainder}
-                        signal={scope.chosen}
-                        code={code}
-                    />}
-                </HierarchScope.Consumer>
-            )
+                    />
+                )
+            }
+        </HierarchScope.Consumer>
         )
     }
 

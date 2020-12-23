@@ -22,7 +22,7 @@ class Hierarch extends React.Component {
         ?
         <HierarchScope.Provider value={Object.assign({}, {chosen: this.state.scope}, {
             signal: (s, code) => {
-                // console.log("Signal", s, code)
+                console.log("Signal", s, code)
                 this.setState({scope: { code, signal: s}})
             },
         })}>
