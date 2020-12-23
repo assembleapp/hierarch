@@ -38,6 +38,9 @@ height: 40vmin;
 }
 `
 
+const Logo1 = styled(Logo)`
+`
+
 const Header = styled.header`
 background-color: #bda862;
 min-height: 100vh;
