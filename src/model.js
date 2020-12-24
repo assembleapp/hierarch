@@ -1,8 +1,6 @@
 import graph from "./hierarch/graph"
 
-import { observer } from "mobx-react"
-// import { DateTime } from "luxon"
-import { computed, observable, reaction } from "mobx"
+import { autorun } from "mobx"
 import { types } from "mobx-state-tree"
 import gql from "graphql-tag"
 
@@ -11,9 +9,11 @@ const Model = types.model({
         name: types.string,
         address: types.string,
         danger: types.maybeNull(types.integer),
-        labels: types.array(types.string),
+        labels: types.maybeNull(types.string),
     }))
-})
+}).actions(m => ({
+    assign(name, x) { m[name] = x },
+}))
 
 var query = gql`
 query Companies {
@@ -28,11 +28,9 @@ query Companies {
 
 const model = Model.create({companies: []})
 
-const check = model => response => {
-    return null
-}
-
 graph.subscribe({ query }).subscribe({
-    next: check(model),
+    next: response => model.assign("companies", response.data.companies),
     error: err => console.error("err", err),
 })
+
+autorun(() => console.log(model.companies.toJSON()))

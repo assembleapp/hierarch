@@ -2,6 +2,8 @@ import Lens, { Code, P, Box } from './hierarch/lens'
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
 
+import "./model"
+
 function App() {
   return (
     <Box original={Layout} code="abc1">
