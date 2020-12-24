@@ -15,20 +15,21 @@ const Model = types.model({
     assign(name, x) { m[name] = x },
 }))
 
-var query = gql`
-query Companies {
-    companies {
-      address
-      danger
-      labels
-      name
-    }
-}
-`
-
 const model = Model.create({companies: []})
 
-graph.subscribe({ query }).subscribe({
+graph
+.subscribe({
+    query: gql`
+    query Companies {
+        companies {
+          address
+          danger
+          labels
+          name
+        }
+    }
+`})
+.subscribe({
     next: response => model.assign("companies", response.data.companies),
     error: err => console.error("err", err),
 })
