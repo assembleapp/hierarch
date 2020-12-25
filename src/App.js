@@ -9,7 +9,6 @@ function App() {
     <Box original={Layout} code="abc1">
       <Box original={Header} code="abc2">
 
-        <Box original={Logo1} code="abc3" src={logo} alt="logo" />
         <Box original={Logo} code="abc31" src={logo} alt="logo" />
 
         <Box original={P} code="abc4">
@@ -38,9 +37,6 @@ height: 40vmin;
 @media (prefers-reduced-motion: no-preference) {
   animation: ${LogoSpin} infinite 20s linear;
 }
-`
-
-const Logo1 = styled(Logo)`
 `
 
 const Header = styled.header`
