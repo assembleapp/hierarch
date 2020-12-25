@@ -1,9 +1,11 @@
 import React from "react"
-import graph from "./graph"
 
 import { autorun } from "mobx"
 import { types } from "mobx-state-tree"
+import { Observer } from "mobx-react"
+
 import gql from "graphql-tag"
+import graph from "./graph"
 
 /* example schema
 { companies: {
@@ -38,7 +40,7 @@ const makeModel = (schema) => {
     }).actions(m => ({
         assign(name, x) { m[name] = x },
     }))
-    .create({companies: [{ name: 'a', address: 'b' }]})
+    .create({companies: []})
 }
 
 class Scope extends React.Component {
@@ -63,7 +65,7 @@ class Scope extends React.Component {
     }
 
     render() {
-        return this.props.children(this.model)
+        return <Observer>{() => this.props.children(this.model)}</Observer>
     }
 }
 
