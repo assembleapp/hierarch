@@ -38,10 +38,10 @@ const makeModel = (schema) => {
     }).actions(m => ({
         assign(name, x) { m[name] = x },
     }))
-    .create({companies: []})
+    .create({companies: [{ name: 'a', address: 'b' }]})
 }
 
-class Scope extends React.createClass {
+class Scope extends React.Component {
     constructor(p) {
         super(p)
         this.model = makeModel(p.schema)
@@ -50,7 +50,7 @@ class Scope extends React.createClass {
     }
 
     subscribe() {
-        graph.subscribe({ this.query }).subscribe({
+        graph.subscribe({ query: this.query }).subscribe({
             next: response => {
                 Object.keys(response.data).forEach(m => {
                     this.model.assign(m, response.data[m])
@@ -59,10 +59,12 @@ class Scope extends React.createClass {
             error: err => console.error("err", err),
         })
 
-        autorun(() => console.log(model.companies.toJSON()))
+        autorun(() => console.log(this.model.toJSON()))
     }
 
     render() {
         return this.props.children(this.model)
     }
 }
+
+export default Scope

@@ -1,9 +1,7 @@
 import Lens, { Code, P, Box } from './hierarch/lens'
-import { Scope } from './hierarch/scope'
+import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
-
-import "./model"
 
 function App() {
   return (
@@ -26,7 +24,7 @@ function App() {
           schema={{ companies: { name: 'string' }}}
         >
           {model => (
-            model.data.companies.map(c => (
+            model.companies.map(c => (
               <li>{c.name}</li>
             ))
           )}
@@ -44,7 +42,7 @@ const LogoSpin = keyframes`
 const Layout = styled.div`
 text-align: center;
 display: grid;
-grid-template-columns: 1fr auto;
+grid-template-columns: auto 1fr;
 `
 
 const Logo = styled.img`
