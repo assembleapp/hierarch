@@ -1,4 +1,5 @@
 import Lens, { Code, P, Box } from './hierarch/lens'
+import { Scope } from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
 
@@ -18,6 +19,19 @@ function App() {
           Learn Hierarch.
         </Box>
       </Box>
+
+      <Box original={Header} code="abc8">
+        <Scope
+          source="https://assemble-opposed.herokuapp.com/v1/graphql"
+          schema={{ companies: { name: 'string' }}}
+        >
+          {model => (
+            model.data.companies.map(c => (
+              <li>{c.name}</li>
+            ))
+          )}
+        </Scope>
+      </Box>
     </Box>
   );
 }
@@ -29,6 +43,8 @@ const LogoSpin = keyframes`
 
 const Layout = styled.div`
 text-align: center;
+display: grid;
+grid-template-columns: 1fr auto;
 `
 
 const Logo = styled.img`
