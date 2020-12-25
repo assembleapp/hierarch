@@ -25,7 +25,7 @@ function App() {
         >
           {model => (
             model.companies.map(c => (
-              <li>{c.name}</li>
+              <li key={c.name}>{c.name}</li>
             ))
           )}
         </Scope>

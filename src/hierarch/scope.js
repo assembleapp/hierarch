@@ -19,7 +19,7 @@ import graph from "./graph"
 
 const makeQuery = (schema) => {
     return gql`
-    query Companies {
+    subscription Companies {
         companies {
           address
           danger

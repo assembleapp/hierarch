@@ -21,7 +21,7 @@ const wsLink = new WebSocketLink({
 })
 
 const httpLink = createHttpLink({
-  uri: `http://${process.env.REACT_APP_URL_HASURA}`
+  uri: `https://${process.env.REACT_APP_URL_HASURA}`
 })
 
 const authLink = setContext((_, { headers }) => (
