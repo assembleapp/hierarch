@@ -17,38 +17,44 @@ import graph from "./graph"
     }
 */
 
-const makeQuery = (schema) => {
-    return gql`
-    subscription Companies {
-        companies(order_by: {name: asc}) {
-          address
-          danger
-          labels
-          name
-        }
-    }`
-}
-
-const makeModel = (schema) => {
-    return types.model({
-        companies: types.array(types.model("Company", {
-            name: types.string,
-            address: types.string,
-            danger: types.maybeNull(types.integer),
-            labels: types.maybeNull(types.string),
-        }))
-    }).actions(m => ({
-        assign(name, x) { m[name] = x },
-    }))
-    .create({companies: []})
-}
-
 class Scope extends React.Component {
     constructor(p) {
         super(p)
-        this.model = makeModel(p.schema)
-        this.query = makeQuery(p.schema)
-        this.subscribe()
+        this.model = this.makeModel(p.schema)
+        this.query = this.makeQuery(p.schema)
+
+        if(!this.props.anonymous) {
+            this.subscribe()
+        } else {
+            this.model.assign('companies', [{ name: '~~~', address: 'https://example.com'}])
+        }
+    }
+
+    makeQuery = (schema) => {
+        return gql`
+        subscription Companies {
+            companies(order_by: {name: asc}) {
+              address
+              danger
+              labels
+              name
+            }
+        }`
+    }
+
+    makeModel = (schema) => {
+        const model = types.model({
+            companies: types.array(types.model("Company", {
+                name: types.string,
+                address: types.string,
+                danger: types.maybeNull(types.integer),
+                labels: types.maybeNull(types.string),
+            }))
+        }).actions(m => ({
+            assign(name, x) { m[name] = x },
+        })).create({companies: []})
+
+        return model
     }
 
     subscribe() {

@@ -7,12 +7,12 @@ function App() {
   return (
     <Box original={Layout} code="abc1">
       <Box original={Header} code="abc2">
-
         <Box original={Logo} code="abc31" src={logo} alt="logo" />
 
         <Box original={P} code="abc4">
           Change <Box original={Code} code="abc5">src/App.js</Box> by clicking and clacking.
         </Box>
+
         <Box original={Link} code="abc6" href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
           Learn Hierarch.
         </Box>
@@ -21,7 +21,8 @@ function App() {
       <Header>
         <Scope
           source="https://assemble-opposed.herokuapp.com/v1/graphql"
-          schema={{ companies: { name: 'string' }}}
+          schema={{ companies: { '_': ['name', 'address' ]}}}
+          anonymous
         >
           {model => (
             <Board>
