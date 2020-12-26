@@ -24,11 +24,11 @@ function App() {
           schema={{ companies: { name: 'string' }}}
         >
           {model => (
-            <Ul>
+            <Board>
               {model.companies.map(c => (
-                <li key={c.name}>{c.name}</li>
+                <a key={c.name} href={c.address}>{c.name}</a>
               ))}
-            </Ul>
+            </Board>
           )}
         </Scope>
       </Header>
@@ -36,7 +36,7 @@ function App() {
   );
 }
 
-const Ul = styled.ul`
+const Board = styled.ul`
 display: grid;
 grid-template-columns: 1fr 1fr;
 grid-column-gap: 1rem;
@@ -73,7 +73,6 @@ color: #0d408e;
 `
 
 const Link = styled.a`
-color: #61dafb;
 `
 
 export default App;
