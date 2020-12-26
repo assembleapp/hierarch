@@ -20,7 +20,7 @@ import graph from "./graph"
 const makeQuery = (schema) => {
     return gql`
     subscription Companies {
-        companies {
+        companies(order_by: {name: asc}) {
           address
           danger
           labels
