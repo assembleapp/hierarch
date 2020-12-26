@@ -268,6 +268,7 @@ const hierarchy = (address, callback) => {
             var c = m.captures[0]
             var name = null
             var code = null
+            var permissions = []
 
             if(c.node.type === "jsx_element") {
                 name = program.display(c.node.firstNamedChild.firstNamedChild)
@@ -277,6 +278,7 @@ const hierarchy = (address, callback) => {
                     code = program.display(c.node.namedChildren[0].namedChildren[2].namedChildren[1])
                     name = program.display(c.node.namedChildren[0].namedChildren[1].namedChildren[1])
                     // console.log(name, code)
+                    permissions = permissions.concat(c.node.type === "jsx_element" ? "g-4:change" : [])
                 }
             } else if (c.node.type === "jsx_self_closing_element") {
                 name = program.display(c.node.firstNamedChild)
@@ -286,6 +288,7 @@ const hierarchy = (address, callback) => {
                     code = program.display(c.node.namedChildren[2].namedChildren[1])
                     name = program.display(c.node.namedChildren[1].namedChildren[1])
                     // console.log(name, code)
+                    permissions = permissions.concat(c.node.type === "jsx_self_closing_element" ? "g-4:resize" : [])
                 }
             } else {
                 throw (
@@ -296,9 +299,6 @@ const hierarchy = (address, callback) => {
                 )
             }
 
-            var permissions = []
-                .concat(c.node.type === "jsx_element" ? "g-4:change" : [])
-                .concat(c.node.type === "jsx_self_closing_element" ? "g-4:resize" : [])
             // console.log(program.display(c.node))
             // console.log(permissions)
 
