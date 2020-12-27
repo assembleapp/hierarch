@@ -30,6 +30,7 @@ class Scope extends React.Component {
             this.subscribe()
         } else {
             this.prepare()
+            this.big_clock = setInterval(() => this.model.assign('companies', []), clock() * 200)
         }
     }
 
@@ -86,7 +87,18 @@ class Scope extends React.Component {
     }
 
     render() {
-        return <Observer>{() => this.props.children(this.model)}</Observer>
+        return (
+        <Observer>
+            {() => {
+                this.props.callback(this.model, this.drop_clock)
+                return this.props.children(this.model)
+            }}
+        </Observer>
+        )
+    }
+
+    drop_clock = (clock_name) => {
+        clearInterval(this[clock_name])
     }
 }
 

@@ -23,6 +23,13 @@ function App() {
           source="https://assemble-opposed.herokuapp.com/v1/graphql"
           schema={{ companies: { '_': ['name', 'address' ]}}}
           anonymous
+          callback={(model, drop_clock) => {
+            if(model.companies.length >= 144) {
+              drop_clock('clock')
+              drop_clock('big_clock')
+              console.log(new Date().toISOString())
+            }
+          }}
         >
           {model => (
             <Board>
