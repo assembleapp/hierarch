@@ -98,6 +98,7 @@ class Scope extends React.Component {
     }
 
     drop_clock = (clock_name) => {
+        clearTimeout(this[clock_name])
         clearInterval(this[clock_name])
     }
 }
