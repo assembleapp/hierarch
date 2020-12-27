@@ -10,7 +10,7 @@ function App() {
         <Box original={Logo} code="abc31" src={logo} alt="logo" />
 
         <Box original={P} code="abc4">
-          Change <Box original={Code} code="abc5">src/App.js</Box> by clicking and clacking.
+          Change <Box original={Code} code="abc5">code</Box> by clicking and clacking.
         </Box>
 
         <Box original={Link} code="abc6" href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
