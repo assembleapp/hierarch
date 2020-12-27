@@ -22,7 +22,7 @@ function App() {
         <Scope
           source="https://assemble-opposed.herokuapp.com/v1/graphql"
           schema={{ companies: { '_': ['name', 'address' ]}}}
-          anonymous
+          // anonymous
           callback={(model, drop_clock) => {
             if(model.companies.length >= 144) {
               drop_clock('clock')
@@ -46,8 +46,7 @@ function App() {
 
 const Board = styled.ul`
 display: grid;
-grid-template-columns: repeat(12, auto);
-grid-template-rows: repeat(12, 1fr);
+grid-template-columns: repeat(2, auto);
 grid-row-gap: 0.2rem;
 grid-column-gap: 0.2rem;
 `
@@ -72,19 +71,21 @@ height: 40vmin;
 `
 
 const Header = styled.header`
-background-color: #bda862;
+background-color: #8ab7ab;
 min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
 font-size: calc(10px + 2vmin);
-color: #0d408e;
+color: #365a92;
+padding: 0 4rem;
 `
 
 const Link = styled.a.attrs(p => ({
   href: p.address,
 }))`
+color: #365a92;
 `
 
 export default App;
