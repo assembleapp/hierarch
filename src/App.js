@@ -26,8 +26,8 @@ function App() {
         >
           {model => (
             <Board>
-              {model.companies.map(c => (
-                <Link key={c.name} address={c.address}>{c.name}</Link>
+              {model.companies.map((c, i) => (
+                <Link key={i} address={c.address}>{c.name}</Link>
               ))}
             </Board>
           )}
@@ -39,8 +39,10 @@ function App() {
 
 const Board = styled.ul`
 display: grid;
-grid-template-columns: 1fr 1fr;
-grid-column-gap: 1rem;
+grid-template-columns: repeat(12, auto);
+grid-template-rows: repeat(12, 1fr);
+grid-row-gap: 0.2rem;
+grid-column-gap: 0.2rem;
 `
 
 const LogoSpin = keyframes`
