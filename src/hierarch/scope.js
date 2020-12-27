@@ -9,13 +9,16 @@ import graph from "./graph"
 
 /* example schema
 { companies: {
-        name: 'string',
-        address: 'string',
+        name: 'symbols',
+        address: 'address',
         danger: 'number?',
-        labels: 'string?',
+        labels: 'symbols?',
         }
     }
 */
+
+const clock = () =>
+    (Math.random() * Math.random() * 0.4 + 0.9) * 1000
 
 class Scope extends React.Component {
     constructor(p) {
@@ -26,8 +29,20 @@ class Scope extends React.Component {
         if(!this.props.anonymous) {
             this.subscribe()
         } else {
-            this.model.assign('companies', [{ name: '~~~', address: 'https://example.com'}])
+            this.prepare()
         }
+    }
+
+    prepare = () => {
+        clearTimeout(this.clock)
+        this.clock = setTimeout(this.prepare, clock())
+
+        this.model.assign(
+            'companies',
+            Math.random() < 0.6
+            ? this.model.companies.concat([{ name: '~~~', address: 'https://example.com'}])
+            : this.model.companies.slice(1)
+        )
     }
 
     makeQuery = (schema) => {
