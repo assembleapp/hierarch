@@ -13,7 +13,7 @@ function App() {
           Change <Box original={Code} code="abc5">code</Box> by clicking and clacking.
         </Box>
 
-        <Box original={Link} code="abc6" href="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
+        <Box original={Link} code="abc6" address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
           Learn Hierarch.
         </Box>
       </Box>
@@ -27,7 +27,7 @@ function App() {
           {model => (
             <Board>
               {model.companies.map(c => (
-                <a key={c.name} href={c.address}>{c.name}</a>
+                <Link key={c.name} address={c.address}>{c.name}</Link>
               ))}
             </Board>
           )}
@@ -73,7 +73,9 @@ font-size: calc(10px + 2vmin);
 color: #0d408e;
 `
 
-const Link = styled.a`
+const Link = styled.a.attrs(p => ({
+  href: p.address,
+}))`
 `
 
 export default App;
