@@ -3,15 +3,15 @@ import styled from "styled-components"
 import { useTable } from "react-table"
 
 const Grid = ({ schema, model }) => {
-    const columns = [
-        { Header: "name", accessor: "name" },
-        { Header: "address", accessor: "address" },
-    ]
-
-    const data = React.useMemo(
-        () => model.toJSON().companies,
+    const columns = React.useMemo(
+        () => [
+            { Header: "name", accessor: "name" },
+            { Header: "address", accessor: "address" },
+        ],
         []
-      )
+    )
+
+    const data = model.toJSON().companies
     const tableInstance = useTable({ columns, data })
 
     const {

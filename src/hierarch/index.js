@@ -75,12 +75,15 @@ margin: 0;
 `
 
 const Modal = styled.div`
+text-align: left;
 position: absolute;
 height: 90vh;
 width: 90vw;
-background: blue;
+background: #08080a;
+background: #a0a080;
 top: 5vh;
 left: 5vw;
+overflow: scroll;
 `
 
 const Page = styled.div`
