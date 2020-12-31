@@ -275,7 +275,10 @@ const hierarchy = (address, callback) => {
                 if(name === "Box") {
                     // console.log()
                     // console.log(program.display(c.node))
+
                     code = program.display(c.node.namedChildren[0].namedChildren[2].namedChildren[1])
+                    code = code.split('"').join('') // chop quotes.
+
                     name = program.display(c.node.namedChildren[0].namedChildren[1].namedChildren[1])
                     // console.log(name, code)
                     permissions = permissions.concat("g-4:change")
@@ -287,6 +290,7 @@ const hierarchy = (address, callback) => {
                     attrs = attrs.filter(a => ["source", "schema"].some(s => s === program.display(a.children[0])))
                     code = {}
                     attrs.forEach(a => code[program.display(a).split('=')[0]] = program.display(a).split('=').slice(1).join('='))
+                    code.source = code.source.split('"').join('') // chop quotes.
                     code = JSON.stringify(code)
                     // console.log(code)
                 }
@@ -295,7 +299,10 @@ const hierarchy = (address, callback) => {
                 if(name === "Box") {
                     // console.log()
                     // console.log(program.display(c.node))
+
                     code = program.display(c.node.namedChildren[2].namedChildren[1])
+                    code = code.split('"').join('') // chop quotes.
+
                     name = program.display(c.node.namedChildren[1].namedChildren[1])
                     // console.log(name, code)
                     permissions = permissions.concat("g-4:resize")
@@ -317,10 +324,6 @@ const hierarchy = (address, callback) => {
                 jsx_element: ["<", ">"],
             }[c.node.type] || ["", ""]
             name = appendages[0] + name + appendages[1]
-
-            // chop quotes.
-            if(code)
-                code = code.split('"').join('')
 
             return [
                 c.node.startIndex,

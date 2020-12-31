@@ -90,7 +90,7 @@ class Scope extends React.Component {
         return (
         <Observer>
             {() => {
-                this.props.callback(this.model, this.drop_clock)
+                this.props.callback && this.props.callback(this.model, this.drop_clock)
                 return this.props.children(this.model)
             }}
         </Observer>

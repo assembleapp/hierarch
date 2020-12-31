@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import Logo from "./logo"
+import Scope from "./scope"
 import Sidebar from "./sidebar"
 
 const HierarchScope = React.createContext({
@@ -26,7 +27,7 @@ class Hierarch extends React.Component {
                 this.setState({scope: { code, signal: s}})
             },
         })}>
-            <Grid>
+            <Display>
                 <Page>
                     {this.props.children}
                 </Page>
@@ -34,7 +35,16 @@ class Hierarch extends React.Component {
                     close={() => this.setState({ open: false })}
                     display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
                 />
-            </Grid>
+            </Display>
+            {this.state.scope.signal === 'grid' && (
+                <Scope
+                {...JSON.parse(this.state.scope.code)}
+                >
+                    {model => {
+                        return <Modal>{JSON.stringify(model.toJSON())}</Modal>
+                    }}
+                </Scope>
+            )}
         </HierarchScope.Provider>
         :
         <>
@@ -50,11 +60,20 @@ class Hierarch extends React.Component {
     )
 }
 
-const Grid = styled.div`
+const Display = styled.div`
 display: grid;
 grid-template-columns: 1fr auto;
 width: 100vw;
 margin: 0;
+`
+
+const Modal = styled.div`
+position: absolute;
+height: 20vh;
+width: 20vw;
+background: blue;
+top: 40vh;
+left: 40vh;
 `
 
 const Page = styled.div`
