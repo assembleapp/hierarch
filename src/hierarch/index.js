@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Logo from "./logo"
 import Scope from "./scope"
 import Sidebar from "./sidebar"
+import Grid from "./grid"
 
 const HierarchScope = React.createContext({
     chosen: { code: null, signal: null },
@@ -40,9 +41,14 @@ class Hierarch extends React.Component {
                 <Scope
                 {...JSON.parse(this.state.scope.code)}
                 >
-                    {model => {
-                        return <Modal>{JSON.stringify(model.toJSON())}</Modal>
-                    }}
+                    {model => (
+                        <Modal>
+                            <Grid
+                            schema={JSON.parse(this.state.scope.code).schema}
+                            model={model}
+                            />
+                        </Modal>
+                    )}
                 </Scope>
             )}
         </HierarchScope.Provider>
@@ -69,11 +75,11 @@ margin: 0;
 
 const Modal = styled.div`
 position: absolute;
-height: 20vh;
-width: 20vw;
+height: 90vh;
+width: 90vw;
 background: blue;
-top: 40vh;
-left: 40vh;
+top: 5vh;
+left: 5vw;
 `
 
 const Page = styled.div`
