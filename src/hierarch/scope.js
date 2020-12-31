@@ -83,7 +83,7 @@ class Scope extends React.Component {
             error: err => console.error("err", err),
         })
 
-        autorun(() => console.log(this.model.toJSON()))
+        // autorun(() => console.log(this.model.toJSON()))
     }
 
     render() {
