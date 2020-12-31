@@ -7,8 +7,12 @@ const Grid = ({ schema, model }) => {
         { Header: "name", accessor: "name" },
         { Header: "address", accessor: "address" },
     ]
-    console.log(model.toJSON())
-    const tableInstance = useTable({ columns, data: model.toJSON().companies })
+
+    const data = React.useMemo(
+        () => model.toJSON().companies,
+        []
+      )
+    const tableInstance = useTable({ columns, data })
 
     const {
         getTableProps,
@@ -32,10 +36,19 @@ const Grid = ({ schema, model }) => {
                         </tr>
                     ))}
                 </thead>
-                <tbody>
-                <tr>
-                    <td></td>
-                </tr>
+                <tbody {...getTableBodyProps()}>
+                    {rows.map(row => {
+                        prepareRow(row)
+                        return (
+                            <tr {...row.getRowProps()}>
+                                {row.cells.map(cell => (
+                                    <td {...cell.getCellProps()}>
+                                        {cell.render('Cell')}
+                                    </td>
+                                ))}
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </Display>

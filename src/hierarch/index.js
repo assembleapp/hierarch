@@ -40,6 +40,7 @@ class Hierarch extends React.Component {
             {this.state.scope.signal === 'grid' && (
                 <Scope
                 {...JSON.parse(this.state.scope.code)}
+                callback={(model, _) => console.log(model.toJSON())}
                 >
                     {model => (
                         <Modal>
