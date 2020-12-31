@@ -75,6 +75,12 @@ const Hierarchical = ({name, begin, end, permissions, code}) => (
             onClick={() => scope.signal("resize", code) }
         >resize</a>
         }
+        {permissions.indexOf("g-4:scope:grid") !== -1
+        && <a
+            href="#"
+            onClick={() => scope.signal("grid", code) }
+        >display grid</a>
+        }
         </>
     )}
     </HierarchScope.Consumer>

@@ -278,7 +278,17 @@ const hierarchy = (address, callback) => {
                     code = program.display(c.node.namedChildren[0].namedChildren[2].namedChildren[1])
                     name = program.display(c.node.namedChildren[0].namedChildren[1].namedChildren[1])
                     // console.log(name, code)
-                    permissions = permissions.concat(c.node.type === "jsx_element" ? "g-4:change" : [])
+                    permissions = permissions.concat("g-4:change")
+                }
+                if(name === "Scope") {
+                    permissions = permissions.concat("g-4:scope:grid")
+                    var attrs = c.node.namedChildren[0].namedChildren.slice(1)
+                    attrs = attrs.filter(a => (a.children[0] && a.children[0].type) === "property_identifier")
+                    attrs = attrs.filter(a => ["source", "schema"].some(s => s === program.display(a.children[0])))
+                    code = {}
+                    attrs.forEach(a => code[program.display(a).split('=')[0]] = program.display(a).split('=').slice(1).join('='))
+                    code = JSON.stringify(code)
+                    // console.log(code)
                 }
             } else if (c.node.type === "jsx_self_closing_element") {
                 name = program.display(c.node.firstNamedChild)
@@ -288,7 +298,7 @@ const hierarchy = (address, callback) => {
                     code = program.display(c.node.namedChildren[2].namedChildren[1])
                     name = program.display(c.node.namedChildren[1].namedChildren[1])
                     // console.log(name, code)
-                    permissions = permissions.concat(c.node.type === "jsx_self_closing_element" ? "g-4:resize" : [])
+                    permissions = permissions.concat("g-4:resize")
                 }
             } else {
                 throw (
