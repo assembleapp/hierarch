@@ -31,7 +31,7 @@ function App() {
             }
           }}
         >
-          {model => (
+          {(model, _) => (
             <Board>
               {model.companies.map((c, i) => (
                 <Link key={i} address={c.address}>{c.name}</Link>

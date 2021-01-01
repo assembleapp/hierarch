@@ -4,6 +4,7 @@ import { autorun } from "mobx"
 import { types } from "mobx-state-tree"
 import { Observer } from "mobx-react"
 
+import { useMutation } from "@apollo/client";
 import gql from "graphql-tag"
 import graph from "./graph"
 
@@ -50,6 +51,7 @@ class Scope extends React.Component {
         return gql`
         subscription Companies {
             companies(order_by: {name: asc}) {
+              number
               address
               danger
               labels
@@ -61,6 +63,7 @@ class Scope extends React.Component {
     makeModel = (schema) => {
         const model = types.model({
             companies: types.array(types.model("Company", {
+                number: types.string,
                 name: types.string,
                 address: types.string,
                 danger: types.maybeNull(types.integer),
@@ -91,7 +94,11 @@ class Scope extends React.Component {
         <Observer>
             {() => {
                 this.props.callback && this.props.callback(this.model, this.drop_clock)
-                return this.props.children(this.model)
+                return (
+                    <Upgrade>
+                        {g => this.props.children(this.model, g)}
+                    </Upgrade>
+                )
             }}
         </Observer>
         )
@@ -101,6 +108,20 @@ class Scope extends React.Component {
         clearTimeout(this[clock_name])
         clearInterval(this[clock_name])
     }
+}
+
+const Upgrade = (p) => {
+    var query = gql`
+    mutation ($name: String, $address: String, $number: uuid) {
+        update_companies(where: {number: {_eq: $number}}, _set: {name: $name, address: $address}) {
+          affected_rows
+        }
+    }`
+    const [upgrade_company] = useMutation(query, { client: graph })
+    return p.children((grade) => {
+        console.log(grade);
+        upgrade_company({ variables: grade })
+    })
 }
 
 export default Scope

@@ -42,11 +42,12 @@ class Hierarch extends React.Component {
                 {...JSON.parse(this.state.scope.code)}
                 callback={(model, _) => console.log(model.toJSON())}
                 >
-                    {model => (
+                    {(model, upgrade) => (
                         <Modal>
                             <Grid
                             schema={JSON.parse(this.state.scope.code).schema}
                             model={model}
+                            upgradeRecord={this.upgradeRecord(model, upgrade)}
                             />
                         </Modal>
                     )}
@@ -65,6 +66,22 @@ class Hierarch extends React.Component {
         </Corner>
         </>
     )
+
+    upgradeRecord = (model, upgrade) => (rowIndex, columnId, value) => {
+        var company = model.companies.toJSON()[rowIndex]
+        console.log(company)
+        var grade = Object.assign(
+            {},
+            {
+                name: company.name,
+                address: company.address,
+                number: company.number,
+            },
+            { [columnId]: value },
+        )
+
+        upgrade(grade)
+    }
 }
 
 const Display = styled.div`
