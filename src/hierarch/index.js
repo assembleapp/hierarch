@@ -22,12 +22,16 @@ class Hierarch extends React.Component {
     render = () => (
         this.state.open
         ?
-        <HierarchScope.Provider value={Object.assign({}, {chosen: this.state.scope}, {
-            signal: (s, code) => {
-                console.log("Signal", s, code)
-                this.setState({scope: { code, signal: s}})
-            },
-        })}>
+        <HierarchScope.Provider
+            value={Object.assign(
+                {},
+                {chosen: this.state.scope},
+                {signal: (s, code) => {
+                    console.log("Signal", s, code)
+                    this.setState({scope: { code, signal: s}})
+                },
+            })}
+        >
             <Display>
                 <Page>
                     {this.props.children}
@@ -37,6 +41,7 @@ class Hierarch extends React.Component {
                     display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
                 />
             </Display>
+
             {this.state.scope.signal === 'grid' && (
                 <Scope
                 {...JSON.parse(this.state.scope.code)}
