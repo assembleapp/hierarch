@@ -12,15 +12,10 @@ class Box extends React.Component {
         ${({signal}) => signal.signal === "display" && "outline: 1px solid blue;"}
         ${({signal, code}) => signal.signal === "display" && signal.code === code && "outline-color: red;"}
         `
-        // console.log('rendering Box:', code, this.state, children)
 
         // code: abc123-123132
         // source file hash - content hash
 
-        // if(code === 'abc4' &&
-        // (scope.chosen && scope.chosen.signal === "change" && scope.chosen.code === code)
-        // )
-        //     debugger;
         var focus_count = 0
 
         return (
@@ -115,12 +110,10 @@ class Box extends React.Component {
                 return { code: this.props.children[x].props.code }
             }
         })
-        // console.log(changeArray)
 
         fetch("http://0.0.0.0:4321/change", {
             method: "POST",
             body: JSON.stringify({
-                // upgrade: ["Change", { code: 'abc5' }, "by clicking and clacking."],
                 upgrade: changeArray,
                 code: this.props.code,
             }),
@@ -129,8 +122,6 @@ class Box extends React.Component {
                 'Content-Type': 'application/json',
             },
         })
-        // .then(response => response.text())
-        // .then(response => console.log(response))
         .then(() => {
             if(window.assemble && window.assemble.repull)
                 window.assemble.repull()
@@ -224,12 +215,6 @@ class Resize extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-        })
-        // .then(response => response.text())
-        // .then(response => console.log(response))
-        .then(() => {
-            // if(window.assemble && window.assemble.repull)
-            //     window.assemble.repull()
         })
     }
 }
