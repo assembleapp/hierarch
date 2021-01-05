@@ -42,7 +42,7 @@ class Scope extends React.Component {
         this.model.assign(
             'companies',
             Math.random() < 0.6
-            ? this.model.companies.concat([{ name: '~~~', address: 'https://example.com'}])
+            ? this.model.companies.concat([{ number: String(Math.random()), name: '~~~', address: 'https://example.com'}])
             : this.model.companies.slice(1)
         )
     }
