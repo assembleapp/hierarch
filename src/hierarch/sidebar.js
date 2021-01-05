@@ -6,7 +6,7 @@ import Hierarchy from "./hierarchy"
 
 class Sidebar extends React.Component {
     state = {
-        address: "src/App.js"
+        address: "src/App.js",
     }
 
     render = () => (

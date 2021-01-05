@@ -1,4 +1,4 @@
-import Lens, { Code, P, Box } from './hierarch/lens'
+import { Code, P, Box } from './hierarch/lens'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
