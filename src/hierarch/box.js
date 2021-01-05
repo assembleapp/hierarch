@@ -41,6 +41,14 @@ class Box extends React.Component {
                             scope.signal('change', code)
                             e.stopPropagation()
                         }}
+                        onMouseEnter={(e) => {
+                            scope.signal('display', code)
+                            e.stopPropagation()
+                        }}
+                        onMouseLeave={(e) => {
+                            if(scope.chosen.code === code)
+                                scope.signal('display', e.relatedTarget ? e.relatedTarget.getAttribute("data-code") : null)
+                        }}
                     >
                         {children instanceof Array
                         ? children.map(c => {
@@ -77,6 +85,14 @@ class Box extends React.Component {
                             scope.signal('change', code)
                             e.stopPropagation()
                         }}
+                        onMouseEnter={(e) => {
+                            scope.signal('display', code)
+                            e.stopPropagation()
+                        }}
+                        onMouseLeave={(e) => {
+                            if(scope.chosen.code === code)
+                                scope.signal('display', e.relatedTarget ? e.relatedTarget.getAttribute("data-code") : null)
+                        }}
                     >
                         {children}
                     </Original>
@@ -96,6 +112,14 @@ class Box extends React.Component {
                         onClick={(e) => {
                             scope.signal('resize', code)
                             e.stopPropagation()
+                        }}
+                        onMouseEnter={(e) => {
+                            scope.signal('display', code)
+                            e.stopPropagation()
+                        }}
+                        onMouseLeave={(e) => {
+                            if(scope.chosen.code === code)
+                                scope.signal('display', e.relatedTarget ? e.relatedTarget.getAttribute("data-code") : null)
                         }}
                     />
                 )
