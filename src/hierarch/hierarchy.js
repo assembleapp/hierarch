@@ -44,14 +44,14 @@ const display_hierarchy_index = (index, hierarchy) => (
     hierarchy[2].map(h => (
         <>
         {("  ".repeat(index))}
-        <Hierarchical name={h[3]} begin={h[0]} end={h[1]} permissions={h[4]} code={h[5]} />
+        <Hierarchical name={h[3]} permissions={h[4]} code={h[5]} />
         {"\n"}
         {display_hierarchy_index(index + 1, h)}
         </>
     ))
 )
 
-const Hierarchical = ({name, begin, end, permissions, code}) => (
+const Hierarchical = ({name, permissions, code}) => (
     <HierarchScope.Consumer>
     {scope => (
         <>
@@ -59,13 +59,13 @@ const Hierarchical = ({name, begin, end, permissions, code}) => (
         {
         permissions.indexOf("g-4:change") !== -1
         ? <a
-            key={`${begin}-${end}`}
+            key={code}
             href="#"
             onClick={() => scope.signal("change", code)}
             onMouseOver={() => scope.signal("display", code)}
         >{name}</a>
         : <span
-            key={`${begin}-${end}`}
+            key={code}
             onMouseOver={() => scope.signal("display", code)}
         >{name}</span>
         }
