@@ -10,7 +10,7 @@ class Sidebar extends React.Component {
     }
 
     render = () => (
-        <Layout>
+        <Layout place={this.props.place} >
             <span>Hierarch</span>
             <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
 
@@ -22,7 +22,13 @@ class Sidebar extends React.Component {
     )
 }
 
-const Layout = styled.div`
+const Layout = styled.div.attrs(p => ({
+    style: {
+        top: p.place.y + 'px',
+        left: 40 + p.place.x + 'px',
+    }
+}))`
+position: absolute;
 width: 22rem;
 height: auto;
 background: rgba(212, 212, 212, 40%);

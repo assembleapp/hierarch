@@ -17,6 +17,10 @@ class Hierarch extends React.Component {
             code: null,
             signal: null,
         },
+        mouse: {
+            x: 0,
+            y: 0,
+        },
     }
 
     render = () => (
@@ -32,13 +36,14 @@ class Hierarch extends React.Component {
                 },
             })}
         >
-            <Display>
+            <Display onMouseMove={(e) => { this.setState({ mouse: { x: e.clientX, y: e.clientY }}); }}>
                 <Page>
                     {this.props.children}
                 </Page>
                 <Sidebar
                     close={() => this.setState({ open: false })}
                     display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
+                    place={this.state.mouse}
                 />
             </Display>
 
@@ -90,9 +95,6 @@ class Hierarch extends React.Component {
 }
 
 const Display = styled.div`
-display: grid;
-grid-template-columns: 1fr auto;
-width: 100vw;
 margin: 0;
 `
 
@@ -109,8 +111,6 @@ overflow: scroll;
 `
 
 const Page = styled.div`
-  overflow: hidden;
-  transform: scale(0.8);
 `
 
 const Corner = styled.div`
