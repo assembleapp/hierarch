@@ -84,10 +84,6 @@ const apply_change = (change) => {
         })
 
         program.reparse()
-        console.log(program.source)
-        // drop_dependency(program)
-
-        // program.reparse()
         fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
     })
 }

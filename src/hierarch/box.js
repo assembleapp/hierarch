@@ -52,7 +52,7 @@ class Box extends React.Component {
                                             focus_count += 1
                                         }
                                     }}
-                                    record={() => this.recordChanges()}
+                                    record={() => this.recordChanges().then(() => scope.signal('display', null))}
                                 >
                                     {c}
                                 </Change>
@@ -61,7 +61,7 @@ class Box extends React.Component {
                         })
                         :
                         (typeof(children) === 'string'
-                            ? <Change focus={e => e && e.focus()} record={() => this.recordChanges()}>
+                            ? <Change focus={e => e && e.focus()} record={() => this.recordChanges().then(() => scope.signal('display', null))}>
                                 {children}
                             </Change>
                             : children
@@ -113,7 +113,7 @@ class Box extends React.Component {
             }
         })
 
-        fetch("http://0.0.0.0:4321/change", {
+        return fetch("http://0.0.0.0:4321/change", {
             method: "POST",
             body: JSON.stringify({
                 upgrade: changeArray,
