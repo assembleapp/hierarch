@@ -62,11 +62,16 @@ const LogoSpin = keyframes`
 const Layout = styled.div`
 text-align: center;
 display: grid;
-grid-template-columns: auto 1fr;
+grid-template-columns: 1fr auto;
+
+@media(max-width: 800px) {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
 `
 
 const Logo = styled.img`
-height: 40vmin;
+height: 20vmin;
 
 @media (prefers-reduced-motion: no-preference) {
   animation: ${LogoSpin} infinite 20s linear;
