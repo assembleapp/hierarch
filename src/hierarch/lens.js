@@ -3,10 +3,6 @@ import styled from "styled-components"
 import { HierarchScope } from "./index"
 
 class Box extends React.Component {
-    state = {
-        clicked: false,
-    }
-
     changeableBox = React.createRef()
 
     render = () => {
@@ -22,7 +18,7 @@ class Box extends React.Component {
         // source file hash - content hash
 
         // if(code === 'abc4' &&
-        // this.state.clicked //|| (scope.chosen && scope.chosen.signal === "change" && scope.chosen.code === code)
+        // (scope.chosen && scope.chosen.signal === "change" && scope.chosen.code === code)
         // )
         //     debugger;
         var focus_count = 0
@@ -30,8 +26,11 @@ class Box extends React.Component {
         return (
         <HierarchScope.Consumer>
             {scope => {
-                var running = this.state.clicked ||
-                    (scope.chosen && ["change", "resize"].indexOf(scope.chosen.signal) !== -1 && scope.chosen.code === code)
+                var running = (
+                    scope.chosen &&
+                    scope.chosen.code === code
+                )
+
                 focus_count = 0
                 return children
                 ? ( running && scope.chosen.signal === "change"
