@@ -29,11 +29,11 @@ const Layout = styled.div.attrs(p => ({
     }
 }))`
 position: absolute;
-width: 22rem;
+width: auto;
 height: auto;
-background: rgba(212, 212, 212, 40%);
+background: rgba(24, 12,   12, 40%);
 padding: 0.5rem;
-overflow-y: scroll;
+color: #b1b1e2cc;
 `
 
 const Close = styled.span`
