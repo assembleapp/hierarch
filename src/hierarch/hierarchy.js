@@ -1,5 +1,6 @@
 import React from "react"
 import { HierarchScope } from "./index"
+import styled from "styled-components"
 
 class Hierarchy extends React.Component {
     state = {
@@ -54,7 +55,7 @@ const display_hierarchy_index = (index, hierarchy) => (
 const Hierarchical = ({name, permissions, code}) => (
     <HierarchScope.Consumer>
     {scope => (
-        <>
+        <Border running={code === scope.chosen.code}>
 
         {
         permissions.indexOf("g-4:change") !== -1
@@ -83,9 +84,13 @@ const Hierarchical = ({name, permissions, code}) => (
             onClick={() => scope.signal("grid", code) }
         >display grid</a>
         }
-        </>
+        </Border>
     )}
     </HierarchScope.Consumer>
 )
+
+const Border = styled.span`
+    border: ${p => p.running ? "1px solid #ee00ee" : "none"};
+`
 
 export default Hierarchy
