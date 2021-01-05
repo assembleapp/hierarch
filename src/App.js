@@ -32,11 +32,14 @@ function App() {
           }}
         >
           {(model, _) => (
+            <>
+            <h3>See also:</h3>
             <Board>
               {model.companies.map((c, i) => (
-                <Link key={i} address={c.address}>{c.name}</Link>
+                <Link key={i} address={c.address} style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}>{c.name}</Link>
               ))}
             </Board>
+            </>
           )}
         </Scope>
       </Header>
