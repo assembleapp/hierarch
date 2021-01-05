@@ -46,8 +46,13 @@ class Box extends React.Component {
                             e.stopPropagation()
                         }}
                         onMouseLeave={(e) => {
+                            var code_key = e.relatedTarget
+                            && typeof e.relatedTarget.getAttribute === 'function'
+                            ? e.relatedTarget.getAttribute("data-code")
+                            : null
+
                             if(scope.chosen.code === code)
-                                scope.signal('display', e.relatedTarget ? e.relatedTarget.getAttribute("data-code") : null)
+                                scope.signal('display', code_key)
                         }}
                     >
                         {children instanceof Array
@@ -90,8 +95,13 @@ class Box extends React.Component {
                             e.stopPropagation()
                         }}
                         onMouseLeave={(e) => {
+                            var code_key = e.relatedTarget
+                            && typeof e.relatedTarget.getAttribute === 'function'
+                            ? e.relatedTarget.getAttribute("data-code")
+                            : null
+
                             if(scope.chosen.code === code)
-                                scope.signal('display', e.relatedTarget ? e.relatedTarget.getAttribute("data-code") : null)
+                                scope.signal('display', code_key)
                         }}
                     >
                         {children}
@@ -118,8 +128,13 @@ class Box extends React.Component {
                             e.stopPropagation()
                         }}
                         onMouseLeave={(e) => {
+                            var code_key = e.relatedTarget
+                            && typeof e.relatedTarget.getAttribute === 'function'
+                            ? e.relatedTarget.getAttribute("data-code")
+                            : null
+
                             if(scope.chosen.code === code)
-                                scope.signal('display', e.relatedTarget ? e.relatedTarget.getAttribute("data-code") : null)
+                                scope.signal('display', code_key)
                         }}
                     />
                 )
