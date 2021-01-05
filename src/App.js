@@ -63,10 +63,12 @@ const Layout = styled.div`
 text-align: center;
 display: grid;
 grid-template-columns: 1fr auto;
+grid-template-rows: 100vh;
 
 @media(max-width: 800px) {
   grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
 }
 `
 
@@ -80,7 +82,7 @@ height: 20vmin;
 
 const Header = styled.header`
 background-color: #8ab7ab;
-min-height: 100vh;
+// min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
