@@ -39,10 +39,12 @@ class Box extends React.Component {
                         code={code}
                         onClick={(e) => {
                             scope.signal('change', code)
-                            e.stopPropagation()
-                            e.preventDefault()
-                            e.bubbles = false
-                            return false
+                            if(scope.open) {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                e.bubbles = false
+                                return false
+                            }
                         }}
                         onMouseEnter={(e) => {
                             scope.signal('display', code)
@@ -91,10 +93,12 @@ class Box extends React.Component {
                         code={code}
                         onClick={(e) => {
                             scope.signal('change', code)
-                            e.stopPropagation()
-                            e.preventDefault()
-                            e.bubbles = false
-                            return false
+                            if(scope.open) {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                e.bubbles = false
+                                return false
+                            }
                         }}
                         onMouseEnter={(e) => {
                             scope.signal('display', code)
@@ -127,10 +131,12 @@ class Box extends React.Component {
                         code={code}
                         onClick={(e) => {
                             scope.signal('resize', code)
-                            e.stopPropagation()
-                            e.preventDefault()
-                            e.bubbles = false
-                            return false
+                            if(scope.open) {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                e.bubbles = false
+                                return false
+                            }
                         }}
                         onMouseEnter={(e) => {
                             scope.signal('display', code)
