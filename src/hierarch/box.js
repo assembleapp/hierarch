@@ -40,6 +40,9 @@ class Box extends React.Component {
                         onClick={(e) => {
                             scope.signal('change', code)
                             e.stopPropagation()
+                            e.preventDefault()
+                            e.bubbles = false
+                            return false
                         }}
                         onMouseEnter={(e) => {
                             scope.signal('display', code)
@@ -89,6 +92,9 @@ class Box extends React.Component {
                         onClick={(e) => {
                             scope.signal('change', code)
                             e.stopPropagation()
+                            e.preventDefault()
+                            e.bubbles = false
+                            return false
                         }}
                         onMouseEnter={(e) => {
                             scope.signal('display', code)
@@ -122,6 +128,9 @@ class Box extends React.Component {
                         onClick={(e) => {
                             scope.signal('resize', code)
                             e.stopPropagation()
+                            e.preventDefault()
+                            e.bubbles = false
+                            return false
                         }}
                         onMouseEnter={(e) => {
                             scope.signal('display', code)
