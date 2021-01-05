@@ -6,7 +6,8 @@ const Grid = ({ schema, model, upgradeRecord }) => {
     const columns = React.useMemo(
         () => [
             { Header: "name", accessor: "name" },
-            { Header: "adress", accessor: "address" },
+            { Header: "address", accessor: "address" },
+            { Header: "danger", accessor: "danger" },
         ],
         []
     )

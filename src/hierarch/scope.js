@@ -50,7 +50,7 @@ class Scope extends React.Component {
     makeQuery = (schema) => {
         return gql`
         subscription Companies {
-            companies(order_by: {name: asc}) {
+            companies(order_by: {danger: desc, name: asc}) {
               number
               address
               danger
@@ -112,8 +112,8 @@ class Scope extends React.Component {
 
 const Upgrade = (p) => {
     var query = gql`
-    mutation ($name: String, $address: String, $number: uuid) {
-        update_companies(where: {number: {_eq: $number}}, _set: {name: $name, address: $address}) {
+    mutation ($name: String, $address: String, $danger: Int, $number: uuid) {
+        update_companies(where: {number: {_eq: $number}}, _set: {name: $name, address: $address, danger: $danger}) {
           affected_rows
         }
     }`
