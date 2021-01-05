@@ -14,10 +14,15 @@ class Sidebar extends React.Component {
             <span>Hierarch</span>
             <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
 
-            <Hierarchy
-            address={this.state.address}
-            display={this.props.display}
-            />
+            {
+                this.props.children
+                ? this.props.children
+                :
+                <Hierarchy
+                address={this.state.address}
+                display={this.props.display}
+                />
+            }
         </Layout>
     )
 }

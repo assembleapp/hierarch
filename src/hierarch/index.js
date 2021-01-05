@@ -57,25 +57,23 @@ class Hierarch extends React.Component {
                     close={() => this.setState({ open: false })}
                     display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
                     place={this.state.mouse}
-                />
-            </Display>
-
-            {this.state.scope.signal === 'grid' && (
-                <Scope
-                {...JSON.parse(this.state.scope.code)}
-                callback={(model, _) => console.log(model.toJSON())}
                 >
-                    {(model, upgrade) => (
-                        <Modal>
-                            <Grid
-                            schema={JSON.parse(this.state.scope.code).schema}
-                            model={model}
-                            upgradeRecord={this.upgradeRecord(model, upgrade)}
-                            />
-                        </Modal>
+                    {this.state.scope.signal === 'grid' && (
+                        <Scope
+                        {...JSON.parse(this.state.scope.code)}
+                        callback={(model, _) => console.log(model.toJSON())}
+                        >
+                            {(model, upgrade) => (
+                                <Grid
+                                schema={JSON.parse(this.state.scope.code).schema}
+                                model={model}
+                                upgradeRecord={this.upgradeRecord(model, upgrade)}
+                                />
+                            )}
+                        </Scope>
                     )}
-                </Scope>
-            )}
+                </Sidebar>
+            </Display>
         </HierarchScope.Provider>
         :
         <>
