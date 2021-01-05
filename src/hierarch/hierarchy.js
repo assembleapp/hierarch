@@ -55,7 +55,7 @@ const Hierarchical = ({name, permissions, code}) => (
     <HierarchScope.Consumer>
     {scope => (
         <>
-        {/* {permissions.join(",")} */}
+
         {
         permissions.indexOf("g-4:change") !== -1
         ? <a
@@ -69,12 +69,14 @@ const Hierarchical = ({name, permissions, code}) => (
             onMouseOver={() => scope.signal("display", code)}
         >{name}</span>
         }
+
         {permissions.indexOf("g-4:resize") !== -1
         && <a
             href="#"
             onClick={() => scope.signal("resize", code) }
         >resize</a>
         }
+
         {permissions.indexOf("g-4:scope:grid") !== -1
         && <a
             href="#"
