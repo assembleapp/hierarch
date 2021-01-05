@@ -4,40 +4,6 @@ var Program = require("./program")
 // ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
 
-const add_dependency = (program) => {
-    matches = program.query(`
-    (import_statement (import_clause (identifier) @identifier) source: (string) @source
-        (#match? @source "./hierarch/lens")
-        (#eq? @identifier "Lens")
-    )
-    `)
-
-    if(!matches.length) {
-        // beginning, ending, upgrade
-        program.replace_by_indices(0, 0, "import Lens from './hierarch/lens'\n")
-    }
-}
-
-const drop_dependency = (program) => {
-    matches = program.query(`
-    (import_statement (import_clause (identifier) @identifier) source: (string) @source
-        (#match? @source "./hierarch/lens")
-        (#eq? @identifier "Lens")
-    ) @import
-    `)
-
-    matches.forEach(m => {
-        var k = "import"
-        var captures = m.captures.filter(c => c.name === k)
-        captures.forEach(c => {
-            var upgrade = ""
-            var options = { endingOffset: 1 }
-
-            program.replace_by_node(c.node, upgrade, options)
-        })
-    })
-}
-
 const apply_change = (change) => {
     console.log(change)
     fs.readFile(sourceAddress, 'utf8', (error, source) => {

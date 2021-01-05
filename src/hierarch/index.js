@@ -20,7 +20,15 @@ class Hierarch extends React.Component {
         mouse: {
             x: 0,
             y: 0,
+            hold: false,
         },
+    }
+
+    componentDidMount() {
+        document.onkeydown = e => {
+            if(e.code === "Space")
+              this.setState({ mouse: { hold: !this.state.mouse.hold }})
+        }
     }
 
     render = () => (
@@ -36,7 +44,12 @@ class Hierarch extends React.Component {
                 },
             })}
         >
-            <Display onMouseMove={(e) => { this.setState({ mouse: { x: e.clientX, y: e.clientY }}); }}>
+            <Display
+                onMouseMove={(e) => {
+                    if(!this.state.mouse.hold)
+                        this.setState({ mouse: { x: e.clientX, y: e.clientY }})
+                }}
+                >
                 <Page>
                     {this.props.children}
                 </Page>
