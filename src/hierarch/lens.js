@@ -12,13 +12,7 @@ class Box extends React.Component {
     render = () => {
         var { original, children, code, ...remainder } = this.props
 
-        const Original = styled(original).attrs({
-            onClick: (e) => {
-                // console.log(code, "clicked!")
-                this.setState({clicked: true})
-                e.stopPropagation()
-            }
-        })`
+        const Original = styled(original)`
         ${({signal}) => signal.signal === "display" && "outline: 1px solid blue;"}
         ${({signal, code}) => signal.signal === "display" && signal.code === code && "outline-color: red;"}
         `
@@ -32,15 +26,26 @@ class Box extends React.Component {
         // )
         //     debugger;
         var focus_count = 0
+
         return (
         <HierarchScope.Consumer>
             {scope => {
+                var running = this.state.clicked ||
+                    (scope.chosen && ["change", "resize"].indexOf(scope.chosen.signal) !== -1 && scope.chosen.code === code)
                 focus_count = 0
                 return children
-                ? (
-                    this.state.clicked || (scope.chosen && scope.chosen.signal === "change" && scope.chosen.code === code)
+                ? ( running && scope.chosen.signal === "change"
                     ?
-                    <Original ref={this.changeableBox} {...remainder} signal={scope.chosen} code={code} >
+                    <Original
+                        ref={this.changeableBox}
+                        {...remainder}
+                        signal={scope.chosen}
+                        code={code}
+                        onClick={(e) => {
+                            scope.signal('change', code)
+                            e.stopPropagation()
+                        }}
+                    >
                         {children instanceof Array
                         ? children.map(c => {
                             if(typeof(c) === 'string') {
@@ -68,19 +73,34 @@ class Box extends React.Component {
                         }
                     </Original>
                     :
-                    <Original {...remainder} signal={scope.chosen} code={code} >
+                    <Original
+                        {...remainder}
+                        signal={scope.chosen}
+                        code={code}
+                        onClick={(e) => {
+                            scope.signal('change', code)
+                            e.stopPropagation()
+                        }}
+                    >
                         {children}
                     </Original>
                 )
-                : (
-                    this.state.clicked || (scope.chosen && scope.chosen.signal === "resize" && scope.chosen.code === code)
+                : ( running && scope.chosen.signal === "resize"
                     ?
-                    <Resize original={original} code={code} {...remainder} />
+                    <Resize
+                        original={original}
+                        code={code}
+                        {...remainder}
+                    />
                     :
                     <Original
                         {...remainder}
                         signal={scope.chosen}
                         code={code}
+                        onClick={(e) => {
+                            scope.signal('resize', code)
+                            e.stopPropagation()
+                        }}
                     />
                 )
             }}
