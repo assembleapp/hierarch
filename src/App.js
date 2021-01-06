@@ -7,24 +7,36 @@ import logo from './logo.svg';
 function App() {
   return (
     <Column>
+      <h1>Some big plans, by Assemble Company.</h1>
+
+      <img
+        style={{ display: 'block', width: '36rem' }}
+        src="https://github.com/assembleapp/hierarch/raw/main/recordings/basic_use_case.gif"
+        alt="basic use case"
+        />
+
+      <h2>– already running –</h2>
+
       <Block>
         <Header>
           <Logo src={logo} alt="logo" />
 
           <Div>
-            <H3>Hierarch Engine</H3>
+            <H3>Hierarch</H3>
 
             <P>
-              Change <Code>code</Code> by clicking and clacking.
+              A programming engine –
+              change <Code>code</Code> by clicking and clacking.
             </P>
 
             <Link address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
-              Learn Hierarch.
+              Read our engine's code and raise issues.
             </Link>
           </Div>
         </Header>
       </Block>
 
+      <h2>– and on our horizon –</h2>
       <Pair>
         <Block>
           <H3>Copper</H3>
@@ -37,7 +49,7 @@ function App() {
         </Block>
 
         <Block>
-          <H3>Seed Bank</H3>
+          <H3>Greenhouse</H3>
 
           <P>
             A booming garden and nursery helping machine kernels
@@ -62,7 +74,7 @@ function App() {
       >
         {(model, _) => (
           <>
-          <H3>See also:</H3>
+          <H3>Keep building! Some similar programs:</H3>
           <Board>
             {model.companies.map((c, i) => (
               <Link key={i} address={c.address} style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}>{c.name}</Link>
@@ -79,7 +91,6 @@ const Pair = styled.div`
 display: grid;
 grid-template-columns: 1fr 1fr;
 grid-gap: 2rem;
-margin-top: 4rem;
 width: 40rem;
 `
 
@@ -87,6 +98,7 @@ const Block = styled.div`
 border: 2px solid purple;
 border-radius: 6px;
 padding: 2rem;
+overflow: hidden;
 `
 
 const Board = styled.ul`
