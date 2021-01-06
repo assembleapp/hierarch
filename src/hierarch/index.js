@@ -32,62 +32,60 @@ class Hierarch extends React.Component {
     }
 
     render = () => (
-        this.state.open
-        ?
         <HierarchScope.Provider
-            value={Object.assign(
-                {
-                    open: this.state.open,
-                    chosen: this.state.scope
-                },
-                {signal: (s, code) => {
+            value={{
+                open: this.state.open,
+                chosen: this.state.scope,
+                signal: (s, code) => {
                     console.log("Signal", s, code)
                     this.setState({scope: { code, signal: s}})
                 },
-            })}
+            }}
         >
             <Display
                 onMouseMove={(e) => {
-                    if(!this.state.mouse.hold)
+                    if(this.state.open && !this.state.mouse.hold)
                         this.setState({ mouse: { x: e.clientX, y: e.clientY }})
                 }}
-                >
-                <Page>
-                    {this.props.children}
-                </Page>
-                <Sidebar
-                    close={() => this.setState({ open: false })}
-                    display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
-                    place={this.state.mouse}
-                >
-                    {this.state.scope.signal === 'grid' && (
-                        <Scope
-                        {...JSON.parse(this.state.scope.code)}
-                        callback={(model, _) => console.log(model.toJSON())}
-                        >
-                            {(model, upgrade) => (
-                                <Grid
-                                schema={JSON.parse(this.state.scope.code).schema}
-                                model={model}
-                                upgradeRecord={this.upgradeRecord(model, upgrade)}
-                                />
-                            )}
-                        </Scope>
-                    )}
-                </Sidebar>
+                onContextMenu={(e) => {
+                    debugger
+                }}
+            >
+                {this.props.children}
+
+                {this.state.open
+                ?
+                    <Sidebar
+                        close={() => this.setState({ open: false })}
+                        display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
+                        place={this.state.mouse}
+                    >
+                        {this.state.scope.signal === 'grid' && (
+                            <Scope
+                            {...JSON.parse(this.state.scope.code)}
+                            callback={(model, _) => console.log(model.toJSON())}
+                            >
+                                {(model, upgrade) => (
+                                    <Grid
+                                    schema={JSON.parse(this.state.scope.code).schema}
+                                    model={model}
+                                    upgradeRecord={this.upgradeRecord(model, upgrade)}
+                                    />
+                                )}
+                            </Scope>
+                        )}
+                    </Sidebar>
+                :
+                    <Corner>
+                        <Logo
+                            size={20}
+                            repeat={100000}
+                            onClick={() => this.setState({ open: true })}
+                        />
+                    </Corner>
+                }
             </Display>
         </HierarchScope.Provider>
-        :
-        <>
-        {this.props.children}
-        <Corner>
-            <Logo
-                size={20}
-                repeat={100000}
-                onClick={() => this.setState({ open: true })}
-            />
-        </Corner>
-        </>
     )
 
     upgradeRecord = (model, upgrade) => (rowIndex, columnId, value) => {
