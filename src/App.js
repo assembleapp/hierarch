@@ -7,19 +7,46 @@ import logo from './logo.svg';
 function App() {
   return (
     <Column>
-      <Header>
-        <Logo src={logo} alt="logo" />
+      <Block>
+        <Header>
+          <Logo src={logo} alt="logo" />
 
-        <Div>
+          <Div>
+            <H3>Hierarch Engine</H3>
+
+            <P>
+              Change <Code>code</Code> by clicking and clacking.
+            </P>
+
+            <Link address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
+              Learn Hierarch.
+            </Link>
+          </Div>
+        </Header>
+      </Block>
+
+      <Pair>
+        <Block>
+          <H3>Copper</H3>
+
           <P>
-            Change <Code>code</Code> by clicking and clacking.
+            Chromium rules our modern machines.
+            Copper's goal is a more malleable end-user layer,
+            making online programs more dynamic and mesmerizing.
           </P>
+        </Block>
 
-          <Link address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
-            Learn Hierarch.
-          </Link>
-        </Div>
-      </Header>
+        <Block>
+          <H3>Seed Bank</H3>
+
+          <P>
+            A booming garden and nursery helping machine kernels
+            reach rigorous and rich ends.
+            Inspired by 30–year–old code
+            on <Link address="https://kernel.org">Kernel.org</Link>.
+          </P>
+        </Block>
+      </Pair>
 
       <Scope
         source="https://assemble-opposed.herokuapp.com/v1/graphql"
@@ -47,6 +74,20 @@ function App() {
     </Column>
   );
 }
+
+const Pair = styled.div`
+display: grid;
+grid-template-columns: 1fr 1fr;
+grid-gap: 2rem;
+margin-top: 4rem;
+width: 40rem;
+`
+
+const Block = styled.div`
+border: 2px solid purple;
+border-radius: 6px;
+padding: 2rem;
+`
 
 const Board = styled.ul`
 display: grid;
