@@ -59,13 +59,15 @@ const Hierarchical = ({name, permissions, code}) => (
 
         {
         permissions.indexOf("g-4:change") !== -1
-        ? <a
+        ?
+        <a
             key={code}
             href="#"
             onClick={() => scope.signal("change", code)}
             onMouseOver={() => scope.signal("display", code)}
         >{name}</a>
-        : <span
+        :
+        <span
             key={code}
             onMouseOver={() => scope.signal("display", code)}
         >{name}</span>
