@@ -1,4 +1,5 @@
 import { Code, P, Box } from './hierarch/lens'
+import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
 import logo from './logo.svg';
@@ -102,5 +103,11 @@ const Link = styled.a.attrs(p => ({
 }))`
 color: #365a92;
 `
+
+expose({
+  Link,
+  Header,
+  Column,
+})
 
 export default App;

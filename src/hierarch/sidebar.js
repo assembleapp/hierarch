@@ -3,6 +3,16 @@ import styled from "styled-components"
 import Icon from "@mdi/react"
 import { mdiClose } from "@mdi/js"
 import Hierarchy from "./hierarchy"
+import { observable } from "mobx"
+import { Observer } from "mobx-react"
+
+const blocks = observable({})
+const expose = (c) => {
+    Object.keys(c).forEach(k => {
+        blocks[k] = c[k]
+    })
+}
+export { expose }
 
 class Sidebar extends React.Component {
     state = {
@@ -23,14 +33,30 @@ class Sidebar extends React.Component {
                 display={this.props.display}
                 />
             }
+
+            <Observer>
+                {() => (
+                    <div>
+                        {Object.keys(blocks).map(b => {
+                            var B = blocks[b]
+                            return (
+                                <div>
+                                    {b}:
+                                    <B>aaaa</B>
+                                </div>
+                                )
+                        })}
+                    </div>
+                )}
+            </Observer>
         </Layout>
     )
 }
 
 const Layout = styled.div.attrs(p => ({
     style: {
-        top: p.place.y + 'px',
-        left: 40 + p.place.x + 'px',
+        top: (p.place.y || 0) + 'px',
+        left: 40 + (p.place.x || 0) + 'px',
     }
 }))`
 position: absolute;
