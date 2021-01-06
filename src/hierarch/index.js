@@ -5,8 +5,6 @@ import Scope from "./scope"
 import Sidebar from "./sidebar"
 import Grid from "./grid"
 
-const MODES = ["hierarchy", "blocks"]
-
 const HierarchScope = React.createContext({
     chosen: { code: null, signal: null },
     signal: (s, code) => {},
@@ -15,7 +13,6 @@ const HierarchScope = React.createContext({
 class Hierarch extends React.Component {
     state = {
         open: false,
-        mode: 0,
         scope: {
             code: null,
             signal: null,
@@ -45,14 +42,7 @@ class Hierarch extends React.Component {
 
     secondaryClick = (e) => {
         e.preventDefault()
-        this.setState({
-            mode: ((this.state.mode || 0) + 1) % MODES.length
-        })
     }
-
-    mode = () => (
-        MODES[this.state.mode]
-    )
 
     render = () => (
         <HierarchScope.Provider
