@@ -50,7 +50,7 @@ function App() {
 
 const Board = styled.ul`
 display: grid;
-grid-template-columns: repeat(4, auto);
+grid-template-columns: repeat(3, auto);
 grid-row-gap: 0.2rem;
 grid-column-gap: 0.6rem;
 `
