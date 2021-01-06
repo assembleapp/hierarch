@@ -19,6 +19,9 @@ class Program {
     display = (node) => this.parsed.getText(node)
 
     replace_by_node(node, upgrade = "", options = {}) {
+        console.log("Replacing by node:")
+        console.log(this.display(node), " -> ", upgrade)
+
         this.replace_by_indices(
             node.startIndex + (options.beginningOffset || 0),
             node.endIndex + (options.endingOffset || 0),
