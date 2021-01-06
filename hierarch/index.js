@@ -19,7 +19,8 @@ responder.use(function(req, res, next) {
     next();
 });
 
-responder.post("/box", (call, response) => {
+responder.post("/apply_boxes", (call, response) => {
+    // console.log(call.body)
     apply_boxes(call.body.address)
     response.send("done")
 })

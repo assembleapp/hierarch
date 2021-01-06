@@ -5,10 +5,16 @@ var Program = require("./program")
 var sourceAddress = __dirname + '/../src/App.js'
 
 const apply_boxes = (address) => {
+    // console.log(address)
     fs.readFile(address, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
         var program = new Program(address, source)
+
+        var query = program.query(`
+        [(jsx_element) (jsx_self_closing_element)] @element
+        `)
+        program.debug_query(query)
     })
 }
 

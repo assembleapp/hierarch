@@ -42,6 +42,19 @@ class Hierarch extends React.Component {
 
     secondaryClick = (e) => {
         e.preventDefault()
+
+        fetch(`http://0.0.0.0:4321/apply_boxes`, {
+            method: "POST",
+            body: JSON.stringify({
+                address: 'src/App.js',
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.text())
+        .then(response => this.setState({}))
     }
 
     render = () => (
