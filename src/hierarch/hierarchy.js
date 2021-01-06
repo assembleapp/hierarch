@@ -20,8 +20,9 @@ class Hierarchy extends React.Component {
         if(!Object.keys(window.assemble).length) window.assemble = null
     }
 
-    componentDidUpdate = () => {
-        this.pullHierarchy()
+    componentDidUpdate = (original) => {
+        if(original.address !== this.props.address)
+            this.pullHierarchy()
     }
 
     pullHierarchy = () => {
@@ -32,10 +33,10 @@ class Hierarchy extends React.Component {
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.text())
-        .then(response => this.setState({
-            hierarchy: JSON.parse(response),
-        }))
+        .then(response => response.json())
+        .then(response => {
+            this.setState({ hierarchy: response })
+        })
     }
 
     render = () => (
