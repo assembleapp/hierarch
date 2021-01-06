@@ -1,9 +1,11 @@
 import React from "react"
 import styled from "styled-components"
+
+import Grid from "./grid"
+import Hierarchy from "./hierarchy"
 import Logo from "./logo"
 import Scope from "./scope"
 import Sidebar from "./sidebar"
-import Grid from "./grid"
 
 const HierarchScope = React.createContext({
     chosen: { code: null, signal: null },
@@ -12,6 +14,7 @@ const HierarchScope = React.createContext({
 
 class Hierarch extends React.Component {
     state = {
+        address: "src/App.js",
         open: false,
         scope: {
             code: null,
@@ -46,7 +49,7 @@ class Hierarch extends React.Component {
         fetch(`http://0.0.0.0:4321/apply_boxes`, {
             method: "POST",
             body: JSON.stringify({
-                address: 'src/App.js',
+                address: this.state.address,
             }),
             headers: {
                 'Accept': 'application/json',
@@ -54,7 +57,13 @@ class Hierarch extends React.Component {
             },
         })
         .then(response => response.text())
-        .then(response => this.setState({}))
+        .then(_ => {
+            var original_address = this.state.address
+
+            // cause a re-pull on our page's hierarchy.
+            this.setState({address: ""})
+            this.setState({address: original_address})
+        })
     }
 
     render = () => (
@@ -83,7 +92,8 @@ class Hierarch extends React.Component {
                         display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
                         place={this.state.mouse}
                     >
-                        {this.state.scope.signal === 'grid' && (
+                        {this.state.scope.signal === 'grid'
+                        ?
                             <Scope
                             {...JSON.parse(this.state.scope.code)}
                             callback={(model, _) => console.log(model.toJSON())}
@@ -96,7 +106,12 @@ class Hierarch extends React.Component {
                                     />
                                 )}
                             </Scope>
-                        )}
+                        :
+                            <Hierarchy
+                                address={this.state.address}
+                                display={this.props.display}
+                            />
+                        }
                     </Sidebar>
                 :
                     <Corner>

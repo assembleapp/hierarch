@@ -2,7 +2,6 @@ import React from "react"
 import styled from "styled-components"
 import Icon from "@mdi/react"
 import { mdiClose } from "@mdi/js"
-import Hierarchy from "./hierarchy"
 import { observable } from "mobx"
 import { Observer } from "mobx-react"
 
@@ -15,24 +14,12 @@ const expose = (c) => {
 export { expose }
 
 class Sidebar extends React.Component {
-    state = {
-        address: "src/App.js",
-    }
-
     render = () => (
         <Layout place={this.props.place} >
             <span>Hierarch</span>
             <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
 
-            {
-                this.props.children
-                ? this.props.children
-                :
-                <Hierarchy
-                address={this.state.address}
-                display={this.props.display}
-                />
-            }
+            {this.props.children}
 
             <Observer>
                 {() => (

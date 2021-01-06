@@ -20,6 +20,10 @@ class Hierarchy extends React.Component {
         if(!Object.keys(window.assemble).length) window.assemble = null
     }
 
+    componentDidUpdate = () => {
+        this.pullHierarchy()
+    }
+
     pullHierarchy = () => {
         fetch(`http://0.0.0.0:4321/hierarchy?address=${this.props.address}`, {
             method: "GET",
