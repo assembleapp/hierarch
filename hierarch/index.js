@@ -4,6 +4,7 @@ const escape = require("escape-html")
 const responder = express.Router()
 
 const {
+    apply_boxes,
     apply_change,
     apply_resize,
     hierarchy,
@@ -17,6 +18,11 @@ responder.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     next();
 });
+
+responder.post("/box", (call, response) => {
+    apply_boxes(call.body.address)
+    response.send("done")
+})
 
 responder.post("/change", (call, response) => {
     apply_change({

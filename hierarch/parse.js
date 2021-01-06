@@ -4,13 +4,20 @@ var Program = require("./program")
 // ! add address argument to functions.
 var sourceAddress = __dirname + '/../src/App.js'
 
+const apply_boxes = (address) => {
+    fs.readFile(address, 'utf8', (error, source) => {
+        if(error) return console.log(error)
+
+        var program = new Program(address, source)
+    })
+}
+
 const apply_change = (change) => {
     console.log(change)
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
-        var source_name = sourceAddress.split("../").slice(-1)[0]
-        var program = new Program(source_name, source)
+        var program = new Program(sourceAddress, source)
 
         if(!change ||
             !change.code ||
@@ -92,8 +99,7 @@ const apply_resize = (change) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
-        var source_name = sourceAddress.split("../").slice(-1)[0]
-        var program = new Program(source_name, source)
+        var program = new Program(sourceAddress, source)
 
         console.log("params", change)
         console.log("HOLD UP!\nSerious insecure code here; by passing a sneaky `code` param,\nsomeone could hack our parser's query.")
@@ -212,8 +218,7 @@ const hierarchy = (address, callback) => {
     fs.readFile(address, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
-        var source_name = address.split("../").slice(-1)[0]
-        var program = new Program(source_name, source)
+        var program = new Program(address, source)
 
         var query = program.query(`
         [(jsx_element) (jsx_self_closing_element)] @element
@@ -333,4 +338,4 @@ const hierarchy = (address, callback) => {
     })
 }
 
-module.exports = { apply_change, apply_resize, hierarchy }
+module.exports = { apply_boxes, apply_change, apply_resize, hierarchy }
