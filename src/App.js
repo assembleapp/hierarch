@@ -1,4 +1,4 @@
-import { Code, P, Box } from './hierarch/lens'
+import { Code, P, Box, Div } from './hierarch/lens'
 import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
@@ -10,7 +10,7 @@ function App() {
       <Header>
         <Logo src={logo} alt="logo" />
 
-        <div>
+        <Div>
           <P>
             Change <Code>code</Code> by clicking and clacking.
           </P>
@@ -18,7 +18,7 @@ function App() {
           <Link address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
             Learn Hierarch.
           </Link>
-        </div>
+        </Div>
       </Header>
 
       <Scope
