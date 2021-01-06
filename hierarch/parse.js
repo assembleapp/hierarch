@@ -15,6 +15,7 @@ const apply_boxes = (address) => {
         // Plan A: drop boxes.
         // attributes in query are ordered... hm.
         var plan_a = 0
+        program.reparse()
         var query = program.query(`
         (jsx_element
             open_tag: (
@@ -48,6 +49,7 @@ const apply_boxes = (address) => {
         })
         plan_a += query.length
 
+        program.reparse()
         query = program.query(`
         (jsx_self_closing_element
             name: (_) @name
@@ -78,6 +80,7 @@ const apply_boxes = (address) => {
         }
 
         // Plan B: add boxes.
+        program.reparse()
         query = program.query(`
         (jsx_element
             open_tag: (
@@ -93,6 +96,7 @@ const apply_boxes = (address) => {
         `)
         program.debug_query(query)
 
+        program.reparse()
         query = program.query(`
         (jsx_self_closing_element
             name: (_) @name
