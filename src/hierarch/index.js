@@ -61,7 +61,7 @@ class Hierarch extends React.Component {
             var original_address = this.state.address
 
             // cause a re-pull on our page's hierarchy.
-            this.setState({address: ""})
+            this.setState({address: null})
             this.setState({address: original_address})
         })
     }

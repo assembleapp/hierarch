@@ -79,7 +79,7 @@ class Program {
             return m.captures.map(c => {
                 return [
                     c.name,
-                    c.node.toString(),
+                    // c.node.toString(),
                     this.display(c.node),
                 ]
             })

@@ -5,14 +5,98 @@ var Program = require("./program")
 var sourceAddress = __dirname + '/../src/App.js'
 
 const apply_boxes = (address) => {
+    if(!address || address === "null") return null
     // console.log(address)
     fs.readFile(address, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
         var program = new Program(address, source)
 
+        // Plan A: drop boxes.
+        // attributes in query are ordered... hm.
+        var plan_a = 0
         var query = program.query(`
-        [(jsx_element) (jsx_self_closing_element)] @element
+        (jsx_element
+            open_tag: (
+                jsx_opening_element
+                name: (_) @opening-name
+                attribute: (jsx_attribute (property_identifier) @_original "=" (jsx_expression (_) @original))
+                attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
+            )
+            close_tag: (
+                jsx_closing_element
+                name: (_) @closing-name
+                (#eq? @closing-name "Box")
+            )
+
+            (#eq? @opening-name "Box")
+            (#eq? @_original "original")
+            (#eq? @_code "code")
+        ) @element
+        `)
+        program.debug_query(query)
+        query.reverse().forEach(m => {
+            var close = m.captures.filter(c => c.name === "closing-name")[0].node
+            var open = m.captures.filter(c => c.name === "opening-name")[0].node
+            var original = program.display(m.captures.filter(c => c.name === "original")[0].node)
+
+            var code_attr = m.captures.filter(c => c.name === "_code")[0].node.parent
+            var original_attr = m.captures.filter(c => c.name === "_original")[0].node.parent
+
+            program.replace_by_node(close, original)
+            program.replace_by_indices(open.startIndex, code_attr.endIndex, original)
+        })
+        plan_a += query.length
+
+        query = program.query(`
+        (jsx_self_closing_element
+            name: (_) @name
+            attribute: (jsx_attribute (property_identifier) @_original "=" (jsx_expression (_) @original))
+            attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
+
+            (#eq? @name "Box")
+            (#eq? @_original "original")
+            (#eq? @_code "code")
+        ) @element
+        `)
+        program.debug_query(query)
+        query.reverse().forEach(m => {
+            var name = m.captures.filter(c => c.name === "name")[0].node
+            var original = program.display(m.captures.filter(c => c.name === "original")[0].node)
+
+            var code_attr = m.captures.filter(c => c.name === "_code")[0].node.parent
+            var original_attr = m.captures.filter(c => c.name === "_original")[0].node.parent
+
+            program.replace_by_indices(name.startIndex, code_attr.endIndex, original)
+        })
+        plan_a += query.length
+
+        if(plan_a !== 0) {
+            program.reparse()
+            fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+            return null
+        }
+
+        // Plan B: add boxes.
+        query = program.query(`
+        (jsx_element
+            open_tag: (
+                jsx_opening_element
+                name: (_) @opening-name
+            )
+            close_tag: (
+                jsx_closing_element
+                name: (_) @closing-name
+            )
+            (#eq? @opening-name @closing-name)
+        ) @element
+        `)
+        program.debug_query(query)
+
+        query = program.query(`
+        (jsx_self_closing_element
+            name: (_) @name
+        ) @element
         `)
         program.debug_query(query)
     })
