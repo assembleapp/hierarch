@@ -13,9 +13,39 @@ const apply_boxes = (address) => {
         var program = new Program(address, source)
 
         // Plan A: drop boxes.
-        // attributes in query are ordered... hm.
-        var plan_a = 0
-        program.reparse()
+
+        // // begin
+        // var plan_a = 0
+        // // loop {
+        //     program.reparse()
+        //     // run query
+        //     plan_a += query.length
+        //     if(query.length > 0) {
+        //         var q = query[0]
+        //         // program.replace_by_nodes(...q...)
+        //     } else {
+        //         break
+        //     }
+        // // }
+
+        // // loop {
+        //     program.reparse()
+        //     // run second query
+        //     plan_a += query.length
+        //     if(query.length > 0) {
+        //         var q = query[0]
+        //         // program.replace_by_nodes(...q...)
+        //     } else {
+        //         break
+        //     }
+        // // }
+
+        // if(plan_a > 0) {
+        //     program.reparse()
+        //     // fs.writeFile(...)
+        //     return null
+        // }
+
         var query = program.query(`
         (jsx_element
             open_tag: (
@@ -95,6 +125,14 @@ const apply_boxes = (address) => {
         ) @element
         `)
         program.debug_query(query)
+        query.reverse().forEach(m => {
+            const opening_name= m.captures.filter(c => c.name === "opening-name")[0].node
+            const closing_name = m.captures.filter(c => c.name === "closing-name")[0].node
+            const original = program.display(opening_name)
+
+            program.replace_by_node(closing_name, "Box")
+            program.replace_by_node(opening_name, `Box original={${original}} code="${Math.random()}" `)
+        })
 
         program.reparse()
         query = program.query(`
@@ -103,6 +141,16 @@ const apply_boxes = (address) => {
         ) @element
         `)
         program.debug_query(query)
+        query.reverse().forEach(m => {
+            const name = m.captures.filter(c => c.name === "name")[0].node
+            const original = program.display(name)
+
+            program.replace_by_node(name, `Box original={${original}} code="${Math.random()}" `)
+        })
+
+        program.reparse()
+        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
+
     })
 }
 
