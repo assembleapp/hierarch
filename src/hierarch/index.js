@@ -5,6 +5,8 @@ import Scope from "./scope"
 import Sidebar from "./sidebar"
 import Grid from "./grid"
 
+const MODES = ["hierarchy", "blocks"]
+
 const HierarchScope = React.createContext({
     chosen: { code: null, signal: null },
     signal: (s, code) => {},
@@ -13,6 +15,7 @@ const HierarchScope = React.createContext({
 class Hierarch extends React.Component {
     state = {
         open: false,
+        mode: 0,
         scope: {
             code: null,
             signal: null,
@@ -27,9 +30,29 @@ class Hierarch extends React.Component {
     componentDidMount() {
         document.onkeydown = e => {
             if(e.code === "Space")
-              this.setState({ mouse: { hold: !this.state.mouse.hold }})
+              this.setState({ mouse: Object.assign(
+                  this.state.mouse,
+                  { hold: !this.state.mouse.hold },
+              )})
         }
     }
+
+    componentDidUpdate() {
+        document.oncontextmenu = this.state.open
+            ? this.secondaryClick
+            : null
+    }
+
+    secondaryClick = (e) => {
+        e.preventDefault()
+        this.setState({
+            mode: ((this.state.mode || 0) + 1) % MODES.length
+        })
+    }
+
+    mode = () => (
+        MODES[this.state.mode]
+    )
 
     render = () => (
         <HierarchScope.Provider
@@ -46,9 +69,6 @@ class Hierarch extends React.Component {
                 onMouseMove={(e) => {
                     if(this.state.open && !this.state.mouse.hold)
                         this.setState({ mouse: { x: e.clientX, y: e.clientY }})
-                }}
-                onContextMenu={(e) => {
-                    debugger
                 }}
             >
                 {this.props.children}
