@@ -9,12 +9,6 @@ function App() {
     <Column>
       <h1>Some big plans, by Assemble Company.</h1>
 
-      <img
-        style={{ display: 'block', width: '36rem' }}
-        src="https://github.com/assembleapp/hierarch/raw/main/recordings/basic_use_case.gif"
-        alt="basic use case"
-        />
-
       <h2>– already running –</h2>
 
       <Block>
@@ -53,7 +47,7 @@ function App() {
 
           <P>
             A booming garden and nursery helping machine kernels
-            reach rigorous and rich ends.
+            reach rigorous uses and rich ends.
             Inspired by 30–year–old code
             on <Link address="https://kernel.org">Kernel.org</Link>.
           </P>
