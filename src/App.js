@@ -35,7 +35,7 @@ function App() {
       >
         {(model, _) => (
           <>
-          <h3>See also:</h3>
+          <H3>See also:</H3>
           <Board>
             {model.companies.map((c, i) => (
               <Link key={i} address={c.address} style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}>{c.name}</Link>
@@ -50,7 +50,7 @@ function App() {
 
 const Board = styled.ul`
 display: grid;
-grid-template-columns: repeat(3, auto);
+grid-template-columns: repeat(4, auto);
 grid-row-gap: 0.2rem;
 grid-column-gap: 0.6rem;
 `
@@ -102,6 +102,12 @@ const Link = styled.a.attrs(p => ({
   href: p.address,
 }))`
 color: #365a92;
+`
+
+const H3 = styled.h3`
+margin-top: 2rem;
+margin-bottom: 0;
+color: purple;
 `
 
 expose({
