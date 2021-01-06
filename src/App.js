@@ -48,7 +48,7 @@ function App() {
           <P>
             A booming garden and nursery helping machine kernels
             reach rigorous uses and rich ends.
-            Inspired by 30–year–old code
+            Inspired by code a couple decades old
             on <Link address="https://kernel.org">Kernel.org</Link>.
           </P>
         </Block>
