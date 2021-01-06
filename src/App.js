@@ -107,7 +107,6 @@ color: #365a92;
 expose({
   Link,
   Header,
-  Column,
 })
 
 export default App;
