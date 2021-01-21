@@ -19,8 +19,8 @@ function App() {
             <H3>Hierarch</H3>
 
             <P>
-              A programming engine –
-              change <Code>code</Code> by clicking and clacking.
+              A programming engine breaking many rules –<br/>
+              change code by clicking and clacking.
             </P>
 
             <Link address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
