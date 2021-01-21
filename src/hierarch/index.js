@@ -66,15 +66,17 @@ class Hierarch extends React.Component {
         })
     }
 
+    signal = (signal, code) => {
+        console.log("Signal", signal, code)
+        this.setState({ scope: { code, signal } })
+    }
+
     render = () => (
         <HierarchScope.Provider
             value={{
                 open: this.state.open,
                 chosen: this.state.scope,
-                signal: (s, code) => {
-                    console.log("Signal", s, code)
-                    this.setState({scope: { code, signal: s}})
-                },
+                signal: this.signal,
             }}
         >
             <Display
@@ -88,8 +90,8 @@ class Hierarch extends React.Component {
                         ? e.target.getAttribute("data-code")
                         : null
 
-                    if(this.state.scope.signal === "display")
-                        this.setState({scope: { code: code_key }})
+                    if(code_key && this.state.scope.signal === "display")
+                        this.signal("display", code_key)
                 }}
             >
                 {this.props.children}
@@ -98,7 +100,7 @@ class Hierarch extends React.Component {
                 ?
                     <Sidebar
                         close={() => this.setState({ open: false })}
-                        display={(code) => this.setState({ scope: { chosen: code, signal: "display" } })}
+                        display={(code) => this.signal("display", code)}
                         place={this.state.mouse}
                     >
                         {this.state.scope.signal === 'grid'

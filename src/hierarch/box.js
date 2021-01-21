@@ -11,11 +11,13 @@ class Box extends React.Component {
         var { original, children, code, ...remainder } = this.props
 
         const Original = styled(original).attrs(p => ({
-            "data-code": p.code
-        }))`
-        ${({signal}) => signal.signal === "display" && "outline: 1px solid blue;"}
-        ${({signal, code}) => signal.signal === "display" && signal.code === code && "outline-color: red;"}
-        `
+            "data-code": p.code,
+            style: {
+                outlineWidth: p.signal.signal === "display" ? "1px" : 0,
+                outlineStyle: p.signal.signal === "display" ? "solid" : null,
+                outlineColor: (p.signal.signal === "display" && p.signal.code === p.code) ? "red" : "blue",
+            },
+        }))``
 
         var focus_count = 0
 
