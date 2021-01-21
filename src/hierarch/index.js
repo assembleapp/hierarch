@@ -17,7 +17,7 @@ class Hierarch extends React.Component {
         address: "src/App.js",
         open: false,
         scope: {
-            code: null,
+            code: "display",
             signal: null,
         },
         mouse: {
@@ -88,7 +88,8 @@ class Hierarch extends React.Component {
                         ? e.target.getAttribute("data-code")
                         : null
 
-                    this.setState({scope: { signal: 'display', code: code_key}})
+                    if(this.state.scope.signal === "display")
+                        this.setState({scope: { code: code_key }})
                 }}
             >
                 {this.props.children}

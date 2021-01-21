@@ -16,7 +16,7 @@ function App() {
           <Logo src={logo} alt="logo" />
 
           <Div>
-            <H3>Hierarch!</H3>
+            <H3>Hierarch</H3>
 
             <P>
               A programming engine breaking many rules –<br/>
