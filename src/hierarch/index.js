@@ -78,6 +78,7 @@ class Hierarch extends React.Component {
             }}
         >
             <Display
+                open={this.state.open}
                 onMouseMove={(e) => {
                     if(this.state.open && !this.state.mouse.hold)
                         this.setState({ mouse: { x: e.clientX, y: e.clientY }})
@@ -145,6 +146,10 @@ class Hierarch extends React.Component {
 
 const Display = styled.div`
 margin: 0;
+${({open}) => open && `
+display: grid;
+grid-template-columns: 1fr 12rem;
+`}
 `
 
 const Modal = styled.div`

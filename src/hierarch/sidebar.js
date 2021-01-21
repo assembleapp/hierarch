@@ -41,17 +41,17 @@ class Sidebar extends React.Component {
 }
 
 const Layout = styled.div.attrs(p => ({
-    style: {
-        top: (p.place.y || 0) + 'px',
-        left: 40 + (p.place.x || 0) + 'px',
-    }
+    // style: {
+    //     top: (p.place.y || 0) + 'px',
+    //     left: 40 + (p.place.x || 0) + 'px',
+    // }
 }))`
-position: absolute;
+// position: absolute;
 width: auto;
 height: auto;
-background: rgba(24, 12,   12, 40%);
+// background: rgba(24, 12,   12, 40%);
 padding: 0.5rem;
-color: #b1b1e2cc;
+// color: #b1b1e2cc;
 `
 
 const Close = styled.span`
