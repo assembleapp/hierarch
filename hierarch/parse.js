@@ -118,6 +118,7 @@ const apply_boxes = (address) => {
             ) @element
             `)
             query = query.filter(m => !(m.captures.some(c => c.name === 'opening-name' && program.display(c.node) === 'Box')))
+            query = query.filter(m => !(m.captures.some(c => c.name === 'opening-name' && program.display(c.node) === 'Scope')))
 
             if(query.length > 0) {
                 var m = query[0]
