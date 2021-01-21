@@ -9,7 +9,7 @@ function App() {
     <Column>
       <H1>Some big plans, by Assemble Company.</H1>
 
-      <H2>– already running –</H2>
+      <H2>~ already running ~</H2>
 
       <Block>
         <Header>
@@ -30,7 +30,7 @@ function App() {
         </Header>
       </Block>
 
-      <H2>– and on our horizon –</H2>
+      <H2>~ and on our horizon ~</H2>
       <Pair>
         <Block>
           <H3>Copper</H3>
