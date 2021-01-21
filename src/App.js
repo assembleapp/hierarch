@@ -1,4 +1,4 @@
-import { Code, P, Box, Div, H1, H2 } from './hierarch/lens'
+import { P, Box, Div, H1, H2 } from './hierarch/lens'
 import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
