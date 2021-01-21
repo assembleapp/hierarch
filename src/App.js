@@ -91,6 +91,7 @@ border: 2px solid purple;
 border-radius: 6px;
 padding: 2rem;
 overflow: hidden;
+background: #2a2a2a2a;
 `
 
 const Board = styled.ul`
