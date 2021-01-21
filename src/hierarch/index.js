@@ -82,6 +82,13 @@ class Hierarch extends React.Component {
                 onMouseMove={(e) => {
                     if(this.state.open && !this.state.mouse.hold)
                         this.setState({ mouse: { x: e.clientX, y: e.clientY }})
+
+                    var code_key = e.target
+                        && typeof e.target.getAttribute === 'function'
+                        ? e.target.getAttribute("data-code")
+                        : null
+
+                    this.setState({scope: { signal: 'display', code: code_key}})
                 }}
             >
                 {this.props.children}

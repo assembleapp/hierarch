@@ -10,13 +10,12 @@ class Box extends React.Component {
     render = () => {
         var { original, children, code, ...remainder } = this.props
 
-        const Original = styled(original)`
+        const Original = styled(original).attrs(p => ({
+            "data-code": p.code
+        }))`
         ${({signal}) => signal.signal === "display" && "outline: 1px solid blue;"}
         ${({signal, code}) => signal.signal === "display" && signal.code === code && "outline-color: red;"}
         `
-
-        // code: abc123-123132
-        // source file hash - content hash
 
         var focus_count = 0
 
@@ -45,19 +44,6 @@ class Box extends React.Component {
                                 e.bubbles = false
                                 return false
                             }
-                        }}
-                        onMouseEnter={(e) => {
-                            scope.signal('display', code)
-                            e.stopPropagation()
-                        }}
-                        onMouseLeave={(e) => {
-                            var code_key = e.relatedTarget
-                            && typeof e.relatedTarget.getAttribute === 'function'
-                            ? e.relatedTarget.getAttribute("data-code")
-                            : null
-
-                            if(scope.chosen.code === code)
-                                scope.signal('display', code_key)
                         }}
                     >
                         {children instanceof Array
@@ -100,19 +86,6 @@ class Box extends React.Component {
                                 return false
                             }
                         }}
-                        onMouseEnter={(e) => {
-                            scope.signal('display', code)
-                            e.stopPropagation()
-                        }}
-                        onMouseLeave={(e) => {
-                            var code_key = e.relatedTarget
-                            && typeof e.relatedTarget.getAttribute === 'function'
-                            ? e.relatedTarget.getAttribute("data-code")
-                            : null
-
-                            if(scope.chosen.code === code)
-                                scope.signal('display', code_key)
-                        }}
                     >
                         {children}
                     </Original>
@@ -137,19 +110,6 @@ class Box extends React.Component {
                                 e.bubbles = false
                                 return false
                             }
-                        }}
-                        onMouseEnter={(e) => {
-                            scope.signal('display', code)
-                            e.stopPropagation()
-                        }}
-                        onMouseLeave={(e) => {
-                            var code_key = e.relatedTarget
-                            && typeof e.relatedTarget.getAttribute === 'function'
-                            ? e.relatedTarget.getAttribute("data-code")
-                            : null
-
-                            if(scope.chosen.code === code)
-                                scope.signal('display', code_key)
                         }}
                     />
                 )

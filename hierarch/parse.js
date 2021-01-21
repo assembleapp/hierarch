@@ -127,6 +127,8 @@ const apply_boxes = (address) => {
                 const closing_name = m.captures.filter(c => c.name === "closing-name")[0].node
                 const original = program.display(opening_name)
 
+                // code: abc123-123132
+                // source file hash - content hash
                 program.replace_by_node(closing_name, "Box")
                 program.replace_by_node(opening_name, `Box original={${original}} code="${Math.random()}"`)
 
@@ -154,6 +156,8 @@ const apply_boxes = (address) => {
                 const name = m.captures.filter(c => c.name === "name")[0].node
                 const original = program.display(name)
 
+                // code: abc123-123132
+                // source file hash - content hash
                 program.replace_by_node(name, `Box original={${original}} code="${Math.random()}"`)
 
                 plan_b += 1
