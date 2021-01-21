@@ -128,7 +128,7 @@ const apply_boxes = (address) => {
                 const original = program.display(opening_name)
 
                 program.replace_by_node(closing_name, "Box")
-                program.replace_by_node(opening_name, `Box original={${original}} code="${Math.random()}" `)
+                program.replace_by_node(opening_name, `Box original={${original}} code="${Math.random()}"`)
 
                 plan_b += 1
             } else {
@@ -154,7 +154,7 @@ const apply_boxes = (address) => {
                 const name = m.captures.filter(c => c.name === "name")[0].node
                 const original = program.display(name)
 
-                program.replace_by_node(name, `Box original={${original}} code="${Math.random()}" `)
+                program.replace_by_node(name, `Box original={${original}} code="${Math.random()}"`)
 
                 plan_b += 1
             } else {
