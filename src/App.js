@@ -2,7 +2,7 @@ import { P, Box, Div, H1, H2 } from './hierarch/lens'
 import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
-import logo from './logo.svg';
+import logo from './hierarch.svg'
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
 
       <Block>
         <Header>
-          <Logo src={logo} alt="logo" />
+          <Logo src={logo} alt="hierarch logo" />
 
           <Div>
             <H3>Hierarch</H3>
