@@ -64,7 +64,12 @@ function App() {
           <H3>Keep building! Some similar programs:</H3>
           <Board>
             {model.companies.map((c, i) => (
-              <Link key={i} address={c.address} style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}>{c.name}</Link>
+              <Link
+                key={i}
+                address={c.address}
+                style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}
+                target="_blank"
+              >{c.name}</Link>
             ))}
           </Board>
           </>
@@ -148,7 +153,7 @@ color: #365a92;
 const H3 = styled.h3`
 margin-top: 2rem;
 margin-bottom: 0;
-color: purple;
+// color: purple;
 `
 
 expose({
