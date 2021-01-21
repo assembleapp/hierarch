@@ -1,4 +1,4 @@
-import { Code, P, Box, Div } from './hierarch/lens'
+import { Code, P, Box, Div, H1, H2 } from './hierarch/lens'
 import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
@@ -7,16 +7,16 @@ import logo from './logo.svg';
 function App() {
   return (
     <Column>
-      <h1>Some big plans, by Assemble Company.</h1>
+      <H1>Some big plans, by Assemble Company.</H1>
 
-      <h2>– already running –</h2>
+      <H2>– already running –</H2>
 
       <Block>
         <Header>
           <Logo src={logo} alt="logo" />
 
           <Div>
-            <H3>Hierarch</H3>
+            <H3>Hierarch!</H3>
 
             <P>
               A programming engine breaking many rules –<br/>
@@ -30,7 +30,7 @@ function App() {
         </Header>
       </Block>
 
-      <h2>– and on our horizon –</h2>
+      <H2>– and on our horizon –</H2>
       <Pair>
         <Block>
           <H3>Copper</H3>
