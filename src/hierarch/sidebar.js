@@ -21,7 +21,7 @@ class Sidebar extends React.Component {
 
             {this.props.children}
 
-            <Observer>
+            {/* <Observer>
                 {() => (
                     <div>
                         {Object.keys(blocks).map(b => {
@@ -35,7 +35,7 @@ class Sidebar extends React.Component {
                         })}
                     </div>
                 )}
-            </Observer>
+            </Observer> */}
         </Layout>
     )
 }

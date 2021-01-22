@@ -6,6 +6,7 @@ import Hierarchy from "./hierarchy"
 import Logo from "./logo"
 import Scope from "./scope"
 import Sidebar from "./sidebar"
+import Change from "./change"
 
 const HierarchScope = React.createContext({
     chosen: { code: null, signal: null },
@@ -98,11 +99,22 @@ class Hierarch extends React.Component {
                                     />
                                 )}
                             </Scope>
-                        :
-                            <Hierarchy
-                                address={this.state.address}
-                                display={this.props.display}
-                            />
+                        : (
+                            this.state.scope.signal === 'change'
+                            ?
+                                <Change.Board>
+                                    <Change.Color name="background-color" />
+                                    <Change.Color name="color" />
+                                    <Change.Size name="font-size" />
+                                    <Change.Size name="width" />
+                                    <Change.Size name="height" />
+                                </Change.Board>
+                            :
+                                <Hierarchy
+                                    address={this.state.address}
+                                    display={this.props.display}
+                                />
+                            )
                         }
                     </Sidebar>
                 :
