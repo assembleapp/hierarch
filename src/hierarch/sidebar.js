@@ -44,13 +44,13 @@ const Layout = styled.div.attrs(p => ({
     style: {
         top: -20 + (p.place.y || 0) + 'px',
         left: (p.place.hold ? -20 : 40) + (p.place.x || 0) + 'px',
+        overflowY: p.place.hold ? 'scroll' : 'hidden',
     }
 }))`
 width: auto;
 height: auto;
 padding: 0.5rem;
 height: 12rem;
-overflow-y: scroll;
 position: absolute;
 background: #2a2a2a60;
 color: #b1b1e2cc;
