@@ -15,7 +15,7 @@ export { expose }
 
 class Sidebar extends React.Component {
     render = () => (
-        <Layout place={this.props.place} >
+        <Layout place={this.props.place} hold={this.props.hold} >
             <span>Hierarch</span>
             <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
 
@@ -42,13 +42,15 @@ class Sidebar extends React.Component {
 
 const Layout = styled.div.attrs(p => ({
     style: {
-        top: (p.place.y || 0) + 'px',
-        left: 40 + (p.place.x || 0) + 'px',
+        top: -20 + (p.place.y || 0) + 'px',
+        left: (p.place.hold ? -20 : 40) + (p.place.x || 0) + 'px',
     }
 }))`
 width: auto;
 height: auto;
 padding: 0.5rem;
+height: 12rem;
+overflow-y: scroll;
 position: absolute;
 background: #2a2a2a60;
 color: #b1b1e2cc;
