@@ -47,6 +47,9 @@ const Layout = styled.div.attrs(p => ({
         overflowY: p.place.hold ? 'scroll' : 'hidden',
     }
 }))`
+::-webkit-scrollbar {
+    display: none;
+}
 width: auto;
 height: auto;
 padding: 0.5rem;

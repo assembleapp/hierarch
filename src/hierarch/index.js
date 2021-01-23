@@ -37,7 +37,9 @@ class Hierarch extends React.Component {
                     this.state.mouse,
                     {
                         hold: !this.state.mouse.hold,
-                        scroll: this.state.mouse.hold ? 0 : window.pageYOffset,
+                        scroll: this.state.mouse.hold
+                        ? 0
+                        : window.pageYOffset,
                     },
                 )})
             }
@@ -116,7 +118,6 @@ class Hierarch extends React.Component {
                         ?
                             <Scope
                             {...JSON.parse(this.state.scope.code)}
-                            callback={(model, _) => console.log(model.toJSON())}
                             >
                                 {(model, upgrade) => (
                                     <Grid
