@@ -6,8 +6,17 @@ import { getMainDefinition } from "apollo-utilities"
 import { setContext } from "apollo-link-context"
 import { split } from "apollo-link"
 
-const wsLink = (address) => (
-  new WebSocketLink({
+const authLink = setContext((_, { headers }) => (
+  { headers: {
+    ...headers,
+      "x-hasura-access-key": process.env.REACT_APP_HASURA_PASSCODE,
+  } }
+))
+
+const graph = (address) => {
+  const httpLink = createHttpLink({ uri: `https://${address}` })
+
+  const wsLink = new WebSocketLink({
     uri: `ws://${address}`,
     options: {
       reconnect: true,
@@ -19,23 +28,8 @@ const wsLink = (address) => (
       }
     },
   })
-)
 
-const httpLink = (address) => (
-  createHttpLink({
-    uri: `https://${address}`
-  })
-)
-
-const authLink = setContext((_, { headers }) => (
-  { headers: {
-    ...headers,
-      "x-hasura-access-key": process.env.REACT_APP_HASURA_PASSCODE,
-  } }
-))
-
-const link = (address) => (
-  split(
+  const link = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
       return (
@@ -43,16 +37,14 @@ const link = (address) => (
         definition.operation === 'subscription'
       );
     },
-    wsLink(address),
-    httpLink(address),
+    wsLink,
+    httpLink,
   )
-)
 
-const graph = (address) => (
-  new ApolloClient({
-    link: authLink.concat(link(address)),
+  return new ApolloClient({
+    link: authLink.concat(link),
     cache: new InMemoryCache(),
   })
-)
+}
 
 export default graph
