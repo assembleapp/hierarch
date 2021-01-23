@@ -16,7 +16,7 @@ function App() {
           <Logo src={logo} alt="hierarch logo" />
 
           <Div>
-            <H3>Hierarch</H3>
+            <H3>Hierarch!</H3>
 
             <P>
               A programming engine breaking many rules –<br/>
@@ -33,7 +33,7 @@ function App() {
       <H2>~ and on our horizon ~</H2>
       <Pair>
         <Block>
-          <H3>Copper</H3>
+          <H3>Copper!</H3>
 
           <P>
             Chromium rules our modern machines.
@@ -43,7 +43,7 @@ function App() {
         </Block>
 
         <Block>
-          <H3>Greenhouse</H3>
+          <H3>Greenhouse!</H3>
 
           <P>
             A booming garden and nursery helping machine kernels
@@ -159,7 +159,7 @@ color: #365a92;
 const H3 = styled.h3`
 margin-top: 2rem;
 margin-bottom: 0;
-// color: purple;
+color: purple;
 `
 
 expose({
