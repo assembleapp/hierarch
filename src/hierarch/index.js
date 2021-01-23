@@ -24,6 +24,7 @@ class Hierarch extends React.Component {
         mouse: {
             x: 0,
             y: 0,
+            scroll: 0,
             hold: false,
         },
     }
@@ -33,7 +34,10 @@ class Hierarch extends React.Component {
             if(e.code === "Space")
               this.setState({ mouse: Object.assign(
                   this.state.mouse,
-                  { hold: !this.state.mouse.hold },
+                  {
+                    hold: !this.state.mouse.hold,
+                    scroll: this.state.mouse.hold ? 0 : window.pageYOffset,
+                  },
               )})
         }
     }
@@ -81,6 +85,8 @@ class Hierarch extends React.Component {
             }}
         >
             <Display
+                hold={this.state.mouse.hold}
+                scroll={this.state.mouse.scroll}
                 open={this.state.open}
                 onMouseMove={(e) => {
                     if(this.state.open && !this.state.mouse.hold)
@@ -168,9 +174,12 @@ class Hierarch extends React.Component {
 
 const Display = styled.div`
 margin: 0;
-${({open}) => open && `
-// display: grid;
-// grid-template-columns: 1fr 16rem;
+${({hold, scroll}) => hold && `
+position: fixed;
+top: ${scroll || 0};
+left: 0;
+right: 0;
+bottom: 0;
 `}
 `
 
