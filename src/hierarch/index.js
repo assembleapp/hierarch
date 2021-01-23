@@ -21,6 +21,21 @@ class Hierarch extends React.Component {
             code: "display",
             signal: null,
         },
+        mouse: {
+            x: 0,
+            y: 0,
+            hold: false,
+        },
+    }
+
+    componentDidMount() {
+        document.onkeydown = e => {
+            if(e.code === "Space")
+              this.setState({ mouse: Object.assign(
+                  this.state.mouse,
+                  { hold: !this.state.mouse.hold },
+              )})
+        }
     }
 
     componentDidUpdate() {
@@ -68,6 +83,9 @@ class Hierarch extends React.Component {
             <Display
                 open={this.state.open}
                 onMouseMove={(e) => {
+                    if(this.state.open && !this.state.mouse.hold)
+                        this.setState({ mouse: { x: e.clientX, y: e.clientY }})
+
                     var code_key = e.target
                         && typeof e.target.getAttribute === 'function'
                         ? e.target.getAttribute("data-code")
@@ -84,6 +102,7 @@ class Hierarch extends React.Component {
                     <Sidebar
                         close={() => this.setState({ open: false })}
                         display={(code) => this.signal("display", code)}
+                        place={this.state.mouse}
                     >
                         {this.state.scope.signal === 'grid'
                         ?
@@ -150,8 +169,8 @@ class Hierarch extends React.Component {
 const Display = styled.div`
 margin: 0;
 ${({open}) => open && `
-display: grid;
-grid-template-columns: 1fr 12rem;
+// display: grid;
+// grid-template-columns: 1fr 16rem;
 `}
 `
 
