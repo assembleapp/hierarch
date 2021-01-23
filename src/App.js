@@ -55,11 +55,11 @@ function App() {
       </Pair>
 
       <Scope
-        source="https://assemble-opposed.herokuapp.com/v1/graphql"
+        source="assemble-company.herokuapp.com/v1/graphql"
         schema={{ companies: { '_': ['name', 'address' ]}}}
         // anonymous
       >
-        {(model, _) => (
+        {(model) => (
           <>
           <H3>Keep building! Some similar programs:</H3>
           <Board>
@@ -69,7 +69,9 @@ function App() {
                 address={c.address}
                 style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}
                 target="_blank"
-              >{c.name}</Link>
+              >
+                {c.name}
+              </Link>
             ))}
           </Board>
           </>

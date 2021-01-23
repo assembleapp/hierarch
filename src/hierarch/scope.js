@@ -24,6 +24,7 @@ const clock = () =>
 class Scope extends React.Component {
     constructor(p) {
         super(p)
+        this.graph = graph(p.source)
         this.model = this.makeModel(p.schema)
         this.query = this.makeQuery(p.schema)
 
@@ -77,7 +78,7 @@ class Scope extends React.Component {
     }
 
     subscribe() {
-        graph.subscribe({ query: this.query }).subscribe({
+        this.graph.subscribe({ query: this.query }).subscribe({
             next: response => {
                 Object.keys(response.data).forEach(m => {
                     this.model.assign(m, response.data[m])
@@ -92,14 +93,7 @@ class Scope extends React.Component {
     render() {
         return (
         <Observer>
-            {() => {
-                this.props.callback && this.props.callback(this.model, this.drop_clock)
-                return (
-                    <Upgrade>
-                        {g => this.props.children(this.model, g)}
-                    </Upgrade>
-                )
-            }}
+            {() => (this.props.children(this.model))}
         </Observer>
         )
     }
