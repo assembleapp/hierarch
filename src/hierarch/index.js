@@ -31,14 +31,16 @@ class Hierarch extends React.Component {
 
     componentDidMount() {
         document.onkeydown = e => {
-            if(e.code === "Space")
-              this.setState({ mouse: Object.assign(
-                  this.state.mouse,
-                  {
-                    hold: !this.state.mouse.hold,
-                    scroll: this.state.mouse.hold ? 0 : window.pageYOffset,
-                  },
-              )})
+            if(e.code === "Space") {
+                e.preventDefault()
+                this.setState({ mouse: Object.assign(
+                    this.state.mouse,
+                    {
+                        hold: !this.state.mouse.hold,
+                        scroll: this.state.mouse.hold ? 0 : window.pageYOffset,
+                    },
+                )})
+            }
         }
     }
 
