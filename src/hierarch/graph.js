@@ -6,14 +6,14 @@ import { getMainDefinition } from "apollo-utilities"
 import { setContext } from "apollo-link-context"
 import { split } from "apollo-link"
 
-const authLink = setContext((_, { headers }) => (
-  { headers: {
-    ...headers,
-      "x-hasura-access-key": process.env.REACT_APP_HASURA_PASSCODE,
-  } }
-))
+const graph = (address, passcode) => {
+  const authLink = setContext((_, { headers }) => (
+    { headers: {
+      ...headers,
+        "x-hasura-access-key": passcode,
+    } }
+  ))
 
-const graph = (address) => {
   const httpLink = createHttpLink({ uri: `https://${address}` })
 
   const wsLink = new WebSocketLink({
@@ -23,7 +23,7 @@ const graph = (address) => {
       connectionParams: {
         headers: {
           // TODO is this needed if used alongside authLink?
-          "x-hasura-access-key": process.env.REACT_APP_HASURA_PASSCODE,
+          "x-hasura-access-key": passcode,
         }
       }
     },

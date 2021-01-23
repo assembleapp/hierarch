@@ -24,7 +24,7 @@ const clock = () =>
 class Scope extends React.Component {
     constructor(p) {
         super(p)
-        this.graph = graph(p.source)
+        this.graph = graph(p.source, p.passcode)
         this.model = this.makeModel(p.schema)
         this.query = this.makeQuery(p.schema)
 
