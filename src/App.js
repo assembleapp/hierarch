@@ -62,7 +62,9 @@ function App() {
       >
         {(model) => (
           <>
-          <H3>Keep building! Some similar programs:</H3>
+          {model.companies.length > 0 &&
+            <H3>Keep building! Some similar programs:</H3>
+          }
           <Board>
             {model.companies.map((c, i) => (
               <Link
