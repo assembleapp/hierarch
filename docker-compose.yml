@@ -7,6 +7,7 @@ services:
     command: node hierarch --host 0.0.0.0
     volumes:
       - .:/launch
+      - /launch/node_modules/
     ports:
       - 4321:4321
 
