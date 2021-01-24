@@ -1,0 +1,21 @@
+version: "2.1"
+
+services:
+  node:
+    build: .
+    image: assemble/hiearch-launch
+    command: node hierarch --host 0.0.0.0
+    volumes:
+      - .:/launch
+    ports:
+      - 4321:4321
+
+  yarn:
+    build: .
+    env_file: .env
+    image: assemble/hierarch-launch
+    command: yarn start --host 0.0.0.0
+    volumes:
+      - .:/launch
+    ports:
+      - 3000:3000
