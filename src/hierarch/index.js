@@ -177,7 +177,7 @@ class Hierarch extends React.Component {
 
 const Display = styled.div`
 margin: 0;
-${({hold, scroll}) => hold && `
+${({hold, scroll, open}) => open && hold && `
 position: fixed;
 top: ${scroll || 0};
 left: 0;
@@ -202,7 +202,7 @@ const Page = styled.div`
 `
 
 const Corner = styled.div`
-position: absolute;
+position: fixed;
 bottom: 40px;
 right: 80px;
 height: 40px;
