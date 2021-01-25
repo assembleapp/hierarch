@@ -54,7 +54,7 @@ width: auto;
 height: auto;
 padding: 0.5rem;
 height: 12rem;
-position: absolute;
+position: fixed;
 background: #2a2a2a60;
 color: #b1b1e2cc;
 `
