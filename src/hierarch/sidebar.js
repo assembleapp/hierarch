@@ -14,6 +14,10 @@ const expose = (c) => {
 export { expose }
 
 class Sidebar extends React.Component {
+    state = {
+        scroll: 0,
+    }
+
     render = () => (
         <Place
             place={this.props.place}
@@ -23,6 +27,7 @@ class Sidebar extends React.Component {
             }}
         >
             <ScrollColumn>
+                <ScrollBox onChange={num => this.setState({ scroll: num })} />
                 <span>1</span>
                 <span>2</span>
                 <span>3</span>
@@ -35,25 +40,34 @@ class Sidebar extends React.Component {
 
                 {this.props.children}
             </Column>
-
-            {/* <Observer>
-                {() => (
-                    <div>
-                        {Object.keys(blocks).map(b => {
-                            var B = blocks[b]
-                            return (
-                                <div>
-                                    {b}:
-                                    <B>aaaa</B>
-                                </div>
-                                )
-                        })}
-                    </div>
-                )}
-            </Observer> */}
         </Place>
     )
 }
+
+class ScrollBox extends React.Component {
+    handleScroll(e) {
+        console.log('scrolling')
+        debugger
+    }
+
+    componentDidMount() {
+        this.refs.scrollable.addEventListener('scroll', this.handleScroll)
+    }
+
+    componentWillUnmount() {
+        this.refs.scrollable.removeEventListener('scroll', this.handleScroll)
+    }
+
+    render = () => (
+        <Scrollable ref="scrollable" onScroll={(e) => { debugger }}>
+
+        </Scrollable>
+    )
+}
+// ({onChange}) => (
+//     <Scrollable ref= onScroll={(e) => { debugger }}>
+//     </Scrollable>
+// )
 
 const Place = styled.div.attrs(p => ({
     style: {
@@ -70,7 +84,6 @@ align-items: flex-start;
 }
 width: auto;
 height: auto;
-height: 12rem;
 position: fixed;
 `
 
@@ -83,6 +96,23 @@ padding: 0.5rem;
 const ScrollColumn = styled(Column)`
 display: flex;
 flex-direction: column;
+position: relative;
+height: 4rem;
+overflow: scroll;
+::-webkit-scrollbar {
+    display: none;
+}
+`
+
+const Scrollable = styled.div`
+background: #2a2a2a88;
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+height: 10000px;
+// overflow-y: scroll;
 `
 
 const Close = styled.span`
