@@ -17,6 +17,7 @@ const apply_boxes = (address) => {
         var plan_a = 0
         // run query
         while(true) {
+            console.log('query A.1')
             program.reparse()
             var query = program.query(`
             (jsx_element
@@ -38,6 +39,7 @@ const apply_boxes = (address) => {
             ) @element
             `)
 
+            console.log('response:', query.length)
             if(query.length > 0) {
                 var m = query[0]
                 program.debug_query([m])
@@ -59,6 +61,7 @@ const apply_boxes = (address) => {
 
         // run second query
         while(true) {
+            console.log('query A.2')
             program.reparse()
 
             query = program.query(`
@@ -92,6 +95,7 @@ const apply_boxes = (address) => {
 
         program.reparse()
         if(plan_a > 0) {
+            console.log("Recording changes: plan A")
             fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
             return null
         }
@@ -102,6 +106,7 @@ const apply_boxes = (address) => {
         // begin
         var plan_b = 0
         while(true) {
+            console.log('query B.1')
             program.reparse()
             // run query
             query = program.query(`
@@ -140,6 +145,7 @@ const apply_boxes = (address) => {
         }
 
         while(true) {
+            console.log('query B.2')
             program.reparse()
             // run second query
             query = program.query(`
@@ -169,6 +175,7 @@ const apply_boxes = (address) => {
 
         program.reparse()
         if(plan_b > 0) {
+            console.log("Recording changes: plan B")
             fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
             return null
         }
