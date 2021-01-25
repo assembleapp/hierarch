@@ -33,6 +33,7 @@ class Hierarch extends React.Component {
         document.onkeydown = e => {
             if(e.code === "Space") {
                 e.preventDefault()
+                var original_scroll = this.state.mouse.scroll
                 this.setState({ mouse: Object.assign(
                     this.state.mouse,
                     {
@@ -42,6 +43,9 @@ class Hierarch extends React.Component {
                         : window.pageYOffset,
                     },
                 )})
+                if(!this.state.mouse.hold) {
+                    window.scrollBy(0, original_scroll)
+                }
             }
         }
     }
@@ -179,7 +183,7 @@ const Display = styled.div`
 margin: 0;
 ${({hold, scroll, open}) => open && hold && `
 position: fixed;
-top: ${scroll || 0};
+top: ${-1 * (scroll || 0)}px;
 left: 0;
 right: 0;
 bottom: 0;
