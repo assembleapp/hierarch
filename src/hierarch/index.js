@@ -18,8 +18,8 @@ class Hierarch extends React.Component {
         address: "src/App.js",
         open: false,
         scope: {
-            code: "display",
-            signal: null,
+            code: null,
+            signal: "display",
         },
         mouse: {
             x: 0,
