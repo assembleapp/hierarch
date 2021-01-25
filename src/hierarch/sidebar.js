@@ -15,11 +15,26 @@ export { expose }
 
 class Sidebar extends React.Component {
     render = () => (
-        <Layout place={this.props.place} hold={this.props.hold} >
-            <span>Hierarch</span>
-            <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+        <Place
+            place={this.props.place}
+            hold={this.props.hold}
+            onScroll={(e) => {
+                debugger
+            }}
+        >
+            <ScrollColumn>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+            </ScrollColumn>
 
-            {this.props.children}
+            <Column>
+                <span>Hierarch</span>
+                <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+
+                {this.props.children}
+            </Column>
 
             {/* <Observer>
                 {() => (
@@ -36,27 +51,38 @@ class Sidebar extends React.Component {
                     </div>
                 )}
             </Observer> */}
-        </Layout>
+        </Place>
     )
 }
 
-const Layout = styled.div.attrs(p => ({
+const Place = styled.div.attrs(p => ({
     style: {
         top: -20 + (p.place.y || 0) + 'px',
         left: (p.place.hold ? -20 : 40) + (p.place.x || 0) + 'px',
         overflowY: p.place.hold ? 'scroll' : 'hidden',
     }
 }))`
+display: flex;
+flex-direction: row;
+align-items: flex-start;
 ::-webkit-scrollbar {
     display: none;
 }
 width: auto;
 height: auto;
-padding: 0.5rem;
 height: 12rem;
 position: fixed;
+`
+
+const Column = styled.div`
 background: #2a2a2a60;
 color: #b1b1e2cc;
+padding: 0.5rem;
+`
+
+const ScrollColumn = styled(Column)`
+display: flex;
+flex-direction: column;
 `
 
 const Close = styled.span`
