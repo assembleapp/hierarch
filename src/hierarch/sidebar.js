@@ -5,6 +5,20 @@ import { mdiClose } from "@mdi/js"
 import { observable } from "mobx"
 import { Observer } from "mobx-react"
 
+import size from "../mockup/size.png"
+import spacing from "../mockup/spacing.png"
+import typography from "../mockup/typography.png"
+import position from "../mockup/position.png"
+import layout from "../mockup/layout.png"
+
+const panes = {
+    size,
+    spacing,
+    typography,
+    position,
+    layout,
+}
+
 const blocks = observable({})
 const expose = (c) => {
     Object.keys(c).forEach(k => {
@@ -27,18 +41,30 @@ class Sidebar extends React.Component {
             }}
         >
             <ScrollColumn>
-                <ScrollBox onChange={num => this.setState({ scroll: num })} />
-                <Pane chosen={this.state.scroll === 0}>0</Pane>
-                <Pane chosen={this.state.scroll === 1}>1</Pane>
-                <Pane chosen={this.state.scroll === 2}>2</Pane>
-                <Pane chosen={this.state.scroll === 3}>3</Pane>
+                <ScrollBox onChange={num => {
+                    console.log(num)
+                    this.setState({ scroll: num })
+                }} />
+                <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
+
+                {Object.keys(panes).map((pane, i) => (
+                    <Pane chosen={this.state.scroll === (i + 1)}>{pane}</Pane>
+                ))}
             </ScrollColumn>
 
             <Column>
-                <span>Hierarch</span>
-                <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+                <div>
+                    <span>Hierarch</span>
+                    <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+                </div>
 
-                {this.props.children}
+                {this.state.scroll === 0
+                ? this.props.children
+                : <img
+                    src={panes[Object.keys(panes)[this.state.scroll - 1]]}
+                    alt={Object.keys(panes)[this.state.scroll - 1]}
+                    />
+                }
             </Column>
         </Place>
     )
@@ -46,7 +72,9 @@ class Sidebar extends React.Component {
 
 class ScrollBox extends React.Component {
     render = () => (
-        <Scrollable onScroll={(e) => this.props.onChange((e.target.scrollTop /4)% 4)}>
+        <Scrollable onScroll={(e) =>
+            this.props.onChange(Math.floor(e.target.scrollTop / 10) % (Object.keys(panes).length + 1))
+        }>
             <Scroller/>
         </Scrollable>
     )
@@ -89,7 +117,7 @@ overflow: hidden;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
-height: 6rem;
+height: 8rem;
 `
 
 const Scroller = styled.div`
