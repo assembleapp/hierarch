@@ -28,10 +28,10 @@ class Sidebar extends React.Component {
         >
             <ScrollColumn>
                 <ScrollBox onChange={num => this.setState({ scroll: num })} />
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
+                <Pane chosen={this.state.scroll === 0}>0</Pane>
+                <Pane chosen={this.state.scroll === 1}>1</Pane>
+                <Pane chosen={this.state.scroll === 2}>2</Pane>
+                <Pane chosen={this.state.scroll === 3}>3</Pane>
             </ScrollColumn>
 
             <Column>
@@ -45,17 +45,16 @@ class Sidebar extends React.Component {
 }
 
 class ScrollBox extends React.Component {
-    handleScroll(e) {
-        console.log('scrolling')
-        debugger
-    }
-
     render = () => (
-        <Scrollable onScroll={this.handleScroll}>
+        <Scrollable onScroll={(e) => this.props.onChange((e.target.scrollTop /4)% 4)}>
             <Scroller/>
         </Scrollable>
     )
 }
+
+const Pane = styled.span`
+color: ${({ chosen }) => chosen ? '#3a3ad4' : '#d0d0d0'};
+`
 
 const Place = styled.div.attrs(p => ({
     style: {
@@ -94,7 +93,6 @@ height: 6rem;
 `
 
 const Scroller = styled.div`
-background: #2a2a2a88;
 width: 100%;
 height: 10000px;
 display: flex;
