@@ -65,14 +65,18 @@ class Program {
     }
 
     query(query, node = this.parsed.rootNode, lang = 'js') {
+        console.log(node.toString())
         try {
+            console.log('querying')
             if(query instanceof Array) {
                 return query.map(q => (
                     new Parser.Query(languages[lang], q).matches(node)
-                )).flat(1)
+                    )).flat(1)
             }
+            console.log('querying')
             return new Parser.Query(languages[lang], query).matches(node)
         } catch(e) {
+            console.log('error')
             console.log(e)
         }
     }

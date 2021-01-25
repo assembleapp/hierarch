@@ -19,6 +19,7 @@ const apply_boxes = (address) => {
         while(true) {
             console.log('query A.1')
             program.reparse()
+            console.log('query A.1')
             var query = program.query(`
             (jsx_element
                 open_tag: (
@@ -38,6 +39,7 @@ const apply_boxes = (address) => {
                 (#eq? @_code "code")
             ) @element
             `)
+            console.log('query A.1')
 
             console.log('response:', query.length)
             if(query.length > 0) {
