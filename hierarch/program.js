@@ -75,8 +75,16 @@ class Program {
             console.log('making query')
             const q = new Parser.Query(languages[lang], query)
             console.log('running query')
-            return q.matches(node)
+            const response = q.matches(node)
+            console.log(response.length)
+            console.log()
+            console.log()
+            console.log()
+            return response
         } catch(e) {
+            console.log('error')
+            console.log('error')
+            console.log('error')
             console.log('error')
             console.log(e)
         }
