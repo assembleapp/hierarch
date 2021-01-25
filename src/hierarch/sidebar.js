@@ -50,24 +50,12 @@ class ScrollBox extends React.Component {
         debugger
     }
 
-    componentDidMount() {
-        this.refs.scrollable.addEventListener('scroll', this.handleScroll)
-    }
-
-    componentWillUnmount() {
-        this.refs.scrollable.removeEventListener('scroll', this.handleScroll)
-    }
-
     render = () => (
-        <Scrollable ref="scrollable" onScroll={(e) => { debugger }}>
-
+        <Scrollable onScroll={this.handleScroll}>
+            <Scroller/>
         </Scrollable>
     )
 }
-// ({onChange}) => (
-//     <Scrollable ref= onScroll={(e) => { debugger }}>
-//     </Scrollable>
-// )
 
 const Place = styled.div.attrs(p => ({
     style: {
@@ -87,32 +75,41 @@ height: auto;
 position: fixed;
 `
 
-const Column = styled.div`
+const BaseColumn = styled.div`
 background: #2a2a2a60;
 color: #b1b1e2cc;
+`
+
+const Column = styled(BaseColumn)`
 padding: 0.5rem;
 `
 
 const ScrollColumn = styled(Column)`
+position: relative;
+overflow: hidden;
 display: flex;
 flex-direction: column;
-position: relative;
-height: 4rem;
-overflow: scroll;
-::-webkit-scrollbar {
-    display: none;
-}
+justify-content: space-between;
+height: 6rem;
 `
 
-const Scrollable = styled.div`
+const Scroller = styled.div`
 background: #2a2a2a88;
+width: 100%;
+height: 10000px;
+display: flex;
+flex-direction: column;
+`
+const Scrollable = styled.div`
 position: absolute;
 top: 0;
 left: 0;
 right: 0;
 bottom: 0;
-height: 10000px;
-// overflow-y: scroll;
+overflow-y: scroll;
+::-webkit-scrollbar {
+    display: none;
+}
 `
 
 const Close = styled.span`
