@@ -177,13 +177,13 @@ class Hierarch extends React.Component {
 
 const Display = styled.div`
 margin: 0;
-${({hold, scroll, open}) => open && hold && `
+${({hold, scroll, open}) => (open && hold && `
 position: fixed;
-top: ${scroll || 0};
+top: ${-1 * (scroll || 0)}px;
 left: 0;
 right: 0;
 bottom: 0;
-`}
+`)}
 `
 
 const Modal = styled.div`
