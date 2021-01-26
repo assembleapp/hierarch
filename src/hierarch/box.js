@@ -6,6 +6,7 @@ import { HierarchScope } from "./index"
 
 class Box extends React.Component {
     changeableBox = React.createRef()
+    state = { changes: [] }
 
     render = () => {
         var { original, children, code, ...remainder } = this.props
@@ -58,7 +59,7 @@ class Box extends React.Component {
                                             focus_count += 1
                                         }
                                     }}
-                                    record={() => this.recordChanges().then(() => scope.signal('display', null))}
+                                    record={() => this.recordChanges().then(() => scope.signal('display', code))}
                                     escape={() => scope.signal('display', code)}
                                 >
                                     {c}
@@ -70,7 +71,7 @@ class Box extends React.Component {
                         (typeof(children) === 'string'
                             ? <Change
                                 focus={e => e && e.focus()}
-                                record={() => this.recordChanges().then(() => scope.signal('display', null))}
+                                record={() => this.recordChanges().then(() => scope.signal('display', code))}
                                 escape={() => scope.signal('display', code)}
                             >
                                 {children}
@@ -94,7 +95,10 @@ class Box extends React.Component {
                             }
                         }}
                     >
-                        {children}
+                        {children instanceof Array
+                        ? children.map((c, i) => (typeof(this.state.changes[i]) === 'string' ? this.state.changes[i] : c))
+                        : (this.state.changes[0] || children)
+                        }
                     </Original>
                 )
                 : ( running && scope.chosen.signal === "resize"
@@ -148,6 +152,8 @@ class Box extends React.Component {
         .then(() => {
             if(window.assemble && window.assemble.repull)
                 window.assemble.repull()
+            console.log(changeArray)
+            this.setState({ changes: changeArray })
         })
     }
 }
@@ -155,9 +161,8 @@ class Box extends React.Component {
 class Change extends React.Component {
     state = { value: null }
 
-    render = () => {
-        // console.log("rendering change:",this.props.children)
-        return <Field
+    render = () => (
+    <Field
         onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -185,8 +190,8 @@ class Change extends React.Component {
                 return false
             }
         }}
-        />
-    }
+    />
+    )
 }
 
 const Field = styled.input.attrs({
