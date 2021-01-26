@@ -158,7 +158,7 @@ class Hierarch extends React.Component {
                         <Logo
                             size={20}
                             repeat={100000}
-                            onClick={() => this.setState({ open: true })}
+                            onClick={() => this.setState({ open: true, mouse: { hold: false } })}
                         />
                     </Corner>
                 }
