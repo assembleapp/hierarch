@@ -59,6 +59,7 @@ class Box extends React.Component {
                                         }
                                     }}
                                     record={() => this.recordChanges().then(() => scope.signal('display', null))}
+                                    escape={() => scope.signal('display', code)}
                                 >
                                     {c}
                                 </Change>
@@ -67,7 +68,11 @@ class Box extends React.Component {
                         })
                         :
                         (typeof(children) === 'string'
-                            ? <Change focus={e => e && e.focus()} record={() => this.recordChanges().then(() => scope.signal('display', null))}>
+                            ? <Change
+                                focus={e => e && e.focus()}
+                                record={() => this.recordChanges().then(() => scope.signal('display', null))}
+                                escape={() => scope.signal('display', code)}
+                            >
                                 {children}
                             </Change>
                             : children
@@ -166,6 +171,13 @@ class Change extends React.Component {
             this.setState({ value: e.target.value || "" })
         }}
         onKeyDown={(e) => {
+            console.log(e.key)
+            if(e.key === ' ') {
+                e.stopPropagation()
+            }
+            if(e.key === "Escape") {
+                this.props.escape()
+            }
             if(e.key === "Enter") {
                 this.props.record()
                 e.preventDefault();

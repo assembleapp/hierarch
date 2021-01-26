@@ -50,6 +50,10 @@ class Hierarch extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        document.onkeydown = null
+    }
+
     componentDidUpdate() {
         document.oncontextmenu = this.state.open
             ? this.secondaryClick
