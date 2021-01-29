@@ -24,9 +24,15 @@ const clock = () =>
 class Scope extends React.Component {
     constructor(p) {
         super(p)
+
         this.graph = graph(p.source, p.passcode)
-        this.model = this.makeModel(p.schema)
         this.query = this.makeQuery(p.schema)
+
+        if(window.source !== p.source || window.schema !== JSON.stringify(p.schema) || !window.model) {
+            window.source = p.source
+            window.schema = JSON.stringify(p.schema)
+            window.model = this.makeModel(p.schema)
+        }
 
         this.subscribe()
     }
@@ -64,19 +70,23 @@ class Scope extends React.Component {
         this.graph.subscribe({ query: this.query }).subscribe({
             next: response => {
                 Object.keys(response.data).forEach(m => {
-                    this.model.assign(m, response.data[m])
+                    window.model.assign(m, response.data[m])
                 })
             },
             error: err => console.error("err", err),
         })
 
-        // autorun(() => console.log(this.model.toJSON()))
+        autorun(() => console.log(window.model.toJSON()))
     }
 
     render() {
+        console.log("rendering scope", window.model.companies.length)
         return (
         <Observer>
-            {() => (this.props.children(this.model))}
+            {() => {
+                console.log("rendering inside scope", window.model.companies.length)
+                return (this.props.children(window.model))
+            }}
         </Observer>
         )
     }
