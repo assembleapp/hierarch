@@ -7,16 +7,16 @@ import { Observer } from "mobx-react"
 
 import size from "../mockup/size.png"
 import spacing from "../mockup/spacing.png"
-import typography from "../mockup/typography.png"
-import position from "../mockup/position.png"
-import layout from "../mockup/layout.png"
+import symbols from "../mockup/typography.png"
+import place from "../mockup/position.png"
+import dynamics from "../mockup/layout.png"
 
 const panes = {
     size,
     spacing,
-    typography,
-    position,
-    layout,
+    symbols,
+    place,
+    dynamics,
 }
 
 const blocks = observable({})
