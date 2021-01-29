@@ -1,3 +1,4 @@
+import Aviator from "aviator"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -6,23 +7,28 @@ import reportWebVitals from './reportWebVitals';
 
 import Hierarch from "./hierarch"
 
-if(process.env.NODE_ENV === "development") {
+const go = (block) => {
   ReactDOM.render(
     <React.StrictMode>
-      <Hierarch>
-        <App />
-      </Hierarch>
-    </React.StrictMode>,
-    document.getElementById('base')
-  )
-} else {
-  ReactDOM.render(
-    <React.StrictMode>
-      <App />
+      { process.env.NODE_ENV === 'development'
+        ? <Hierarch>{block}</Hierarch>
+        : block
+      }
     </React.StrictMode>,
     document.getElementById('base')
   )
 }
+
+const Bills = () => (
+  <h1>Bills</h1>
+)
+
+Aviator.setRoutes({
+  "/":      () => go(<App/>),
+  "/bills": () => go(<Bills/>),
+})
+
+Aviator.dispatch()
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
