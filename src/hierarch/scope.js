@@ -99,18 +99,4 @@ class Scope extends React.Component {
     }
 }
 
-const Upgrade = (p) => {
-    var query = gql`
-    mutation ($name: String, $address: String, $danger: Int, $number: uuid) {
-        update_companies(where: {number: {_eq: $number}}, _set: {name: $name, address: $address, danger: $danger}) {
-          affected_rows
-        }
-    }`
-    const [upgrade_company] = useMutation(query, { client: graph })
-    return p.children((grade) => {
-        console.log(grade);
-        upgrade_company({ variables: grade })
-    })
-}
-
 export default Scope
