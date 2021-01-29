@@ -76,15 +76,15 @@ class Scope extends React.Component {
             error: err => console.error("err", err),
         })
 
-        autorun(() => console.log(window.model.toJSON()))
+        // autorun(() => console.log(window.model.toJSON()))
     }
 
     render() {
-        console.log("rendering scope", window.model.companies.length)
+        // console.log("rendering scope", window.model.companies.length)
         return (
         <Observer>
             {() => {
-                console.log("rendering inside scope", window.model.companies.length)
+                // console.log("rendering inside scope", window.model.companies.length)
                 return (this.props.children(window.model))
             }}
         </Observer>
