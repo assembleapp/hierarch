@@ -97,11 +97,6 @@ class Scope extends React.Component {
         </Observer>
         )
     }
-
-    drop_clock = (clock_name) => {
-        clearTimeout(this[clock_name])
-        clearInterval(this[clock_name])
-    }
 }
 
 const Upgrade = (p) => {
