@@ -28,24 +28,7 @@ class Scope extends React.Component {
         this.model = this.makeModel(p.schema)
         this.query = this.makeQuery(p.schema)
 
-        if(!this.props.anonymous) {
-            this.subscribe()
-        } else {
-            this.prepare()
-            this.big_clock = setInterval(() => this.model.assign('companies', []), clock() * 200)
-        }
-    }
-
-    prepare = () => {
-        clearTimeout(this.clock)
-        this.clock = setTimeout(this.prepare, clock())
-
-        this.model.assign(
-            'companies',
-            Math.random() < 0.6
-            ? this.model.companies.concat([{ number: String(Math.random()), name: '~~~', address: 'https://example.com'}])
-            : this.model.companies.slice(1)
-        )
+        this.subscribe()
     }
 
     makeQuery = (schema) => {
