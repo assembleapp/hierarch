@@ -1,4 +1,4 @@
-import { P, Box, Div, H1, H2 } from './hierarch/lens'
+import { P, Box, Code, Div, H1 } from './hierarch/lens'
 import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
@@ -7,7 +7,8 @@ import logo from './hierarch.svg'
 function App() {
   return (
     <Column>
-      <H1>Some big plans, by Assemble Company.</H1>
+      <H1>Some big plans</H1>
+      ...by Assemble Company.
 
       <H2>~ already running ~</H2>
 
@@ -30,10 +31,10 @@ function App() {
         </Header>
       </Block>
 
-      <H2>~ and on our horizon ~</H2>
+      <H2>~ on our horizon ~</H2>
       <Pair>
         <Block>
-          <H3>Copper!</H3>
+          <H3>Copper</H3>
 
           <P>
             Chromium rules our modern machines.
@@ -43,7 +44,7 @@ function App() {
         </Block>
 
         <Block>
-          <H3>Greenhouse!</H3>
+          <H3>Greenhouse</H3>
 
           <P>
             A booming garden and nursery helping machine kernels
@@ -54,29 +55,53 @@ function App() {
         </Block>
       </Pair>
 
+      <H2>~ and our long roadmap ~</H2>
+      <San>
+        <Block>
+          No more `<Code>git</Code>`s in our codebases.
+        </Block>
+
+        <Block>
+          Process legal code and recommend changes.
+        </Block>
+
+        <Block>
+          Keep people's records more secure online.
+        </Block>
+      </San>
+
+      <H2>Your <s>money</s> help is needed.</H2>
+      <Block>
+        Become a sponsor and help keep our program running.
+      </Block>
+
+
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
         passcode={process.env.REACT_APP_HASURA_PASSCODE}
         schema={{ companies: { '_': ['name', 'address' ]}}}
       >
         {(model) => (
-          <>
-          {model.companies.length > 0 &&
-            <H3>Keep building! Some similar programs:</H3>
-          }
-          <Board>
-            {model.companies.map((c, i) => (
-              <Link
-                key={i}
-                address={c.address}
-                style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}
-                target="_blank"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </Board>
-          </>
+          <Margin>
+            {model.companies.length > 0 &&
+              <>
+                <H3>Keep building!</H3>
+                ...using some similar programs:
+              </>
+            }
+            <Board>
+              {model.companies.map((c, i) => (
+                <Link
+                  key={i}
+                  address={c.address}
+                  style={{fontSize: (6 + (c.danger || 5) * 2) + 'px'}}
+                  target="_blank"
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </Board>
+          </Margin>
         )}
       </Scope>
     </Column>
@@ -88,6 +113,10 @@ display: grid;
 grid-template-columns: 1fr 1fr;
 grid-gap: 2rem;
 width: 40rem;
+`
+
+const San = styled(Pair)`
+grid-template-columns: repeat(3, 1fr);
 `
 
 const Block = styled.div`
@@ -155,10 +184,17 @@ const Link = styled.a.attrs(p => ({
 color: #365a92;
 `
 
-const H3 = styled.h3`
-margin-top: 2rem;
-margin-bottom: 0;
+const H2 = styled.h2`
 color: purple;
+`
+
+const H3 = styled.h3`
+margin: 0;
+`
+
+const Margin = styled.div`
+margin-top: 2rem;
+text-align: center;
 `
 
 expose({
