@@ -36,18 +36,39 @@ const makeModel = (schema) => {
     console.log(schema)
 
     let keys = Object.keys(schema) // -> 'companies'
+    let model = {}
+    let builder = {}
+
     keys.forEach(k => {
+        let inner_model = {}
+
         if(typeof(schema[k]) === "object") {
-          let subkeys = Object.keys(schema[k]).filter(x => x !== "_")
-          if(schema[k]["_"] instanceof Array) {
-              subkeys = subkeys.concat(schema[k]["_"])
-          }
-          console.log("subkeys", subkeys)
-          subkeys.forEach(sk => {
-              let kind = schema[k][sk] || 'string'
-              console.log('subkey', sk, kind)
-          })
+            let subkeys = Object.keys(schema[k]).filter(x => x !== "_")
+            if(schema[k]["_"] instanceof Array) {
+                subkeys = subkeys.concat(schema[k]["_"])
+            }
+
+            console.log("subkeys", subkeys)
+            subkeys.forEach(sk => {
+                let kind = schema[k][sk] || 'string'
+
+                let maybeNull = false
+                if(kind[kind.length -1] === "?") {
+                    maybeNull = true
+                    kind = kind.slice(0, kind.length - 1)
+                }
+                console.log('subkey', sk, kind)
+
+                if(maybeNull)
+                    inner_model[sk] = types.maybe(types[kind])
+                else
+                    inner_model[sk] = types[kind]
+            })
         }
+        console.log(inner_model)
+
+        model[k] = types.array(types.model(k = "_singular", inner_model))
+        builder["companies"] = []
     })
     if(schema["_"]) {
         keys = keys.concat(schema["_"])
@@ -55,18 +76,7 @@ const makeModel = (schema) => {
 
     console.log("keys", keys)
 
-    let model = {}
-    let company = {}
 
-    company["number"] = types.string
-    company["name"] = types.string
-    company["address"] = types.string
-    company["danger"] = types.maybeNull(types.integer)
-
-    let builder = {}
-    builder["companies"] = []
-
-    model['companies'] = types.array(types.model("Company", company))
     const made = types
     .model("Model", model)
     .actions(m => ({ assign(name, x) { m[name] = x } }))
