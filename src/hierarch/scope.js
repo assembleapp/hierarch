@@ -18,6 +18,63 @@ import graph from "./graph"
     }
 */
 
+const makeQuery = (schema) => {
+    console.log(schema)
+    return gql`
+    subscription Companies {
+        companies(order_by: {danger: desc, name: asc}) {
+          number
+          address
+          danger
+          labels
+          name
+        }
+    }`
+}
+
+const makeModel = (schema) => {
+    console.log(schema)
+
+    let keys = Object.keys(schema) // -> 'companies'
+    keys.forEach(k => {
+        if(typeof(schema[k]) === "object") {
+          let subkeys = Object.keys(schema[k]).filter(x => x !== "_")
+          if(schema[k]["_"] instanceof Array) {
+              subkeys = subkeys.concat(schema[k]["_"])
+          }
+          console.log("subkeys", subkeys)
+          subkeys.forEach(sk => {
+              let kind = schema[k][sk] || 'string'
+              console.log('subkey', sk, kind)
+          })
+        }
+    })
+    if(schema["_"]) {
+        keys = keys.concat(schema["_"])
+    }
+
+    console.log("keys", keys)
+
+    let model = {}
+    let company = {}
+
+    company["number"] = types.string
+    company["name"] = types.string
+    company["address"] = types.string
+    company["danger"] = types.maybeNull(types.integer)
+
+    let builder = {}
+    builder["companies"] = []
+
+    model['companies'] = types.array(types.model("Company", company))
+    const made = types
+    .model("Model", model)
+    .actions(m => ({ assign(name, x) { m[name] = x } }))
+    .create(builder)
+
+    return made
+}
+
 const clock = () =>
     (Math.random() * Math.random() * 0.4 + 0.9) * 1000
 
@@ -26,44 +83,15 @@ class Scope extends React.Component {
         super(p)
 
         this.graph = graph(p.source, p.passcode)
-        this.query = this.makeQuery(p.schema)
+        this.query = makeQuery(p.schema)
 
-        if(window.source !== p.source || window.schema !== JSON.stringify(p.schema) || !window.model) {
+        // if(window.source !== p.source || window.schema !== JSON.stringify(p.schema) || !window.model) {
             window.source = p.source
             window.schema = JSON.stringify(p.schema)
-            window.model = this.makeModel(p.schema)
-        }
+            window.model = makeModel(p.schema)
+        // }
 
         this.subscribe()
-    }
-
-    makeQuery = (schema) => {
-        return gql`
-        subscription Companies {
-            companies(order_by: {danger: desc, name: asc}) {
-              number
-              address
-              danger
-              labels
-              name
-            }
-        }`
-    }
-
-    makeModel = (schema) => {
-        const model = types.model({
-            companies: types.array(types.model("Company", {
-                number: types.string,
-                name: types.string,
-                address: types.string,
-                danger: types.maybeNull(types.integer),
-                labels: types.maybeNull(types.string),
-            }))
-        }).actions(m => ({
-            assign(name, x) { m[name] = x },
-        })).create({companies: []})
-
-        return model
     }
 
     subscribe() {

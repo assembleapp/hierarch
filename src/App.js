@@ -79,7 +79,7 @@ function App() {
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
         passcode={process.env.REACT_APP_HASURA_PASSCODE}
-        schema={{ companies: { '_': ['name', 'address' ]}}}
+        schema={{ companies: { '_': [ 'number', 'name', 'address' ], danger: "integer?"}}}
       >
         {(model) => (
           <Margin>

@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Bills from './bills';
 import reportWebVitals from './reportWebVitals';
 
 import Hierarch from "./hierarch"
@@ -18,10 +19,6 @@ const go = (block) => {
     document.getElementById('base')
   )
 }
-
-const Bills = () => (
-  <h1>Bills</h1>
-)
 
 Aviator.setRoutes({
   "/":      () => go(<App/>),
