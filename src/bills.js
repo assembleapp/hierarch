@@ -45,12 +45,12 @@ const Bills = () => (
       <H2>Bill Reimbursal Policy</H2>
       <Markup>
         Assemble Company reimburses our employee-member's
-        banking, housing, and medical bills,
+        banking, housing, car, and medical bills,
         including as reasonable:<br/><br/>
         <li>Surgeries</li>
         <li>procedures, such as changing one's appearance</li>
         <li>Business dress</li>
-        <li>Car loans, because cars can be homes</li>
+        <li>Car loans</li>
         <li>Home loans and leases</li>
         <li>Meals and medicines</li>
       </Markup>
@@ -63,7 +63,7 @@ const Bills = () => (
           Please help us keep our records sensibly anonymous.
         </Link>
         <br/><br/>
-        <Link href="https://github.com/assembleapp/hierarch/discussions/3">
+        <Link href="https://assembled-donors.herokuapp.com/">
           Help pay our bills by becoming a sponsor.
         </Link>
         <br/>– as you help, you earn badges.
