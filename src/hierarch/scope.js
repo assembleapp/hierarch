@@ -18,7 +18,7 @@ import graph from "./graph"
     }
 */
 
-const makeQuery = (schema) => {
+const makeQuery = (schema, order = {}) => {
     // console.log(schema)
 
     let keys = Object.keys(schema) // -> 'companies'
@@ -68,9 +68,12 @@ const makeQuery = (schema) => {
         keys = keys.concat(schema["_"])
     }
 
+    const order_by = "( order_by: {" + Object.keys(order).map(o => `${o}: ${order[o]}`).join(", ") + "})"
+    // console.log(order_by)
+
     const query = gql`
     subscription ${keys[0]} {
-        ${keys[0]} {
+        ${keys[0]} ${order_by} {
             ${inner_model.join("\n\t\t\t")}
         }
     }
@@ -116,7 +119,7 @@ const makeModel = (schema) => {
                             maybeNull = true
                             kind = kind.slice(0, kind.length - 1)
                         }
-                        console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
+                        // console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
 
                         if(maybeNull)
                             inner_inner_model[ssk] = types.maybeNull(types[kind])
@@ -132,7 +135,7 @@ const makeModel = (schema) => {
                         maybeNull = true
                         kind = kind.slice(0, kind.length - 1)
                     }
-                    console.log('subkey', k, "->", sk, ":", kind, maybeNull ? "?" : "")
+                    // console.log('subkey', k, "->", sk, ":", kind, maybeNull ? "?" : "")
 
                     if(maybeNull)
                         inner_model[sk] = types.maybeNull(types[kind])
@@ -170,7 +173,7 @@ class Scope extends React.Component {
         super(p)
 
         this.graph = graph(p.source, p.passcode)
-        this.query = makeQuery(p.schema)
+        this.query = makeQuery(p.schema, p.order)
 
         // if(window.source !== p.source || window.schema !== JSON.stringify(p.schema) || !window.model) {
             window.source = p.source

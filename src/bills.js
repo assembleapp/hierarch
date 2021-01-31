@@ -12,6 +12,7 @@ const Bills = () => (
         source="assemble-company.herokuapp.com/v1/graphql"
         passcode={process.env.REACT_APP_HASURA_PASSCODE}
         schema={{ bills: { '_': [ 'occurrence', 'label' ], price: "number", payer: ["name"], schedule: ['name', 'begin', 'end' ] }}}
+        order={{occurrence: 'desc'}}
       >
         {model => (
           <>
