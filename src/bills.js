@@ -11,12 +11,15 @@ const Bills = () => (
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
         passcode={process.env.REACT_APP_HASURA_PASSCODE}
-        schema={{ bills: { '_': [ 'occurrence' ], price: "number", schedule: ['name', 'begin', 'end' ] }}}
+        schema={{ bills: { '_': [ 'occurrence', 'label' ], price: "number", schedule: ['name', 'begin', 'end' ] }}}
       >
         {model => (
           model.bills.map((b, i) => (
             <Border key={i}>
-              {b.occurrence} - {b.price} in {b.schedule.name}
+              <Clock>{b.occurrence}</Clock>
+              <Schedule>{b.schedule.name}</Schedule>
+              <Describe>{b.label}</Describe>
+              <Price>${b.price}</Price>
             </Border>
           ))
         )}
@@ -28,6 +31,24 @@ const Bills = () => (
     </Column>
   </Page>
 )
+
+const Clock = styled.span`
+color: grey;
+font-size: 0.6rem;
+`
+
+const Schedule = styled.span`
+float: right;
+color: grey;
+`
+
+const Price = styled.div`
+text-align: right;
+`
+
+const Describe = styled.div`
+margin-top: 0.5rem;
+`
 
 const Graph = styled.div`
 width: 24rem;
@@ -51,7 +72,6 @@ h1 {
 `
 
 const Border = styled.div`
-height: 2rem;
 border: 1px solid #2a2a2a9a;
 border-top: 1px solid #2a2a2a2a;
 border-bottom: 1px solid #2a2a2a2a;
