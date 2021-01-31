@@ -116,10 +116,10 @@ const makeModel = (schema) => {
                             maybeNull = true
                             kind = kind.slice(0, kind.length - 1)
                         }
-                        // console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
+                        console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
 
                         if(maybeNull)
-                            inner_inner_model[ssk] = types.maybe(types[kind])
+                            inner_inner_model[ssk] = types.maybeNull(types[kind])
                         else
                             inner_inner_model[ssk] = types[kind]
                     })
@@ -132,10 +132,10 @@ const makeModel = (schema) => {
                         maybeNull = true
                         kind = kind.slice(0, kind.length - 1)
                     }
-                    // console.log('subkey', k, "->", sk, ":", kind, maybeNull ? "?" : "")
+                    console.log('subkey', k, "->", sk, ":", kind, maybeNull ? "?" : "")
 
                     if(maybeNull)
-                        inner_model[sk] = types.maybe(types[kind])
+                        inner_model[sk] = types.maybeNull(types[kind])
                     else
                         inner_model[sk] = types[kind]
                 }
