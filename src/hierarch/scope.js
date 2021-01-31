@@ -35,38 +35,32 @@ const makeQuery = (schema) => {
 
             console.log("subkeys", subkeys)
             subkeys.forEach(sk => {
-                // if(kind instanceof Array) {
-                //     let inner_inner_model = {}
-
-                //     if(typeof(schema[k][sk]) === "object") {
-                //         let subsubkeys = Object.keys(schema[k][sk]).filter(x => x !== "_")
-                //         if(schema[k][sk] instanceof Array)
-                //             subsubkeys = subsubkeys.concat(schema[k][sk]["_"])
-
-                //         console.log("subsubkeys", subsubkeys)
-                //         subsubkeys.forEach(ssk => {
-                //             let kind = schema[k][sk][ssk] || 'string'
-                //             // if(kind instanceof Array) { ... }
-                //             let maybeNull = false
-                //             if(kind[kind.length - 1] === "?") {
-                //                 maybeNull = true
-                //                 kind = kind.slice(0, kind.length - 1)
-                //             }
-                //             console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
-
-                //             if(maybeNull)
-                //                 inner_inner_model[sk] = types.maybe(types[kind])
-                //             else
-                //                 inner_inner_model[sk] = types[kind]
-                //         })
-                //     }
-
-                //     inner_model[sk] = types.array(types.model(k + "_singular", inner_inner_model))
-                // }
-
                 console.log('subkey', k, "->", sk)
 
-                inner_model = inner_model.concat([sk])
+                if(schema[k][sk] instanceof Array) {
+                    let inner_inner_model = []
+                    let subsubkeys = schema[k][sk].filter(x => x !== "_")
+
+                    if(schema[k][sk] instanceof Array)
+                        subsubkeys = subsubkeys.concat(schema[k][sk]["_"] || [])
+
+                    console.log("subsubkeys", subsubkeys)
+                    subsubkeys.forEach(ssk => {
+                        // if(kind instanceof Array) { ... }
+
+                        console.log("subsubkey", k, "->", sk, "->", ssk)
+
+                        inner_inner_model = inner_inner_model.concat([ssk])
+                    })
+
+                    inner_model = inner_model.concat([`
+            ${sk} {
+                ${inner_inner_model.join("\n\t\t\t\t")}
+            }
+                    `])
+                } else {
+                    inner_model = inner_model.concat([sk])
+                }
             })
         }
     })
@@ -84,6 +78,7 @@ const makeQuery = (schema) => {
     console.log(query.loc.source.body)
     return query
 }
+window.makeQuery = makeQuery
 
 const makeModel = (schema) => {
     console.log(schema)
@@ -93,6 +88,7 @@ const makeModel = (schema) => {
     let builder = {}
 
     keys.forEach(k => {
+        console.log("Modeling", k)
         let inner_model = {}
 
         if(typeof(schema[k]) === "object") {
@@ -106,29 +102,27 @@ const makeModel = (schema) => {
 
                 if(kind instanceof Array) {
                     let inner_inner_model = {}
+                    let subsubkeys = Object.keys(schema[k][sk]).filter(x => x !== "_")
 
-                    if(typeof(schema[k][sk]) === "object") {
-                        let subsubkeys = Object.keys(schema[k][sk]).filter(x => x !== "_")
-                        if(schema[k][sk] instanceof Array)
-                            subsubkeys = subsubkeys.concat(schema[k][sk]["_"])
+                    if(schema[k][sk] instanceof Array)
+                        subsubkeys = subsubkeys.concat(schema[k][sk]["_"])
 
-                        console.log("subsubkeys", subsubkeys)
-                        subsubkeys.forEach(ssk => {
-                            let kind = schema[k][sk][ssk] || 'string'
-                            // if(kind instanceof Array) { ... }
-                            let maybeNull = false
-                            if(kind[kind.length - 1] === "?") {
-                                maybeNull = true
-                                kind = kind.slice(0, kind.length - 1)
-                            }
-                            console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
+                    console.log("subsubkeys", subsubkeys)
+                    subsubkeys.forEach(ssk => {
+                        let kind = schema[k][sk][ssk] || 'string'
+                        // if(kind instanceof Array) { ... }
+                        let maybeNull = false
+                        if(kind[kind.length - 1] === "?") {
+                            maybeNull = true
+                            kind = kind.slice(0, kind.length - 1)
+                        }
+                        console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
 
-                            if(maybeNull)
-                                inner_inner_model[sk] = types.maybe(types[kind])
-                            else
-                                inner_inner_model[sk] = types[kind]
-                        })
-                    }
+                        if(maybeNull)
+                            inner_inner_model[sk] = types.maybe(types[kind])
+                        else
+                            inner_inner_model[sk] = types[kind]
+                    })
 
                     inner_model[sk] = types.array(types.model(k + "_singular", inner_inner_model))
                 }
@@ -165,6 +159,7 @@ const makeModel = (schema) => {
 
     return made
 }
+window.makeModel = makeModel
 
 const clock = () =>
     (Math.random() * Math.random() * 0.4 + 0.9) * 1000
