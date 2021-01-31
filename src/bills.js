@@ -41,9 +41,25 @@ const Bills = () => (
 
     <Column>
       <Graph></Graph>
+      <H2>Bill Reimbursal Policy</H2>
+      <Markup>
+        Assemble Company reimburses our employee-member's
+        banking, housing, and medical bills,
+        including as reasonable:<br/><br/>
+        <li>Surgeries</li>
+        <li>procedures, such as changing one's appearance</li>
+        <li>Business dress</li>
+        <li>Car loans, because cars can be homes</li>
+        <li>Home loans and leases</li>
+        <li>Meals and medicines</li>
+      </Markup>
     </Column>
   </Page>
 )
+
+const Markup = styled.p`
+color: #d2c998;
+`
 
 const H1 = styled.h1`
 grid-area: 1 / 1 / 1 / -1;
