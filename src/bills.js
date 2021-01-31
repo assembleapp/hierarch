@@ -59,7 +59,7 @@ const Bills = () => (
         so your help is needed in sponsoring our bills due,
         as you can see here.
         <br/><br/>
-        <Link href="https://github.com/assembleapp/hierarch/discussions/3">
+        <Link href="https://github.com/assembleapp/hierarch/discussions/10">
           Please help us keep our records sensibly anonymous.
         </Link>
         <br/><br/>
@@ -67,6 +67,7 @@ const Bills = () => (
           Help pay our bills by becoming a sponsor.
         </Link>
         <br/>– as you help, you earn badges.
+        <br/><br/>~ Badges Coming Soon ~
       </Markup>
     </Column>
   </Page>
