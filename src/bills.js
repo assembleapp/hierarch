@@ -5,7 +5,7 @@ import Scope from "./hierarch/scope"
 
 const Bills = () => (
   <Page>
-    <h1>Bills</h1>
+    <H1>Bills</H1>
 
     <Column>
       <Scope
@@ -32,6 +32,12 @@ const Bills = () => (
   </Page>
 )
 
+const H1 = styled.h1`
+grid-area: 1 / 1 / 1 / -1;
+color: #d2c998;
+padding: 0.5em;
+`
+
 const Clock = styled.span`
 color: grey;
 font-size: 0.6rem;
@@ -53,8 +59,8 @@ margin-top: 0.5rem;
 const Graph = styled.div`
 width: 24rem;
 height: 12rem;
-border-bottom: 1px solid black;
-border-left: 1px solid black;
+border-bottom: 1px solid #d2c998;
+border-left: 1px solid #d2c998;
 `
 
 const Page = styled.div`
@@ -66,9 +72,7 @@ background: #4060a8;
 display: grid;
 grid-template-columns: auto 1fr;
 grid-template-rows: auto 1fr;
-h1 {
-  grid-area: 1 / 1 / 1 / -1;
-}
+
 `
 
 const Border = styled.div`
