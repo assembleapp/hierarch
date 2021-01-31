@@ -11,7 +11,7 @@ const Bills = () => (
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
         passcode={process.env.REACT_APP_HASURA_PASSCODE}
-        schema={{ bills: { '_': [ 'occurrence', 'label' ], price: "number", payer_number: "string?", schedule: ['name', 'begin', 'end' ] }}}
+        schema={{ bills: { '_': [ 'occurrence', 'label' ], price: "number", payer: ["name"], schedule: ['name', 'begin', 'end' ] }}}
       >
         {model => (
           <>
@@ -22,6 +22,7 @@ const Bills = () => (
               <Clock>{b.occurrence}</Clock>
               <Schedule>{b.schedule.name}</Schedule>
               <Describe>{b.label}</Describe>
+              <Describe>{b.payer && "Paid by " + b.payer.name}</Describe>
               <Price>${b.price}</Price>
             </Border>
           ))}
@@ -93,7 +94,7 @@ background: #d2c998;
 `
 
 const Column = styled.div`
-width: 18rem;
+width: 24rem;
 margin-left: 2rem;
 `
 

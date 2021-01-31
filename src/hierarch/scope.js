@@ -125,7 +125,7 @@ const makeModel = (schema) => {
                     })
 
                     // console.log(inner_inner_model)
-                    inner_model[sk] = types.model(k + "_singular", inner_inner_model)
+                    inner_model[sk] = types.maybeNull(types.model(k + "_singular", inner_inner_model))
                 } else {
                     let maybeNull = false
                     if(kind[kind.length -1] === "?") {
