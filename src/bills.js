@@ -40,7 +40,8 @@ const Bills = () => (
     </Column>
 
     <Column>
-      <Graph></Graph>
+      <Graph>Graph Coming Soon</Graph>
+
       <H2>Bill Reimbursal Policy</H2>
       <Markup>
         Assemble Company reimburses our employee-member's
@@ -61,6 +62,11 @@ const Bills = () => (
         <Link href="https://github.com/assembleapp/hierarch/discussions/3">
           Please help us keep our records sensibly anonymous.
         </Link>
+        <br/><br/>
+        <Link href="https://github.com/assembleapp/hierarch/discussions/3">
+          Help pay our bills by becoming a sponsor.
+        </Link>
+        <br/>– as you help, you earn badges.
       </Markup>
     </Column>
   </Page>
@@ -107,6 +113,7 @@ width: 24rem;
 height: 12rem;
 border-bottom: 1px solid #d2c998;
 border-left: 1px solid #d2c998;
+text-align: center;
 `
 
 const Page = styled.div`
@@ -118,7 +125,7 @@ background: #4060a8;
 display: grid;
 grid-template-columns: auto 1fr;
 grid-template-rows: auto 1fr;
-
+color: #d2c998;
 `
 
 const Border = styled.div`
@@ -128,6 +135,7 @@ border-bottom: 1px solid #2a2a2a2a;
 margin-bottom: 2px;
 padding: 1rem;
 background: #d2c998;
+color: #2a2a2a;
 `
 
 const Column = styled.div`
