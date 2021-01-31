@@ -11,11 +11,11 @@ const Bills = () => (
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
         passcode={process.env.REACT_APP_HASURA_PASSCODE}
-        schema={{ bills: { '_': [ 'price', 'occurrence' ], schedule: ['name', 'begin', 'end' ] }}}
+        schema={{ bills: { '_': [ 'occurrence' ], price: "number" /*, schedule: ['name', 'begin', 'end' ]*/ }}}
       >
         {model => (
-          model.companies.map(b => (
-            <Border>
+          model.bills.map((b, i) => (
+            <Border key={i}>
               {/* {b.name} */}
               {b.occurrence} - {b.price} in ---{/* b.schedule.name */}
             </Border>
