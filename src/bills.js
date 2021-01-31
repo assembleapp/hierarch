@@ -16,7 +16,14 @@ const Bills = () => (
       >
         {model => (
           <>
-          <H2>Sum: ${model.bills.filter(x => !x.payer_number).reduce((x, b) => x + b.price, 0).toFixed(2)} due</H2>
+          <H2>
+            Sum: ${
+              model.bills
+              .filter(x => !x.payer)
+              .reduce((x, b) => x + b.price, 0)
+              .toFixed(2)
+            } due
+          </H2>
 
           {model.bills.map((b, i) => (
             <Border key={i}>
