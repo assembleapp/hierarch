@@ -53,11 +53,24 @@ const Bills = () => (
         <li>Home loans and leases</li>
         <li>Meals and medicines</li>
       </Markup>
+      <Markup>
+        Assemble is a publicly-billed company,
+        so your help is needed in sponsoring our bills due,
+        as you can see here.
+        <br/><br/>
+        <Link href="https://github.com/assembleapp/hierarch/discussions/3">
+          Please help us keep our records sensibly anonymous.
+        </Link>
+      </Markup>
     </Column>
   </Page>
 )
 
 const Markup = styled.p`
+color: #d2c998;
+`
+
+const Link = styled.a`
 color: #d2c998;
 `
 
