@@ -102,10 +102,10 @@ const makeModel = (schema) => {
 
                 if(kind instanceof Array) {
                     let inner_inner_model = {}
-                    let subsubkeys = Object.keys(schema[k][sk]).filter(x => x !== "_")
+                    let subsubkeys = schema[k][sk].filter(x => x !== "_")
 
                     if(schema[k][sk] instanceof Array)
-                        subsubkeys = subsubkeys.concat(schema[k][sk]["_"])
+                        subsubkeys = subsubkeys.concat(schema[k][sk]["_"] || [])
 
                     console.log("subsubkeys", subsubkeys)
                     subsubkeys.forEach(ssk => {
@@ -119,25 +119,26 @@ const makeModel = (schema) => {
                         console.log("subsubkey", k, "->", sk, "->", ssk, ":", kind, maybeNull ? "?" : "")
 
                         if(maybeNull)
-                            inner_inner_model[sk] = types.maybe(types[kind])
+                            inner_inner_model[ssk] = types.maybe(types[kind])
                         else
-                            inner_inner_model[sk] = types[kind]
+                            inner_inner_model[ssk] = types[kind]
                     })
 
-                    inner_model[sk] = types.array(types.model(k + "_singular", inner_inner_model))
-                }
+                    console.log(inner_inner_model)
+                    inner_model[sk] = types.model(k + "_singular", inner_inner_model)
+                } else {
+                    let maybeNull = false
+                    if(kind[kind.length -1] === "?") {
+                        maybeNull = true
+                        kind = kind.slice(0, kind.length - 1)
+                    }
+                    console.log('subkey', k, "->", sk, ":", kind, maybeNull ? "?" : "")
 
-                let maybeNull = false
-                if(kind[kind.length -1] === "?") {
-                    maybeNull = true
-                    kind = kind.slice(0, kind.length - 1)
+                    if(maybeNull)
+                        inner_model[sk] = types.maybe(types[kind])
+                    else
+                        inner_model[sk] = types[kind]
                 }
-                console.log('subkey', k, "->", sk, ":", kind, maybeNull ? "?" : "")
-
-                if(maybeNull)
-                    inner_model[sk] = types.maybe(types[kind])
-                else
-                    inner_model[sk] = types[kind]
             })
         }
         console.log(inner_model)
