@@ -5,7 +5,10 @@ import Scope from "./hierarch/scope"
 
 const Bills = () => (
   <Page>
-    <H1>Bills</H1>
+    <Header>
+      <H1>Bills</H1>
+      <Link href="/" >See our home page.</Link>
+    </Header>
 
     <Column>
       <Scope
@@ -30,7 +33,7 @@ const Bills = () => (
               <Clock>{b.occurrence}</Clock>
               <Schedule>{b.schedule.name}</Schedule>
               <Describe>{b.label}</Describe>
-              <Describe>{b.payer && "Paid by " + b.payer.name}</Describe>
+              <Describe>{b.payer && "Paid by a loan"}</Describe>
               <Price>${b.price}</Price>
             </Border>
           ))}
@@ -82,9 +85,12 @@ color: #d2c998;
 `
 
 const H1 = styled.h1`
-grid-area: 1 / 1 / 1 / -1;
 color: #d2c998;
-padding: 0.5em;
+`
+
+const Header = styled.header`
+grid-area: 1 / 1 / 1 / -1;
+padding: 1rem;
 `
 
 const H2 = styled(H1)`
