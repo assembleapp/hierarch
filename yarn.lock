@@ -12491,6 +12491,11 @@ tr46@^2.0.2:
   dependencies:
     punycode "^2.1.1"
 
+tree-sitter-cli@^0.18.1:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.18.1.tgz#6b7b8895cc9b717b68e6874a165e24d43ca044ef"
+  integrity sha512-XgUxNPaqL0hwOAQsL32WfN6tE6R/siIZa7WjPFnyPyVtcvx+iGNqEkk6qFaS2lTbspJP4McVS9j85eJC+m7ekw==
+
 tree-sitter-css@^0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/tree-sitter-css/-/tree-sitter-css-0.16.0.tgz#0ed93165c49a0aa338c4644a786a93924c1c6f2e"
@@ -12969,6 +12974,11 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
+
+web-tree-sitter@^0.18.1:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/web-tree-sitter/-/web-tree-sitter-0.18.1.tgz#ecbfc6dc3ee6fde7fbd72ac0bd13f2da673f7fb7"
+  integrity sha512-DCIA1VITXVaulLlQdHy+Or81pGIiAaJ3SwoYnRWuwkizUUTFCoq52A492kTon9Qs5yBrgFRn9DEyi1scwlKA4Q==
 
 web-vitals@^0.2.4:
   version "0.2.4"

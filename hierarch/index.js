@@ -4,10 +4,11 @@ const escape = require("escape-html")
 const responder = express.Router()
 
 const {
-    apply_boxes,
-    apply_change,
-    apply_resize,
-    hierarchy,
+  apply_boxes,
+  apply_change,
+  apply_resize,
+  hierarchy,
+  source,
 } = require("./parse")
 
 responder.use(bodyParser.json())
@@ -18,6 +19,10 @@ responder.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     next();
 });
+
+responder.get("/source", (call, response) => {
+  source(call.query.address, s => response.send(s))
+})
 
 responder.post("/apply_boxes", (call, response) => {
     // console.log(call.body)

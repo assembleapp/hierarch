@@ -504,4 +504,11 @@ const hierarchy = (address, callback) => {
     })
 }
 
-module.exports = { apply_boxes, apply_change, apply_resize, hierarchy }
+const source = (address, callback) => {
+  fs.readFile(address, 'utf8', (error, source) => {
+    if(error) return console.log(error)
+    callback(source)
+  })
+}
+
+module.exports = { apply_boxes, apply_change, apply_resize, hierarchy, source }

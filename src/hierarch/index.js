@@ -48,6 +48,10 @@ class Hierarch extends React.Component {
                 }
             }
         }
+
+      fetch(`http://0.0.0.0:4321/source?address=${this.state.address}`)
+        .then(response => response.text())
+        .then(response => console.log(response))
     }
 
     componentWillUnmount() {
