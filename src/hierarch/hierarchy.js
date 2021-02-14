@@ -4,7 +4,8 @@ import styled from "styled-components"
 
 class Hierarchy extends React.Component {
     state = {
-        hierarchy: [0,0,[],"",false],
+      hierarchy: [0,0,[],"",false],
+      source: "",
     }
 
     componentDidMount = () => {
@@ -26,16 +27,20 @@ class Hierarchy extends React.Component {
     }
 
     pullHierarchy = () => {
-        fetch(`http://0.0.0.0:4321/hierarchy?address=${this.props.address}`, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
+      fetch(`http://0.0.0.0:4321/source?address=${this.state.address}`)
+        .then(response => response.text())
+        .then(response => this.setState({ source: response }))
+
+      fetch(`http://0.0.0.0:4321/hierarchy?address=${this.props.address}`, {
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
         .then(response => response.json())
         .then(response => {
-            this.setState({ hierarchy: response })
+          this.setState({ hierarchy: response })
         })
     }
 
