@@ -1,4 +1,5 @@
 import React from "react"
+import Parser from "tree-sitter"
 import { HierarchScope } from "./index"
 import styled from "styled-components"
 import Program from "./program"
@@ -102,8 +103,9 @@ const Border = styled.span`
     border: ${p => p.running ? "1px solid #ee00ee" : "none"};
 `
 
-const hierarchy = (source, callback) => {
-  var program = new Program(source)
+const hierarchy = async (source, callback) => {
+  const JavaScript = await Parser.Language.load('/tree-sitter-javascript.wasm');
+  var program = new Program(source, JavaScript)
 
   var query = program.query(`
         [(jsx_element) (jsx_self_closing_element)] @element

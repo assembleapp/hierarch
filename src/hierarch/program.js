@@ -8,12 +8,13 @@ const languages = {
 }
 
 class Program {
-    constructor(name, source) {
-        this.name = name
-        this.source = source
-        this.parser = new Parser()
-        this.parser.setLanguage(JavaScript)
-        this.parsed = this.parser.parse(this.source)
+    constructor(source, language) {
+      this.source = source
+      this.parser = new Parser()
+
+      this.parser.setLanguage(language);
+
+      this.parsed = this.parser.parse(this.source)
     }
 
     display = (node) => this.parsed.getText(node)
@@ -31,7 +32,7 @@ class Program {
 
     replace_by_indices(begin, end, upgrade = "") {
         if(begin < 0) {
-            begin = str.length + begin
+            begin = this.source.length + begin
             if(begin < 0) begin = 0
         }
 
