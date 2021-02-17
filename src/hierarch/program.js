@@ -1,20 +1,16 @@
-const Parser = require("tree-sitter")
-const JavaScript = require("tree-sitter-javascript")
-const Css = require("tree-sitter-css")
-
-const languages = {
-    js: JavaScript,
-    css: Css,
-}
+const Parser = window.TreeSitter
 
 class Program {
     constructor(source, language) {
-      this.source = source
-      this.parser = new Parser()
+      Parser.init().then(() => {
+        this.source = source
+        this.parser = new Parser()
+        this.language = language
 
-      this.parser.setLanguage(language);
+        this.parser.setLanguage(language);
 
-      this.parsed = this.parser.parse(this.source)
+        this.parsed = this.parser.parse(this.source)
+      })
     }
 
     display = (node) => this.parsed.getText(node)
@@ -49,8 +45,8 @@ class Program {
         this.parsed = this.parser.parse(this.source, this.parsed)
     }
 
-    parse_range_as_language(begin, end, lang) {
-        this.parser.setLanguage(languages[lang])
+    parse_range_as_language(begin, end, language) {
+        this.parser.setLanguage(language)
         return this.parser.parse(this.source, null, {
             includedRanges: [{
                 startIndex: begin,
@@ -61,18 +57,18 @@ class Program {
         })
     }
 
-    use_language(lang) {
-        this.parser.setLanguage(languages[lang])
+    use_language(language) {
+        this.parser.setLanguage(language)
     }
 
-    query(query, node = this.parsed.rootNode, lang = 'js') {
+    query(query, node = this.parsed.rootNode, language = this.language) {
         try {
             if(query instanceof Array) {
                 return query.map(q => (
-                    new Parser.Query(languages[lang], q).matches(node)
+                    new Parser.Query(language, q).matches(node)
                 )).flat(1)
             }
-            return new Parser.Query(languages[lang], query).matches(node)
+            return new Parser.Query(language, query).matches(node)
         } catch(e) {
             console.log(e)
         }
@@ -121,4 +117,4 @@ function getExtent(text) {
     return {row, column: text.length - index};
 }
 
-module.exports = Program
+export default Program

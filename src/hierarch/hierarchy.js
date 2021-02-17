@@ -1,8 +1,9 @@
 import React from "react"
-import Parser from "tree-sitter"
 import { HierarchScope } from "./index"
 import styled from "styled-components"
 import Program from "./program"
+
+const Parser = window.TreeSitter
 
 class Hierarchy extends React.Component {
     state = {
@@ -104,12 +105,13 @@ const Border = styled.span`
 `
 
 const hierarchy = async (source, callback) => {
-  const JavaScript = await Parser.Language.load('/tree-sitter-javascript.wasm');
+  await Parser.init()
+  const JavaScript = await Parser.Language.load(`/tree-sitter-javascript.wasm`);
   var program = new Program(source, JavaScript)
 
   var query = program.query(`
-        [(jsx_element) (jsx_self_closing_element)] @element
-        `)
+    [(jsx_element) (jsx_self_closing_element)] @element
+  `)
 
   var elements = query.map(m => {
     if(m.captures.length !== 1) {

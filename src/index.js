@@ -8,6 +8,11 @@ import reportWebVitals from './reportWebVitals';
 
 import Hierarch from "./hierarch"
 
+const Parser = require("web-tree-sitter")
+Parser.init().then(() => {
+  console.log("Loaded")
+})
+
 const go = (block) => {
   ReactDOM.render(
     <React.StrictMode>
@@ -25,7 +30,7 @@ Aviator.setRoutes({
   "/bills": () => go(<Bills/>),
 })
 
-Aviator.dispatch()
+// Aviator.dispatch()
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
