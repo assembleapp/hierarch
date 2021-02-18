@@ -4,6 +4,11 @@ import styled from "styled-components"
 import Program from "./program"
 
 const Parser = window.TreeSitter
+Parser.init().then(() => {
+  console.log("Loaded")
+  const P = Parser
+  debugger
+})
 
 class Hierarchy extends React.Component {
     state = {
