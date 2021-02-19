@@ -150,13 +150,15 @@ min-height: 100vh;
   min-height: 100vh;
 }
 
-background-color: #8ab7ab;
+background: rgb(15,12,73);
+background: linear-gradient(0deg, rgba(15,12,73,1) 0%, rgba(16,116,181,1) 23%, rgba(26,228,202,1) 100%);
+color: #2209a4;
+
 // min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-color: #365a92;
 padding: 0 4rem;
 `
 
@@ -179,11 +181,11 @@ align-items: flex-end;
 const Link = styled.a.attrs(p => ({
   href: p.address,
 }))`
-color: #365a92;
+color: #ccc3da;
 `
 
 const H2 = styled.h2`
-color: purple;
+color: #6502ff;
 `
 
 const H3 = styled.h3`
