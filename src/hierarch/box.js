@@ -142,6 +142,9 @@ class Box extends React.Component {
         }
       })
 
+      // * choose node <Box original={...} code=${this.props.code}
+      // * query `(jsx_text)` opening and closing indices
+      // * pass indices in on `changeArray` changes
       debugger
 
         return fetch("http://0.0.0.0:4321/change", {
