@@ -23,6 +23,18 @@ responder.get("/source", (call, response) => {
   source(call.query.address, s => response.send(s))
 })
 
+const check_upgrade_collisions = () => {
+  // change.
+}
+
+responder.post("/upgrade", (call, response) => {
+  check_upgrade_collisions(call.body.upgrades)
+  call.body.upgrades.forEach(upgrade => {
+    // change.
+  })
+  source(call.query.address, s => response.send(s))
+})
+
 responder.post("/apply_boxes", (call, response) => {
     // console.log(call.body)
     apply_boxes(call.body.address)
