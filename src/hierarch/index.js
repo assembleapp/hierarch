@@ -4,10 +4,11 @@ import styled from "styled-components"
 import Grid from "./grid"
 import Hierarchy from "./hierarchy"
 import Logo from "./logo"
-import Scope from "./scope"
 import Sidebar from "./sidebar"
 import Change from "./change"
+
 import makeProgram from "./engine/program"
+import Scope from "./engine/scope"
 
 const HierarchScope = React.createContext({
   open: false,

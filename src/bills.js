@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-import Scope from "./hierarch/scope"
+import Scope from "./hierarch/engine/scope"
 
 const Bills = () => (
   <Page>
