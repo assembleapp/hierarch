@@ -12,7 +12,8 @@ const parse_hierarchy = async (source, callback) => {
 
     if(e[0] < upper[0]) {
       throw(
-        "oh no! our hierarchy is being processed out of order;\n" +
+        "oh no! " +
+        "our blocks are being processed backwards, basd on opening index;\n" +
         JSON.stringify(elements, null, 2) +
         "\n---\n" +
         JSON.stringify(hierarchy, null, 2)
