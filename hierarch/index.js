@@ -24,10 +24,6 @@ responder.get("/source", (call, response) => {
   source(call.query.address, s => response.send(s))
 })
 
-const check_upgrade_sequence_collisions = (upgrades) => {
-  // change.
-}
-
 responder.post("/upgrade", (call, response) => {
   check_upgrade_sequence_collisions(call.body.upgrades)
 
@@ -37,6 +33,12 @@ responder.post("/upgrade", (call, response) => {
 
   source(call.query.address, s => response.send(s))
 })
+
+const check_upgrade_sequence_collisions = (upgrades) => {
+  // change.
+}
+
+// - - - Dumped; old addresses. begin cleaning up uses. - - - //
 
 responder.post("/apply_boxes", (call, response) => {
     // console.log(call.body)
