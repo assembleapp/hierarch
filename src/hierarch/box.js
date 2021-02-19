@@ -138,6 +138,8 @@ class Box extends React.Component {
             }
         })
 
+        debugger
+
         return fetch("http://0.0.0.0:4321/change", {
             method: "POST",
             body: JSON.stringify({

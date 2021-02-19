@@ -46,14 +46,6 @@ responder.post("/apply_boxes", (call, response) => {
     response.send("done")
 })
 
-responder.post("/change", (call, response) => {
-  apply_change(
-    call.body.code,
-    call.body.upgrade.map(c => typeof(c) === 'string' ? escape(c) : c),
-  )
-  response.send(JSON.stringify(call.body))
-})
-
 responder.post("/resize", (call, response) => {
     apply_resize(call.body)
     response.send(JSON.stringify(call.body))

@@ -193,88 +193,6 @@ const apply_upgrade = (begin, end, upgrade) => {
   })
 }
 
-const apply_change = (code, upgrade) => {
-    console.log(code, upgrade)
-    fs.readFile(sourceAddress, 'utf8', (error, source) => {
-        if(error) return console.log(error)
-
-        var program = new Program(sourceAddress, source)
-
-        if(!code || !upgrade) {
-          throw 'oh no! ' +
-            'improper `change` supplied in `apply_change`. ' +
-            'please check caller.'
-        }
-
-        console.log("HOLD UP!\nSerious insecure code here; by passing a sneaky `code` param,\nsomeone could hack our parser's query.")
-        matches = program.query(`(jsx_element
-            open_tag: (
-                jsx_opening_element
-                name: (_) @opening-name
-                attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
-                )
-
-            [(jsx_text) (jsx_element) (jsx_self_closing_element)]* @children
-
-            close_tag: (jsx_closing_element name: (_) @closing-name)
-            (#eq? @_code "code")
-            (#match? @code "^.${code}.$")
-            (#eq? @opening-name "Box")
-            (#eq? @closing-name "Box")
-        ) @element`)
-        // program.debug_query(matches)
-
-        if(matches.length !== 1) {
-            throw("oh no! more than one match for an apply change operation.")
-        }
-        var m = matches[0]
-
-        var children = m.captures.filter(c => c.name === 'children')
-        var coded_children = {}
-        children.forEach(c => {
-            if (c.node.type === "jsx_element" &&
-            program.display(c.node.firstNamedChild.firstNamedChild) === "Box"
-            ) {
-                var code = program.display(c.node.firstNamedChild.namedChildren[2].namedChildren[1])
-                code = code.split('"').join('')
-                // console.log(code)
-                coded_children[code] = c.node
-            }
-        })
-        // console.log(program.display(children[1].node.firstNamedChild.firstNamedChild))
-        // console.log(JSON.stringify(coded_children))
-        console.log(Object.keys(coded_children))
-        console.log(children.map(c => program.display(c.node)))
-
-        var beginning_skip = program.display(children[0].node).search(/\S/)
-        var ending_skip = program.display(children.slice(-1)[0].node).split('').reverse().join('').search(/\S/)
-
-        console.log(beginning_skip, ending_skip)
-        upgrade.reverse().forEach((grade, back_index) => {
-            // console.log(grade)
-            var index = children.length - 1 - back_index
-            var begin_cursor = children[index].node.startIndex + (index === 0 ? beginning_skip : 0)
-            var end_cursor = children[index].node.endIndex - (index === children.length - 1 ? ending_skip : 0)
-
-            console.log()
-            console.log(index, children.length)
-            console.log(children[index].node.startIndex, children[index].node.endIndex)
-            console.log(begin_cursor, end_cursor)
-            if(typeof(grade) === 'string') {
-                program.replace_by_indices(begin_cursor, end_cursor, grade)
-            } else if(Object.keys(grade).length === 1 && grade.code && coded_children[grade.code]) {
-                console.log("inserting coded child")
-                program.replace_by_indices(begin_cursor, end_cursor, program.display(coded_children[grade.code]))
-            } else {
-                throw("damn. no grade possible.\nindex:" + index + ",grade:" + grade)
-            }
-        })
-
-        program.reparse()
-        fs.writeFile(sourceAddress, program.source, err => { if(error) console.log(err) })
-    })
-}
-
 const apply_resize = (change) => {
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
@@ -403,7 +321,6 @@ const source = (address, callback) => {
 
 module.exports = {
   apply_boxes,
-  apply_change,
   apply_resize,
   apply_upgrade,
   source,
