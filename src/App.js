@@ -1,5 +1,6 @@
-import { P, Box, Code, Div, H1, S } from './hierarch/lens'
-import { expose } from './hierarch/sidebar'
+import { P, Box, Code, Div, H1, S } from './hierarch/display/lens'
+import { expose } from './hierarch/display/sidebar'
+
 import Scope from './hierarch/engine/scope'
 import styled, { keyframes } from "styled-components"
 import logo from './hierarch.svg'

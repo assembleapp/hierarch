@@ -1,7 +1,7 @@
 import React from "react"
-import { HierarchScope } from "./index"
+import { HierarchScope } from "../index"
 import styled from "styled-components"
-import parse_hierarchy from "./engine/parse_hierarchy"
+import parse_hierarchy from "../engine/parse_hierarchy"
 
 class Hierarchy extends React.Component {
     state = {

@@ -1,11 +1,11 @@
 import React from "react"
 import styled from "styled-components"
 
-import Grid from "./grid"
-import Hierarchy from "./hierarchy"
-import Logo from "./logo"
-import Sidebar from "./sidebar"
-import Change from "./change"
+import Change from "./display/change"
+import Grid from "./display/grid"
+import Hierarchy from "./display/hierarchy"
+import Logo from "./display/logo"
+import Sidebar from "./display/sidebar"
 
 import makeProgram from "./engine/program"
 import Scope from "./engine/scope"

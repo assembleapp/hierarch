@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 
 import Resize from "./resize"
-import { HierarchScope } from "./index"
+import { HierarchScope } from "../index"
 
 class Box extends React.Component {
     changeableBox = React.createRef()
