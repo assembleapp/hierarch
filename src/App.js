@@ -1,4 +1,4 @@
-import { P, Box, Code, Div, H1 } from './hierarch/lens'
+import { P, Box, Code, Div, H1, S } from './hierarch/lens'
 import { expose } from './hierarch/sidebar'
 import Scope from './hierarch/scope'
 import styled, { keyframes } from "styled-components"
@@ -70,7 +70,7 @@ function App() {
         </Block>
       </San>
 
-      <H2>Your <s>money</s> help is needed.</H2>
+      <H2>Your <S>money</S> help is needed.</H2>
       <Block>
         Become a sponsor and help keep our program running.
       </Block>
