@@ -75,15 +75,18 @@ const pull_blocks = (program) => {
         permissions = permissions.concat("g-4:change")
       }
       if(name === "Scope") {
-        permissions = permissions.concat("g-4:scope:grid")
+        // <Scope source="" schema={...}>...</Scope>
+        //        ...attrs ->        ...
         var attrs = c.node.namedChildren[0].namedChildren.slice(1)
         attrs = attrs.filter(a => (a.children[0] && a.children[0].type) === "property_identifier")
         attrs = attrs.filter(a => ["source", "schema"].some(s => s === program.display(a.children[0])))
+
         code = {}
         attrs.forEach(a => code[program.display(a).split('=')[0]] = program.display(a).split('=').slice(1).join('='))
         code.source = code.source.split('"').join('') // chop quotes.
         code = JSON.stringify(code)
-        // console.log(code)
+
+        permissions = permissions.concat("g-4:scope:grid")
       }
     } else if (c.node.type === "jsx_self_closing_element") {
       name = program.display(c.node.firstNamedChild)
