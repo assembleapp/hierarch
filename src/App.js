@@ -71,10 +71,7 @@ function App() {
       </San>
 
       <H2>Your <S>money</S> help is needed.</H2>
-      <Block>
-        Become a sponsor and help keep our program running.
-      </Block>
-
+      Become a sponsor and help keep our program running.
 
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
