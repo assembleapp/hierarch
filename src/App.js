@@ -133,15 +133,7 @@ grid-column-gap: 0.6rem;
 text-align: center;
 `
 
-const LogoSpin = keyframes`
-// from { transform: rotate(0deg); }
-// to { transform: rotate(360deg); }
-`
-
 const Column = styled.div`
-// display: grid;
-// grid-template-columns: 1fr auto;
-// grid-template-rows: 100vh;
 min-height: 100vh;
 
 @media(max-width: 800px) {
@@ -154,7 +146,6 @@ background: rgb(15,12,73);
 background: linear-gradient(0deg, rgba(15,12,73,1) 0%, rgba(16,116,181,1) 23%, rgba(26,228,202,1) 100%);
 color: #2209a4;
 
-// min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -165,9 +156,6 @@ padding: 0 4rem;
 const Logo = styled.img`
 height: 100%;
 margin-right: 2rem;
-@media (prefers-reduced-motion: no-preference) {
-  animation: ${LogoSpin} infinite 20s linear;
-}
 `
 
 const Header = styled.header`
