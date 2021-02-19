@@ -65,15 +65,10 @@ const pull_blocks = (program) => {
       name = program.display(c.node.firstNamedChild.firstNamedChild)
 
       if(name === "Box") {
-        // <Box original="Label" code="0.111" >...</Box>
-        // 0 .0 -.1.0     -.-.1  -.2.0 -.-.1
-        name = program.display(c.node.namedChildren[0].namedChildren[1].namedChildren[1])
-
-        code = program.display(c.node.namedChildren[0].namedChildren[2].namedChildren[1])
-        code = code.split('"').join('') // chop quotes.
-
+        [name, code] = parse_box_opening_node(program, c.node.namedChildren[0])
         permissions = permissions.concat("g-4:change")
       }
+
       if(name === "Scope") {
         // <Scope source="" schema={...}>...</Scope>
         //        ...attrs ->        ...
@@ -88,17 +83,12 @@ const pull_blocks = (program) => {
 
         permissions = permissions.concat("g-4:scope:grid")
       }
+
     } else if (c.node.type === "jsx_self_closing_element") {
       name = program.display(c.node.firstNamedChild)
+
       if(name === "Box") {
-        // console.log()
-        // console.log(program.display(c.node))
-
-        code = program.display(c.node.namedChildren[2].namedChildren[1])
-        code = code.split('"').join('') // chop quotes.
-
-        name = program.display(c.node.namedChildren[1].namedChildren[1])
-        // console.log(name, code)
+        [name, code] = parse_box_opening_node(program, c.node)
         permissions = permissions.concat("g-4:resize")
       }
     } else {
@@ -128,6 +118,17 @@ const pull_blocks = (program) => {
       code,
     ]
   })
+}
+
+// <Box original="Label" code="0.111" >...</Box>
+//    0 1.0       1.1    2.0   2.1
+const parse_box_opening_node = (program, node) => {
+  var name = program.display(node.namedChildren[1].namedChildren[1])
+  var code = program.display(node.namedChildren[2].namedChildren[1])
+    .split('"')
+    .join('')
+
+  return [name, code]
 }
 
 export default parse_hierarchy
