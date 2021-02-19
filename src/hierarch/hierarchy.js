@@ -9,24 +9,6 @@ class Hierarchy extends React.Component {
     }
 
     componentDidMount = () => {
-        if(!window.assemble || !window.assemble.repull) {
-            window.assemble = {}
-            window.assemble.repull = this.pullHierarchy.bind(this)
-        }
-        this.pullHierarchy()
-    }
-
-    componentWillUnmount = () => {
-        window.assemble.repull = null
-        if(!Object.keys(window.assemble).length) window.assemble = null
-    }
-
-    componentDidUpdate = (original) => {
-        if(original.index !== this.props.index)
-            this.pullHierarchy()
-    }
-
-    pullHierarchy = () => {
       parse_hierarchy(
         this.props.index,
         (h) => this.setState({ hierarchy: h })

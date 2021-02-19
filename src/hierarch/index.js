@@ -42,6 +42,10 @@ class Hierarch extends React.Component {
 
     componentDidMount() {
       this.pullSource()
+      if(!window.assemble || !window.assemble.repull) {
+        window.assemble = {}
+        window.assemble.repull = this.pullSource.bind(this)
+      }
 
         document.onkeydown = e => {
             if(e.code === "Space") {
@@ -64,7 +68,10 @@ class Hierarch extends React.Component {
     }
 
     componentWillUnmount() {
-        document.onkeydown = null
+      document.onkeydown = null
+
+      window.assemble.repull = null
+      if(!Object.keys(window.assemble).length) window.assemble = null
     }
 
     componentDidUpdate() {
