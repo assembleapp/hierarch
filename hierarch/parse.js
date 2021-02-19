@@ -178,6 +178,21 @@ const apply_boxes = (address) => {
     })
 }
 
+const apply_upgrade = (begin, end, upgrade) => {
+  fs.readFile(sourceAddress, 'utf8', (error, source) => {
+    if(error) return console.log(error)
+
+    var program = new Program(sourceAddress, source)
+    program.replace_by_indices(begin, end, upgrade)
+
+    fs.writeFile(
+      sourceAddress,
+      program.source,
+      err => { if(error) console.log(err) },
+    )
+  })
+}
+
 const apply_change = (code, upgrade) => {
     console.log(code, upgrade)
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
@@ -386,4 +401,10 @@ const source = (address, callback) => {
   })
 }
 
-module.exports = { apply_boxes, apply_change, apply_resize, source }
+module.exports = {
+  apply_boxes,
+  apply_change,
+  apply_resize,
+  apply_upgrade,
+  source,
+}
