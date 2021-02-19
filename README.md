@@ -1,4 +1,4 @@
-![logo](./src/hierarch.svg =120x80)
+<img src="./src/hierarch.svg" style="height:120px; width: 80px;" />
 # Hierarch
 
 Make pages, quick and easy.
