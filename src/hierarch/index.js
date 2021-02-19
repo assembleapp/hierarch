@@ -7,29 +7,42 @@ import Logo from "./logo"
 import Scope from "./scope"
 import Sidebar from "./sidebar"
 import Change from "./change"
+import makeProgram from "./engine/program"
 
 const HierarchScope = React.createContext({
-    chosen: { code: null, signal: null },
-    signal: (s, code) => {},
+  open: false,
+  index: null,
+  chosen: { code: null, signal: null },
+  signal: (s, code) => {},
 })
 
 class Hierarch extends React.Component {
-    state = {
-        address: "src/App.js",
-        open: false,
-        scope: {
-            code: null,
-            signal: "display",
-        },
-        mouse: {
-            x: 0,
-            y: 0,
-            scroll: 0,
-            hold: false,
-        },
-    }
+  state = {
+    address: "src/App.js",
+    index: null,
+    open: false,
+    scope: {
+      code: null,
+      signal: "display",
+    },
+    mouse: {
+      x: 0,
+      y: 0,
+      scroll: 0,
+      hold: false,
+    },
+  }
+
+  pullSource = () => {
+    fetch(`http://0.0.0.0:4321/source?address=${this.state.address}`)
+      .then(response => response.text())
+      .then(response => makeProgram(response))
+      .then(program => this.setState({ index: program }))
+  }
 
     componentDidMount() {
+      this.pullSource()
+
         document.onkeydown = e => {
             if(e.code === "Space") {
                 e.preventDefault()
@@ -90,11 +103,12 @@ class Hierarch extends React.Component {
 
     render = () => (
         <HierarchScope.Provider
-            value={{
-                open: this.state.open,
-                chosen: this.state.scope,
-                signal: this.signal,
-            }}
+          value={{
+            index: this.state.index,
+            open: this.state.open,
+            chosen: this.state.scope,
+            signal: this.signal,
+          }}
         >
             <Display
                 hold={this.state.mouse.hold}
@@ -147,7 +161,7 @@ class Hierarch extends React.Component {
                                 </Change.Board>
                             :
                                 <Hierarchy
-                                    address={this.state.address}
+                                    index={this.state.index}
                                     display={this.props.display}
                                 />
                             )

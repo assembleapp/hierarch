@@ -6,7 +6,6 @@ import parse_hierarchy from "./engine/parse_hierarchy"
 class Hierarchy extends React.Component {
     state = {
       hierarchy: [0,0,[],"",false],
-      source: "",
     }
 
     componentDidMount = () => {
@@ -23,18 +22,15 @@ class Hierarchy extends React.Component {
     }
 
     componentDidUpdate = (original) => {
-        if(original.address !== this.props.address)
+        if(original.index !== this.props.index)
             this.pullHierarchy()
     }
 
     pullHierarchy = () => {
-      fetch(`http://0.0.0.0:4321/source?address=${this.props.address}`)
-        .then(response => response.text())
-        .then(response => this.setState({ source: response }))
-        .then(() => parse_hierarchy(
-          this.state.source,
-          (h) => this.setState({ hierarchy: h })
-        ))
+      parse_hierarchy(
+        this.props.index,
+        (h) => this.setState({ hierarchy: h })
+      )
     }
 
     render = () => (

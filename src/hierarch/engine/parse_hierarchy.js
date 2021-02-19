@@ -1,8 +1,6 @@
 import makeProgram from "./program"
 
-const parse_hierarchy = async (source, callback) => {
-  var program = await makeProgram(source)
-
+const parse_hierarchy = (program, callback) => {
   var blocks = pull_blocks(program)
 
   var hierarchy = [0, program.source.length, [], "program", false]
