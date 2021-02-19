@@ -7,7 +7,37 @@ const parse_hierarchy = async (source, callback) => {
     [(jsx_element) (jsx_self_closing_element)] @element
   `)
 
-  var elements = query.map(m => {
+  var elements = pull_blocks(query, program)
+
+  var hierarchy = [0, program.source.length, [], "program", false]
+  var upper_chain = [hierarchy]
+  elements.forEach(e => {
+    var upper = upper_chain.slice(-1)[0]
+
+    if(e[0] < upper[0]) {
+      throw(
+        "oh no! our hierarchy is being processed out of order;\n" +
+        JSON.stringify(elements, null, 2) +
+        "\n---\n" +
+        JSON.stringify(hierarchy, null, 2)
+      )
+    }
+
+    while(e[1] > upper[1]) {
+      upper_chain = upper_chain.slice(0, upper_chain.length - 1)
+      upper = upper_chain.slice(-1)[0]
+    }
+
+    upper[2] = upper[2].concat([e])
+    // upper[4] = []
+    upper_chain = upper_chain.concat([e])
+  })
+
+  callback(hierarchy)
+}
+
+const pull_blocks = (query, program) => (
+  query.map(m => {
     if(m.captures.length !== 1) {
       throw(
         "oh no! our query has responded using a non-unique capture;\n" +
@@ -84,32 +114,6 @@ const parse_hierarchy = async (source, callback) => {
       code,
     ]
   })
-
-  var hierarchy = [0, program.source.length, [], "program", false]
-  var upper_chain = [hierarchy]
-  elements.forEach(e => {
-    var upper = upper_chain.slice(-1)[0]
-
-    if(e[0] < upper[0]) {
-      throw(
-        "oh no! our hierarchy is being processed out of order;\n" +
-        JSON.stringify(elements, null, 2) +
-        "\n---\n" +
-        JSON.stringify(hierarchy, null, 2)
-      )
-    }
-
-    while(e[1] > upper[1]) {
-      upper_chain = upper_chain.slice(0, upper_chain.length - 1)
-      upper = upper_chain.slice(-1)[0]
-    }
-
-    upper[2] = upper[2].concat([e])
-    // upper[4] = []
-    upper_chain = upper_chain.concat([e])
-  })
-
-  callback(hierarchy)
-}
+)
 
 export default parse_hierarchy
