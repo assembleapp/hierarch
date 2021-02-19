@@ -7,7 +7,6 @@ const {
   apply_boxes,
   apply_change,
   apply_resize,
-  hierarchy,
   source,
 } = require("./parse")
 
@@ -41,10 +40,6 @@ responder.post("/change", (call, response) => {
 responder.post("/resize", (call, response) => {
     apply_resize(call.body)
     response.send(JSON.stringify(call.body))
-})
-
-responder.get("/hierarchy", (call, response) => {
-    hierarchy(call.query.address, (body) => response.send(body))
 })
 
 module.exports = responder

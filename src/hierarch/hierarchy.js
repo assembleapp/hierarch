@@ -208,14 +208,6 @@ const parse_hierarchy = async (source, callback) => {
     upper_chain = upper_chain.concat([e])
   })
 
-  // const chop_arrays = (hierarchical) => {
-  //     hierarchical.shift()
-  //     hierarchical.shift()
-  //     if(hierarchical[0].length)
-  //         chop_arrays(hierarchical[0])
-  // }
-  // chop_arrays(hierarchy)
-
   callback(hierarchy)
 }
 
