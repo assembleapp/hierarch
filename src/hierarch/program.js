@@ -1,29 +1,23 @@
 const makeProgram = async (source) => {
   const Parser = window.TreeSitter
-  var js = null
 
-  await Parser.init().then(() => {
-    js = Parser.Language.load(`/tree-sitter-javascript.wasm`);
-  })
+  await Parser.init()
+  var js = await Parser.Language.load(`/tree-sitter-javascript.wasm`);
 
   return new Program(source, js, Parser)
 }
 
 class Program {
     constructor(source, language, Parser) {
-      Parser.init().then(() => {
-        this.source = source
-        this.Parser = Parser
-        this.parser = new this.Parser()
-        this.language = language
+      this.Parser = Parser
+      this.parser = new this.Parser()
+      this.parser.setLanguage(language);
 
-        this.parser.setLanguage(language);
-
-        this.parsed = this.parser.parse(this.source)
-      })
+      this.source = source
+      this.parsed = this.parser.parse(this.source)
     }
 
-    display = (node) => this.parsed.getText(node)
+    display = (node) => this.source.slice(node.startIndex, node.endIndex)
 
     replace_by_node(node, upgrade = "", options = {}) {
         console.log("Replacing by node:")
@@ -71,16 +65,17 @@ class Program {
         this.parser.setLanguage(language)
     }
 
-    query(query, node = this.parsed.rootNode, language = this.language) {
+    query(query, node = this.parsed.rootNode) {
         try {
             if(query instanceof Array) {
                 return query.map(q => (
-                    new this.Parser.Query(language, q).matches(node)
+                    this.parsed.language.query(q).matches(node)
                 )).flat(1)
             }
-            return new this.Parser.Query(language, query).matches(node)
+            return this.parsed.language.query(query).matches(node)
         } catch(e) {
-            console.log(e)
+          console.log(e)
+          return []
         }
     }
 

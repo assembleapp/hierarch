@@ -28,10 +28,13 @@ class Hierarchy extends React.Component {
     }
 
     pullHierarchy = () => {
-      fetch(`http://0.0.0.0:4321/source?address=${this.state.address}`)
+      fetch(`http://0.0.0.0:4321/source?address=${this.props.address}`)
         .then(response => response.text())
         .then(response => this.setState({ source: response }))
-      this.parse_hierarchy()
+        .then(() => parse_hierarchy(
+          this.state.source,
+          (h) => this.setState({ hierarchy: h })
+        ))
     }
 
     render = () => (
@@ -39,13 +42,6 @@ class Hierarchy extends React.Component {
             {display_hierarchy_index(0, this.state.hierarchy)}
         </pre>
     )
-
-  parse_hierarchy = () => {
-    hierarchy(
-      this.state.source,
-      (h) => this.setState({ hierarchy: h })
-    )
-  }
 }
 
 const display_hierarchy_index = (index, hierarchy) => (
@@ -102,9 +98,8 @@ const Border = styled.span`
     border: ${p => p.running ? "1px solid #ee00ee" : "none"};
 `
 
-const hierarchy = async (source, callback) => {
+const parse_hierarchy = async (source, callback) => {
   var program = await makeProgram(source)
-  debugger
 
   var query = program.query(`
     [(jsx_element) (jsx_self_closing_element)] @element
@@ -125,6 +120,7 @@ const hierarchy = async (source, callback) => {
 
     if(c.node.type === "jsx_element") {
       name = program.display(c.node.firstNamedChild.firstNamedChild)
+
       if(name === "Box") {
         // console.log()
         // console.log(program.display(c.node))
