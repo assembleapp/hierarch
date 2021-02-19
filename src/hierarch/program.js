@@ -1,10 +1,20 @@
-const Parser = window.TreeSitter
+const makeProgram = async (source) => {
+  const Parser = window.TreeSitter
+  var js = null
+
+  await Parser.init().then(() => {
+    js = Parser.Language.load(`/tree-sitter-javascript.wasm`);
+  })
+
+  return new Program(source, js, Parser)
+}
 
 class Program {
-    constructor(source, language) {
+    constructor(source, language, Parser) {
       Parser.init().then(() => {
         this.source = source
-        this.parser = new Parser()
+        this.Parser = Parser
+        this.parser = new this.Parser()
         this.language = language
 
         this.parser.setLanguage(language);
@@ -65,10 +75,10 @@ class Program {
         try {
             if(query instanceof Array) {
                 return query.map(q => (
-                    new Parser.Query(language, q).matches(node)
+                    new this.Parser.Query(language, q).matches(node)
                 )).flat(1)
             }
-            return new Parser.Query(language, query).matches(node)
+            return new this.Parser.Query(language, query).matches(node)
         } catch(e) {
             console.log(e)
         }
@@ -117,4 +127,4 @@ function getExtent(text) {
     return {row, column: text.length - index};
 }
 
-export default Program
+export default makeProgram
