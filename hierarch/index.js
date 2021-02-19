@@ -31,6 +31,7 @@ responder.post("/upgrade", (call, response) => {
   check_upgrade_collisions(call.body.upgrades)
   call.body.upgrades.forEach(upgrade => {
     // change.
+    // upgrade = { begin, end, grade }
   })
   source(call.query.address, s => response.send(s))
 })
