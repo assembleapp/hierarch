@@ -1,51 +1,55 @@
+![logo](./src/hierarch.svg =120x80)
 # Hierarch
 
-Build pages, quick and easy.
+Make pages, quick and easy.
 
-![Basic Use Case](./recordings/basic_use_case.gif)
-
-Build pages using common and easy in-place changes,  
+Build pages using common and easy in-place changes,
 producing clean code you can use in any place you like.
 
 Hierarch records changes in your source code as you make upgrades.
 
+![Basic Use Case](./recordings/basic_use_case.gif)
+
+Machine coding is a hard discipline;
+Hierarch cleans up some rough edges.
+
+Imagine guard rails around your design-and-build process.
+Our program helps people build pages online,
+as solid and reliable as can be.
+
+## An Engine in an Early Phase
+
+As Hierarch grows and changes,
+you'll be able to do more with less.
+Keep your eye on our [discussions].
+
 ## Run on a local machine
 
 ```bash
-git clone https://github.com/assembleapp/hierarch.git
+git clone https://github.com/assembleapp/hierarch
 cd hierarch
 yarn
 
 # Run in parallel:
-node hierarch.js &
+node hierarch &
 yarn start
 ```
 
-## Program
-
-Hierarch is designed to help people build online programs as solid and reliable as can be;  
-while avoiding the steep learning curves that plague the discipline of machine coding.
-
-The three cylinders of the Hierarch programming engine are:
-
-* Disk (basic launch planned January 2021)
-* Grid
-* Pose
-
-These three cylinders replace the common programming paradigms of  
-object storage, relational databases, and web markup; in order.
-
-Hierarch's underlying cylinders are designed to signal each other seamlessly as a program runs,  
-purring along and cheerily running your program on users' machines across our globe.
+In your browser, see <http://0.0.0.0:3000>.
+Click the cube, then press spacebar and secondary-click your mouse.
+Click around your page and make changes,
+keeping an eye on your code in `src/App.js`.
 
 ## License
 
-While under development, Assemble LLC's Hierarch engine code is open-source but unlicensed.
-Use of this unlicensed code is dangerous for people hoping to build secure web applications,
-so we cannot recommend - or even express our legal permission for - its use,
-until secure policies and boundaries are made and programmed in.
+During our build phase,
+Assemble's Hierarch engine code is open-source and unlicensed.
+Use of this unlicensed code is dangerous.
 
-If you would like to use this engine to build a program,  
+No legal permission is epxressed for our code's use,
+because we need more secure policies and boundaries programmed in.
+
+If you would like to use this engine to build a program,
 please leave a remark in the [discussions] describing your build goals.
 
 [discussions]: https://github.com/assembleapp/hierarch/discussions
