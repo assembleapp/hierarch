@@ -36,9 +36,6 @@ class Sidebar extends React.Component {
         <Place
             place={this.props.place}
             hold={this.props.hold}
-            onScroll={(e) => {
-                debugger
-            }}
         >
             <ScrollColumn>
                 <ScrollBox onChange={num => {
