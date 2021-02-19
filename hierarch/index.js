@@ -23,13 +23,13 @@ responder.get("/source", (call, response) => {
   source(call.query.address, s => response.send(s))
 })
 
-const check_upgrade_collisions = () => {
+const check_upgrade_sequence_collisions = () => {
   // change.
 }
 
 responder.post("/upgrade", (call, response) => {
-  check_upgrade_collisions(call.body.upgrades)
-  call.body.upgrades.forEach(upgrade => {
+  check_upgrade_sequence_collisions(call.body.upgrades)
+  call.body.upgrades.reverse().forEach(upgrade => {
     // change.
     // upgrade = { begin, end, grade }
   })
