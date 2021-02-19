@@ -3,30 +3,36 @@ import makeProgram from "./program"
 const parse_hierarchy = async (source, callback) => {
   var program = await makeProgram(source)
 
-  var elements = pull_blocks(program)
+  var blocks = pull_blocks(program)
 
   var hierarchy = [0, program.source.length, [], "program", false]
   var upper_chain = [hierarchy]
-  elements.forEach(e => {
+
+  // place each block on the hierarchical mesh
+  blocks.forEach(e => {
     var upper = upper_chain.slice(-1)[0]
 
+    // compare opening indices; upper blocks should be seen and processed prior.
     if(e[0] < upper[0]) {
       throw(
         "oh no! " +
         "our blocks are being processed backwards, basd on opening index;\n" +
-        JSON.stringify(elements, null, 2) +
+        JSON.stringify(blocks, null, 2) +
         "\n---\n" +
         JSON.stringify(hierarchy, null, 2)
       )
     }
 
+    // choose a chain link, `upper`;
+    // so long as our block exceeds the bounds higher up the chain...
     while(e[1] > upper[1]) {
+      // ...walk back up the chain
       upper_chain = upper_chain.slice(0, upper_chain.length - 1)
       upper = upper_chain.slice(-1)[0]
     }
 
+    // append our block on the chosen chain link
     upper[2] = upper[2].concat([e])
-    // upper[4] = []
     upper_chain = upper_chain.concat([e])
   })
 
