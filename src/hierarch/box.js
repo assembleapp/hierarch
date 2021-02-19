@@ -130,13 +130,17 @@ class Box extends React.Component {
     }
 
     recordChanges() {
-        var changeArray = [...this.changeableBox.current.children].map((child, x) => {
-            if([...child.classList].some(klass => klass === Field.toString().slice(1))) {
-                return child.value
-            } else {
-                return { code: this.props.children[x].props.code }
-            }
-        })
+      var changeArray = [];
+
+      // Query index, see `jsx_text` begin and end.
+      [...this.changeableBox.current.children].forEach((child, x) => {
+        if(
+          [...child.classList].some(klass => klass === Field.toString().slice(1))
+          && child.value !== this.props.children[x]
+        ) {
+          changeArray = changeArray.concat(child.value)
+        }
+      })
 
         debugger
 
