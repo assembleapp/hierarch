@@ -178,18 +178,17 @@ const apply_boxes = (address) => {
     })
 }
 
-const apply_change = (change) => {
-    console.log(change)
+const apply_change = (code, upgrade) => {
+    console.log(code, upgrade)
     fs.readFile(sourceAddress, 'utf8', (error, source) => {
         if(error) return console.log(error)
 
         var program = new Program(sourceAddress, source)
 
-        if(!change ||
-            !change.code ||
-            !change.upgrade
-        ) {
-            throw 'oh no! improper `change` supplied in `apply_change`. please check caller.'
+        if(!code || !upgrade) {
+          throw 'oh no! ' +
+            'improper `change` supplied in `apply_change`. ' +
+            'please check caller.'
         }
 
         console.log("HOLD UP!\nSerious insecure code here; by passing a sneaky `code` param,\nsomeone could hack our parser's query.")
@@ -204,7 +203,7 @@ const apply_change = (change) => {
 
             close_tag: (jsx_closing_element name: (_) @closing-name)
             (#eq? @_code "code")
-            (#match? @code "^.${change.code}.$")
+            (#match? @code "^.${code}.$")
             (#eq? @opening-name "Box")
             (#eq? @closing-name "Box")
         ) @element`)
@@ -236,7 +235,7 @@ const apply_change = (change) => {
         var ending_skip = program.display(children.slice(-1)[0].node).split('').reverse().join('').search(/\S/)
 
         console.log(beginning_skip, ending_skip)
-        change.upgrade.reverse().forEach((grade, back_index) => {
+        upgrade.reverse().forEach((grade, back_index) => {
             // console.log(grade)
             var index = children.length - 1 - back_index
             var begin_cursor = children[index].node.startIndex + (index === 0 ? beginning_skip : 0)
@@ -278,7 +277,7 @@ const apply_resize = (change) => {
             (#eq? @name "Box")
             (#eq? @_original "original")
             (#eq? @_code "code")
-            (#match? @code "^.${change.code}.$")
+            (#match? @code "^.${code}.$")
         ) @element
         `)
         // program.debug_query(original_matches)

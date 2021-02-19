@@ -43,11 +43,11 @@ responder.post("/apply_boxes", (call, response) => {
 })
 
 responder.post("/change", (call, response) => {
-    apply_change({
-        upgrade: call.body.upgrade.map(c => typeof(c) === 'string' ? escape(c) : c),
-        code: call.body.code,
-    })
-    response.send(JSON.stringify(call.body))
+  apply_change(
+    call.body.code,
+    call.body.upgrade.map(c => typeof(c) === 'string' ? escape(c) : c),
+  )
+  response.send(JSON.stringify(call.body))
 })
 
 responder.post("/resize", (call, response) => {
