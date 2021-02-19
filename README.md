@@ -4,24 +4,24 @@
 
 Make pages, quick and easy.
 
-Build pages using common and easy in-place changes,
+Build pages using common and easy in-place changes,  
 producing clean code you can use in any place you like.
 
 Hierarch records changes in your source code as you make upgrades.
 
 ![Basic Use Case](./recordings/basic_use_case.gif)
 
-Machine coding is a hard discipline;
+Machine coding is a hard discipline;  
 Hierarch cleans up some rough edges.
 
-Imagine guard rails around your design-and-build process.
-Our program helps people build pages online,
+Imagine guard rails around your design-and-build process.  
+Our program helps people build pages online,  
 as solid and reliable as can be.
 
 ## An Engine in an Early Phase
 
-As Hierarch grows and changes,
-you'll be able to do more with less.
+As Hierarch grows and changes,  
+you'll be able to do more with less.  
 Keep your eye on our [discussions].
 
 ## Run on a local machine
@@ -36,21 +36,21 @@ node hierarch &
 yarn start
 ```
 
-In your browser, see <http://0.0.0.0:3000>.
-Click the cube, then press spacebar and secondary-click your mouse.
-Click around your page and make changes,
+In your browser, see <http://0.0.0.0:3000>.  
+Click the cube, then press spacebar and secondary-click your mouse.  
+Click around your page and make changes,  
 keeping an eye on your code in `src/App.js`.
 
 ## License
 
-During our build phase,
-Assemble's Hierarch engine code is open-source and unlicensed.
+During our build phase,  
+Assemble's Hierarch engine code is open-source and unlicensed.  
 Use of this unlicensed code is dangerous.
 
-No legal permission is epxressed for our code's use,
+No legal permission is epxressed for our code's use,  
 because we need more secure policies and boundaries programmed in.
 
-If you would like to use this engine to build a program,
+If you would like to use this engine to build a program,  
 please leave a remark in the [discussions] describing your build goals.
 
 [discussions]: https://github.com/assembleapp/hierarch/discussions
