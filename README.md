@@ -1,4 +1,4 @@
-<img src="./src/hierarch.svg" style="height:120px; width: 80px;" />
+<img src="./src/hierarch.svg" height="80" width="120" />
 # Hierarch
 
 Make pages, quick and easy.
