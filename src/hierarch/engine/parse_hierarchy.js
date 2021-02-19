@@ -3,11 +3,7 @@ import makeProgram from "./program"
 const parse_hierarchy = async (source, callback) => {
   var program = await makeProgram(source)
 
-  var query = program.query(`
-    [(jsx_element) (jsx_self_closing_element)] @element
-  `)
-
-  var elements = pull_blocks(query, program)
+  var elements = pull_blocks(program)
 
   var hierarchy = [0, program.source.length, [], "program", false]
   var upper_chain = [hierarchy]
@@ -36,8 +32,23 @@ const parse_hierarchy = async (source, callback) => {
   callback(hierarchy)
 }
 
-const pull_blocks = (query, program) => (
-  query.map(m => {
+// For each `(jsx_element)` or `(jsx_self_closing_element)` in the program,
+// respond using:
+//
+// [
+//   c.node.startIndex,
+//   c.node.endIndex,
+//   [],
+//   name,
+//   permissions,
+//   code,
+// ]
+const pull_blocks = (program) => {
+  var query = program.query(`
+    [(jsx_element) (jsx_self_closing_element)] @element
+  `)
+
+  return query.map(m => {
     if(m.captures.length !== 1) {
       throw(
         "oh no! our query has responded using a non-unique capture;\n" +
@@ -114,6 +125,6 @@ const pull_blocks = (query, program) => (
       code,
     ]
   })
-)
+}
 
 export default parse_hierarchy
