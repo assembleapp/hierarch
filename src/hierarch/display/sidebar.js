@@ -100,7 +100,7 @@ position: fixed;
 `
 
 const BaseColumn = styled.div`
-background: #2a2a2a60;
+background: #2a2a2aa0;
 color: #b1b1e2cc;
 `
 

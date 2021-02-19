@@ -44,7 +44,7 @@ const display_hierarchy_index = (index, hierarchy) => (
 const Hierarchical = ({name, permissions, code}) => (
     <HierarchScope.Consumer>
     {scope => (
-        <Border running={code === scope.chosen.code}>
+        <Border running={scope.chosen.code && code === scope.chosen.code}>
 
         {
         permissions.indexOf("g-4:change") !== -1
