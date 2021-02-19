@@ -4,22 +4,30 @@ import styled from "styled-components"
 import parse_hierarchy from "../engine/parse_hierarchy"
 
 class Hierarchy extends React.Component {
-    state = {
-      hierarchy: [0,0,[],"",false],
-    }
+  state = {
+    hierarchy: [0,0,[],"",false],
+  }
 
-    componentDidMount = () => {
+  componentDidMount = () => {
+    parse_hierarchy(
+      this.props.index,
+      (h) => this.setState({ hierarchy: h })
+    )
+  }
+
+  componentDidUpdate = (original) => {
+    if(original.index !== this.props.index)
       parse_hierarchy(
         this.props.index,
         (h) => this.setState({ hierarchy: h })
       )
-    }
+  }
 
-    render = () => (
-        <pre>
-            {display_hierarchy_index(0, this.state.hierarchy)}
-        </pre>
-    )
+  render = () => (
+    <pre>
+      {display_hierarchy_index(0, this.state.hierarchy)}
+    </pre>
+  )
 }
 
 const display_hierarchy_index = (index, hierarchy) => (
