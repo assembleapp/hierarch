@@ -59,7 +59,7 @@ class Box extends React.Component {
                                             focus_count += 1
                                         }
                                     }}
-                                    record={() => this.recordChanges().then(() => scope.signal('display', code))}
+                                    record={() => this.recordChanges(scope.index).then(() => scope.signal('display', code))}
                                     escape={() => scope.signal('display', code)}
                                 >
                                     {c}
@@ -71,7 +71,7 @@ class Box extends React.Component {
                         (typeof(children) === 'string'
                             ? <Change
                                 focus={e => e && e.focus()}
-                                record={() => this.recordChanges().then(() => scope.signal('display', code))}
+                                record={() => this.recordChanges(scope.index).then(() => scope.signal('display', code))}
                                 escape={() => scope.signal('display', code)}
                             >
                                 {children}
@@ -129,7 +129,7 @@ class Box extends React.Component {
         )
     }
 
-    recordChanges() {
+    recordChanges(index) {
       var changeArray = [];
 
       // Query index, see `jsx_text` begin and end.
@@ -142,7 +142,7 @@ class Box extends React.Component {
         }
       })
 
-        debugger
+      debugger
 
         return fetch("http://0.0.0.0:4321/change", {
             method: "POST",
