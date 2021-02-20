@@ -52,6 +52,7 @@ class Box extends React.Component {
             {children instanceof Array
             ? children.map((c, i) => {
               if(typeof(c) === 'string') {
+
                 return (
                   <Change
                     key={i}
@@ -217,6 +218,11 @@ class Box extends React.Component {
 class Change extends React.Component {
   state = { value: null }
 
+  shouldComponentUpdate = (incomingProps, incomingState) => (
+    incomingProps.children !== this.props.children ||
+    this.state.value !== incomingState.value
+  )
+
   render = () => (
   <Field
     onClick={(e) => {
@@ -224,13 +230,16 @@ class Change extends React.Component {
       e.stopPropagation();
       return false
     }}
+
+    onChange={(e) => {
+      this.setState({ value: e.target.value || "" })
+    }}
+
     key={this.props.children}
     type="text"
     ref={e => this.props.focus(e)}
     value={this.state.value === null ? this.props.children : this.state.value}
-    onChange={(e) => {
-      this.setState({ value: e.target.value || "" })
-    }}
+
     onKeyDown={(e) => {
       console.log(e.key)
       if(e.key === ' ') {
