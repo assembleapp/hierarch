@@ -73,10 +73,10 @@ class Program {
     try {
       if(query instanceof Array) {
         return query.map(q => (
-          this.parsed.language.query(q).matches(node).filter(x => x)
+          this.parser.language.query(q).matches(node).filter(x => x)
         )).flat(1)
       }
-      return this.parsed.language.query(query).matches(node).filter(x => x)
+      return this.parser.language.query(query).matches(node).filter(x => x)
     } catch(e) {
       console.log(e)
       return []

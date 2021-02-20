@@ -118,7 +118,7 @@ const apply_resize = async (program, address, code, width, height) => {
   } else {
     program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nwidth: ${width};`)
   }
-  program.use_language('js')
+  program.use_language(program.parsed.language)
 
   return push_upgrades(upgrades, address)
 }
