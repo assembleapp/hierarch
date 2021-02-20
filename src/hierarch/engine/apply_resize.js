@@ -1,6 +1,12 @@
 
-const apply_resize = (program, address, code, width, height) => {
-  console.log("HOLD UP!\nSerious insecure code here; by passing a sneaky `code` param,\nsomeone could hack our parser's query.")
+const apply_resize = async (program, address, code, width, height) => {
+  var upgrades = []
+
+  console.log(
+    "HOLD UP!\n" +
+    "Serious insecure code here; by passing a sneaky `code` param,\n" +
+    "someone could hack our parser's query."
+  )
 
   var original_matches = program.query(`
   (
@@ -81,10 +87,12 @@ const apply_resize = (program, address, code, width, height) => {
   // program.debug_query(matches)
 
   const css_string = matches.slice(-1)[0].captures.slice(-1)[0].node
+
+  var css = await program.load_language(`/tree-sitter-css.wasm`)
   var css_node = program.parse_range_as_language(
     css_string.startIndex + 1,
     css_string.endIndex - 1,
-    "css",
+    css,
   ).rootNode
 
   var query = program.query(`
@@ -111,6 +119,8 @@ const apply_resize = (program, address, code, width, height) => {
     program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nwidth: ${width};`)
   }
   program.use_language('js')
+
+  return push_upgrades(upgrades, address)
 }
 
 const push_upgrades = (upgrades, address) => {

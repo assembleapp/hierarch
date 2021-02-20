@@ -49,6 +49,10 @@ class Program {
     this.parsed = this.parser.parse(this.source, this.parsed)
   }
 
+  load_language(language_address) {
+    return this.Parser.Language.load(language_address)
+  }
+
   parse_range_as_language(begin, end, language) {
     this.parser.setLanguage(language)
     return this.parser.parse(this.source, null, {
