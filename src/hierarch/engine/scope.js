@@ -165,9 +165,6 @@ const makeModel = (schema) => {
 }
 // window.makeModel = makeModel
 
-const clock = () =>
-  (Math.random() * Math.random() * 0.4 + 0.9) * 1000
-
 class Scope extends React.Component {
   constructor(p) {
     super(p)
