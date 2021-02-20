@@ -96,7 +96,7 @@ min-height: 100vh;
 }
 
 background: rgb(15,12,73);
-background: linear-gradient(0deg, rgba(15,12,73,1) 0%, rgba(16,116,181,1) 23%, rgba(26,228,202,1) 100%);
+background: linear-gradient(0deg, rgba(15,12,73,1) 0%, rgba(16,116,181,1) 45%, rgba(26,228,202,1) 100%);
 color: #2209a4;
 
 display: flex;
