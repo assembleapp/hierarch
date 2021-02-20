@@ -16,19 +16,6 @@ class Program {
         this.parsed = this.parser.parse(this.source)
     }
 
-    display = (node) => this.parsed.getText(node)
-
-    replace_by_node(node, upgrade = "", options = {}) {
-        console.log("Replacing by node:")
-        console.log(this.display(node), " -> ", upgrade)
-
-        this.replace_by_indices(
-            node.startIndex + (options.beginningOffset || 0),
-            node.endIndex + (options.endingOffset || 0),
-            upgrade,
-        )
-    }
-
     replace_by_indices(begin, end, upgrade = "") {
         if(begin < 0) {
             begin = str.length + begin
@@ -42,52 +29,6 @@ class Program {
 
         this.parsed.edit(change)
         this.source = changed_source
-    }
-
-    reparse() {
-        this.parsed = this.parser.parse(this.source, this.parsed)
-    }
-
-    parse_range_as_language(begin, end, lang) {
-        this.parser.setLanguage(languages[lang])
-        return this.parser.parse(this.source, null, {
-            includedRanges: [{
-                startIndex: begin,
-                endIndex: end,
-                startPosition: getExtent(this.source.slice(0, begin)),
-                endPosition: getExtent(this.source.slice(0, end)),
-            }]
-        })
-    }
-
-    use_language(lang) {
-        this.parser.setLanguage(languages[lang])
-    }
-
-    query(query, node = this.parsed.rootNode, lang = 'js') {
-        try {
-            if(query instanceof Array) {
-                return query.map(q => (
-                    new Parser.Query(languages[lang], q).matches(node)
-                )).flat(1)
-            }
-            return new Parser.Query(languages[lang], query).matches(node)
-        } catch(e) {
-            console.log(e)
-        }
-    }
-
-    debug_query(query) {
-        var elements = query.map(m => {
-            return m.captures.map(c => {
-                return [
-                    c.name,
-                    // c.node.toString(),
-                    this.display(c.node),
-                ]
-            })
-        })
-        console.log(elements)
     }
 }
 
