@@ -5,252 +5,253 @@ import Resize from "./resize"
 import { HierarchScope } from "../index"
 
 class Box extends React.Component {
-    changeableBox = React.createRef()
-    state = { changes: [] }
+  changeableBox = React.createRef()
+  state = { changes: [] }
 
-    render = () => {
-        var { original, children, code, ...remainder } = this.props
+  render = () => {
+    var { original, children, code, ...remainder } = this.props
 
-        const Original = styled(original).attrs(p => ({
-            "data-code": p.code,
-            style: {
-                outlineWidth: p.signal.signal === "display" ? "1px" : 0,
-                outlineStyle: p.signal.signal === "display" ? "solid" : null,
-                outlineColor: (p.signal.signal === "display" && p.signal.code === p.code) ? "red" : "blue",
-            },
-        }))``
+    const Original = styled(original).attrs(p => ({
+      "data-code": p.code,
+      style: {
+        outlineWidth: p.signal.signal === "display" ? "1px" : 0,
+        outlineStyle: p.signal.signal === "display" ? "solid" : null,
+        outlineColor: (p.signal.signal === "display" && p.signal.code === p.code) ? "red" : "blue",
+      },
+    }))``
 
-        var focus_count = 0
+    var focus_count = 0
 
-        return (
-        <HierarchScope.Consumer>
-            {scope => {
-                var running = (
-                    scope.chosen &&
-                    scope.chosen.code === code
-                )
+    return (
+    <HierarchScope.Consumer>
+      {scope => {
+        var running = (
+          scope.chosen &&
+          scope.chosen.code === code
+        )
 
-                focus_count = 0
-                return children
-                ? ( running && scope.chosen.signal === "change"
-                    ?
-                    <Original
-                        ref={this.changeableBox}
-                        {...remainder}
-                        signal={scope.chosen}
-                        code={code}
-                        onClick={(e) => {
-                            scope.signal('change', code)
-                            if(scope.open) {
-                                e.stopPropagation()
-                                e.preventDefault()
-                                e.bubbles = false
-                                return false
-                            }
-                        }}
-                    >
-                        {children instanceof Array
-                        ? children.map((c, i) => {
-                            if(typeof(c) === 'string') {
-                                return (
-                                  <Change
-                                    key={i}
-                                    focus={(e) => {
-                                      console.log('focusing?', focus_count, c)
-                                      if(e && focus_count === 0) {
-                                        e.focus()
-                                        focus_count += 1
-                                      }
-                                    }}
-                                    record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
-                                    escape={() => scope.signal('display', code)}
-                                  >
-                                    {c}
-                                  </Change>
-                                )
-                            }
-                            return c
-                        })
-                        :
-                        (typeof(children) === 'string'
-                            ? <Change
-                                focus={e => e && e.focus()}
-                                record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
-                                escape={() => scope.signal('display', code)}
-                            >
-                                {children}
-                            </Change>
-                            : children
-                        )
-                        }
-                    </Original>
-                    :
-                    <Original
-                        {...remainder}
-                        signal={scope.chosen}
-                        code={code}
-                        onClick={(e) => {
-                            scope.signal('change', code)
-                            if(scope.open) {
-                                e.stopPropagation()
-                                e.preventDefault()
-                                e.bubbles = false
-                                return false
-                            }
-                        }}
-                    >
-                        {children instanceof Array
-                        ? (() => {
-                          var child_index = 0
-                          return children.map((c, i) => {
-                            if(typeof(c) === 'string' && this.state.changes[child_index]) {
-                              child_index += 1
-                              return this.state.changes[child_index - 1]
-                            }
-                            return c
-                          })
-                        })()
-                        : (this.state.changes[0] || children)
-                        }
-                    </Original>
-                )
-                : ( running && scope.chosen.signal === "resize"
-                    ?
-                    <Resize
-                        original={original}
-                        code={code}
-                        {...remainder}
-                    />
-                    :
-                    <Original
-                        {...remainder}
-                        signal={scope.chosen}
-                        code={code}
-                        onClick={(e) => {
-                            scope.signal('resize', code)
-                            if(scope.open) {
-                                e.stopPropagation()
-                                e.preventDefault()
-                                e.bubbles = false
-                                return false
-                            }
-                        }}
-                    />
-                )
+        focus_count = 0
+        return children
+        ? ( running && scope.chosen.signal === "change"
+          ?
+          <Original
+            ref={this.changeableBox}
+            {...remainder}
+            signal={scope.chosen}
+            code={code}
+            onClick={(e) => {
+              scope.signal('change', code)
+              if(scope.open) {
+                e.stopPropagation()
+                e.preventDefault()
+                e.bubbles = false
+                return false
+              }
             }}
-        </HierarchScope.Consumer>
+          >
+            {children instanceof Array
+            ? children.map((c, i) => {
+              if(typeof(c) === 'string') {
+                return (
+                  <Change
+                    key={i}
+                    focus={(e) => {
+                      console.log('focusing?', focus_count, c)
+                      if(e && focus_count === 0) {
+                        e.focus()
+                        focus_count += 1
+                      }
+                    }}
+                    record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
+                    escape={() => scope.signal('display', code)}
+                  >
+                    {c}
+                  </Change>
+                )
+              }
+              return c
+            })
+            :
+            (typeof(children) === 'string'
+              ? <Change
+                focus={e => e && e.focus()}
+                record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
+                escape={() => scope.signal('display', code)}
+              >
+                {children}
+              </Change>
+              : children
+            )
+            }
+          </Original>
+
+          :
+          <Original
+            {...remainder}
+            signal={scope.chosen}
+            code={code}
+            onClick={(e) => {
+              scope.signal('change', code)
+              if(scope.open) {
+                e.stopPropagation()
+                e.preventDefault()
+                e.bubbles = false
+                return false
+              }
+            }}
+          >
+            {children instanceof Array
+            ? (() => {
+              var child_index = 0
+              return children.map((c, i) => {
+                if(typeof(c) === 'string' && this.state.changes[child_index]) {
+                  child_index += 1
+                  return this.state.changes[child_index - 1]
+                }
+                return c
+              })
+            })()
+            : (this.state.changes[0] || children)
+            }
+          </Original>
         )
-    }
-
-    recordChanges(address, index) {
-      var changeArray = [];
-
-      // Group all possibly-changed values
-      [...this.changeableBox.current.children].forEach((child, x) => {
-        if(
-          [...child.classList]
-          .some(klass => klass === Field.toString().slice(1))
+        : ( running && scope.chosen.signal === "resize"
+          ?
+          <Resize
+            original={original}
+            code={code}
+            {...remainder}
+          />
+          :
+          <Original
+            {...remainder}
+            signal={scope.chosen}
+            code={code}
+            onClick={(e) => {
+              scope.signal('resize', code)
+              if(scope.open) {
+                e.stopPropagation()
+                e.preventDefault()
+                e.bubbles = false
+                return false
+              }
+            }}
+          />
         )
-          changeArray = changeArray.concat(child.value)
-      })
+      }}
+    </HierarchScope.Consumer>
+    )
+  }
 
-      // * choose node <Box original={...} code=${this.props.code}
-      var matches = index.query(`(jsx_element
-          open_tag: (
-              jsx_opening_element
-              name: (_) @opening-name
-              attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
-              )
+  recordChanges(address, index) {
+    var changeArray = [];
 
-          [(jsx_text) (jsx_element) (jsx_self_closing_element)]* @children
+    // Group all possibly-changed values
+    [...this.changeableBox.current.children].forEach((child, x) => {
+      if(
+        [...child.classList]
+        .some(klass => klass === Field.toString().slice(1))
+      )
+        changeArray = changeArray.concat(child.value)
+    })
 
-          close_tag: (jsx_closing_element name: (_) @closing-name)
-          (#eq? @_code "code")
-          (#match? @code "^.${this.props.code}.$")
-          (#eq? @opening-name "Box")
-          (#eq? @closing-name "Box")
-      ) @element`)
-
-      if(matches.length > 1)
-        throw(
-          "oh no! more than one matching code during a change. " +
-          this.props.code
+    // * choose node <Box original={...} code=${this.props.code}
+    var matches = index.query(`(jsx_element
+      open_tag: (
+        jsx_opening_element
+        name: (_) @opening-name
+        attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
         )
 
-      var block = matches[0].captures.filter(x => x.name === "element")[0]
+      [(jsx_text) (jsx_element) (jsx_self_closing_element)]* @children
 
-      // * query `(jsx_text)` opening and closing indices
-      var subquery = index.query(`(jsx_text) @child`, block.node)
-      var indices = block.node.children
-        .filter(x => x.type === "jsx_text")
-        .map(x => ({
-          begin: x.startIndex,
-          end: x.endIndex,
-        }))
+      close_tag: (jsx_closing_element name: (_) @closing-name)
+      (#eq? @_code "code")
+      (#match? @code "^.${this.props.code}.$")
+      (#eq? @opening-name "Box")
+      (#eq? @closing-name "Box")
+    ) @element`)
 
-      // * pass indices in on `changeArray` changes
-      var changes = changeArray.map((x, i) =>
-        Object.assign(indices[i], { grade: x })
+    if(matches.length > 1)
+      throw(
+        "oh no! more than one matching code during a change. " +
+        this.props.code
       )
 
-      return fetch("http://0.0.0.0:4321/upgrade", {
-        method: "POST",
-        body: JSON.stringify({
-          address,
-          upgrades: changes,
-        }),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(() => {
-          if(window.assemble && window.assemble.repull)
-              window.assemble.repull()
-          console.log(changeArray)
-          this.setState({ changes: changeArray })
-      })
-    }
+    var block = matches[0].captures.filter(x => x.name === "element")[0]
+
+    // * query `(jsx_text)` opening and closing indices
+    var subquery = index.query(`(jsx_text) @child`, block.node)
+    var indices = block.node.children
+      .filter(x => x.type === "jsx_text")
+      .map(x => ({
+        begin: x.startIndex,
+        end: x.endIndex,
+      }))
+
+    // * pass indices in on `changeArray` changes
+    var changes = changeArray.map((x, i) =>
+      Object.assign(indices[i], { grade: x })
+    )
+
+    return fetch("http://0.0.0.0:4321/upgrade", {
+      method: "POST",
+      body: JSON.stringify({
+        address,
+        upgrades: changes,
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(() => {
+      if(window.assemble && window.assemble.repull)
+        window.assemble.repull()
+      console.log(changeArray)
+      this.setState({ changes: changeArray })
+    })
+  }
 }
 
 class Change extends React.Component {
-    state = { value: null }
+  state = { value: null }
 
-    render = () => (
-    <Field
-        onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            return false
-        }}
-        key={this.props.children}
-        type="text"
-        ref={e => this.props.focus(e)}
-        value={this.state.value === null ? this.props.children : this.state.value}
-        onChange={(e) => {
-            this.setState({ value: e.target.value || "" })
-        }}
-        onKeyDown={(e) => {
-            console.log(e.key)
-            if(e.key === ' ') {
-                e.stopPropagation()
-            }
-            if(e.key === "Escape") {
-                this.props.escape()
-            }
-            if(e.key === "Enter") {
-                this.props.record()
-                e.preventDefault();
-                e.stopPropagation();
-                return false
-            }
-        }}
-    />
-    )
+  render = () => (
+  <Field
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      return false
+    }}
+    key={this.props.children}
+    type="text"
+    ref={e => this.props.focus(e)}
+    value={this.state.value === null ? this.props.children : this.state.value}
+    onChange={(e) => {
+      this.setState({ value: e.target.value || "" })
+    }}
+    onKeyDown={(e) => {
+      console.log(e.key)
+      if(e.key === ' ') {
+        e.stopPropagation()
+      }
+      if(e.key === "Escape") {
+        this.props.escape()
+      }
+      if(e.key === "Enter") {
+        this.props.record()
+        e.preventDefault();
+        e.stopPropagation();
+        return false
+      }
+    }}
+  />
+  )
 }
 
 const Field = styled.input.attrs({
-    type: "text",
+  type: "text",
 })`
 background: none;
 outline: none;
