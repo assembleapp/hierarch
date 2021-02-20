@@ -81,7 +81,11 @@ const apply_resize = (program, address, code, width, height) => {
   // program.debug_query(matches)
 
   const css_string = matches.slice(-1)[0].captures.slice(-1)[0].node
-  var css_node = program.parse_range_as_language(css_string.startIndex + 1, css_string.endIndex - 1, "css").rootNode
+  var css_node = program.parse_range_as_language(
+    css_string.startIndex + 1,
+    css_string.endIndex - 1,
+    "css",
+  ).rootNode
 
   var query = program.query(`
   (stylesheet
