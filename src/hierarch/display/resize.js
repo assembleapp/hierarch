@@ -23,14 +23,19 @@ class Resize extends React.Component {
     render = () => {
       const Component = this.component
 
+      var resizeable = (scope) => ({
+        resize: dimensions => this.setState(dimensions),
+        recordSize: () => this.recordSize(scope.index, scope.address),
+      })
+
       return (
         <HierarchScope.Consumer>
           {scope => (
             <ResizeBox {...this.state}>
-              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={-1} y={-1} />
-              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={-1} y={1} />
-              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={1} y={-1} />
-              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={1} y={1} />
+              <Corner {...resizeable(scope)} x={-1} y={-1} />
+              <Corner {...resizeable(scope)} x={-1} y={1} />
+              <Corner {...resizeable(scope)} x={1} y={-1} />
+              <Corner {...resizeable(scope)} x={1} y={1} />
               <Component {...this.state} {...this.props} />
             </ResizeBox>
           )}
