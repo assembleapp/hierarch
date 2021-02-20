@@ -4,7 +4,6 @@ const escape = require("escape-html")
 const responder = express.Router()
 
 const {
-  apply_boxes,
   apply_change,
   apply_resize,
   apply_upgrades,

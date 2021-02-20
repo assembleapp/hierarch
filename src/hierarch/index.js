@@ -8,6 +8,7 @@ import Logo from "./display/logo"
 import Sidebar from "./display/sidebar"
 
 import makeProgram from "./engine/program"
+import apply_boxes from "./engine/apply_boxes"
 import Scope from "./engine/scope"
 
 const HierarchScope = React.createContext({
@@ -83,19 +84,11 @@ class Hierarch extends React.Component {
     }
 
     secondaryClick = (e) => {
-        e.preventDefault()
-
-        fetch(`http://0.0.0.0:4321/apply_boxes`, {
-            method: "POST",
-            body: JSON.stringify({
-                address: this.state.address,
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.text())
+      e.preventDefault()
+      apply_boxes(this.state.index, this.state.address)
+        // .then(response => response.text())
+        // .then(response => makeProgram(response))
+        // .then(program => this.setState({ index: program }))
         .then(this.pullSource)
     }
 

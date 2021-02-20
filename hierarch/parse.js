@@ -153,7 +153,6 @@ const source = (address, callback) => {
 }
 
 module.exports = {
-  apply_boxes,
   apply_resize,
   apply_upgrades,
   source,
