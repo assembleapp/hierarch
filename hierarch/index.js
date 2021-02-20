@@ -36,12 +36,6 @@ const check_upgrade_sequence_collisions = (upgrades) => {
 
 // - - - Dumped; old addresses. begin cleaning up uses. - - - //
 
-responder.post("/apply_boxes", (call, response) => {
-    // console.log(call.body)
-    apply_boxes(call.body.address)
-    response.send("done")
-})
-
 responder.post("/resize", (call, response) => {
     apply_resize(call.body)
     response.send(JSON.stringify(call.body))
