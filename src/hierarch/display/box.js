@@ -59,7 +59,7 @@ class Box extends React.Component {
                                             focus_count += 1
                                         }
                                     }}
-                                    record={() => this.recordChanges(scope.index).then(() => scope.signal('display', code))}
+                                    record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
                                     escape={() => scope.signal('display', code)}
                                 >
                                     {c}
@@ -71,7 +71,7 @@ class Box extends React.Component {
                         (typeof(children) === 'string'
                             ? <Change
                                 focus={e => e && e.focus()}
-                                record={() => this.recordChanges(scope.index).then(() => scope.signal('display', code))}
+                                record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
                                 escape={() => scope.signal('display', code)}
                             >
                                 {children}
@@ -129,41 +129,74 @@ class Box extends React.Component {
         )
     }
 
-    recordChanges(index) {
+    recordChanges(address, index) {
       var changeArray = [];
 
-      // Query index, see `jsx_text` begin and end.
+      // Group all possibly-changed values
       [...this.changeableBox.current.children].forEach((child, x) => {
         if(
-          [...child.classList].some(klass => klass === Field.toString().slice(1))
-          && child.value !== this.props.children[x]
-        ) {
+          [...child.classList]
+          .some(klass => klass === Field.toString().slice(1))
+        )
           changeArray = changeArray.concat(child.value)
-        }
       })
 
       // * choose node <Box original={...} code=${this.props.code}
-      // * query `(jsx_text)` opening and closing indices
-      // * pass indices in on `changeArray` changes
-      debugger
+      var matches = index.query(`(jsx_element
+          open_tag: (
+              jsx_opening_element
+              name: (_) @opening-name
+              attribute: (jsx_attribute (property_identifier) @_code "=" (string) @code)
+              )
 
-        return fetch("http://0.0.0.0:4321/change", {
-            method: "POST",
-            body: JSON.stringify({
-                upgrade: changeArray,
-                code: this.props.code,
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(() => {
-            if(window.assemble && window.assemble.repull)
-                window.assemble.repull()
-            console.log(changeArray)
-            this.setState({ changes: changeArray })
-        })
+          [(jsx_text) (jsx_element) (jsx_self_closing_element)]* @children
+
+          close_tag: (jsx_closing_element name: (_) @closing-name)
+          (#eq? @_code "code")
+          (#match? @code "^.${this.props.code}.$")
+          (#eq? @opening-name "Box")
+          (#eq? @closing-name "Box")
+      ) @element`)
+
+      if(matches.length > 1)
+        throw(
+          "oh no! more than one matching code during a change. " +
+          this.props.code
+        )
+
+      var block = matches[0].captures.filter(x => x.name === "element")[0]
+
+      // * query `(jsx_text)` opening and closing indices
+      var subquery = index.query(`(jsx_text) @child`, block.node)
+      var indices = block.node.children
+        .filter(x => x.type === "jsx_text")
+        .map(x => ({
+          begin: x.startIndex,
+          end: x.endIndex,
+        }))
+
+      // * pass indices in on `changeArray` changes
+      var changes = changeArray.map((x, i) =>
+        Object.assign(indices[i], { grade: x })
+      )
+
+      return fetch("http://0.0.0.0:4321/upgrade", {
+        method: "POST",
+        body: JSON.stringify({
+          address,
+          upgrades: changes,
+        }),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(() => {
+          if(window.assemble && window.assemble.repull)
+              window.assemble.repull()
+          console.log(changeArray)
+          this.setState({ changes: changeArray })
+      })
     }
 }
 

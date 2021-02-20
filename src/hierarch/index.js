@@ -11,6 +11,7 @@ import makeProgram from "./engine/program"
 import Scope from "./engine/scope"
 
 const HierarchScope = React.createContext({
+  address: null,
   open: false,
   index: null,
   chosen: { code: null, signal: null },
@@ -106,6 +107,7 @@ class Hierarch extends React.Component {
     render = () => (
         <HierarchScope.Provider
           value={{
+            address: this.state.address,
             index: this.state.index,
             open: this.state.open,
             chosen: this.state.scope,

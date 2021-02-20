@@ -68,11 +68,11 @@ class Program {
     query(query, node = this.parsed.rootNode) {
         try {
             if(query instanceof Array) {
-                return query.map(q => (
-                    this.parsed.language.query(q).matches(node)
-                )).flat(1)
+              return query.map(q => (
+                this.parsed.language.query(q).matches(node).filter(x => x)
+              )).flat(1)
             }
-            return this.parsed.language.query(query).matches(node)
+            return this.parsed.language.query(query).matches(node).filter(x => x)
         } catch(e) {
           console.log(e)
           return []

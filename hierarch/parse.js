@@ -178,15 +178,22 @@ const apply_boxes = (address) => {
     })
 }
 
-const apply_upgrade = (begin, end, upgrade) => {
-  fs.readFile(sourceAddress, 'utf8', (error, source) => {
+const apply_upgrades = (address, upgrades) => {
+  fs.readFile(address, 'utf8', (error, source) => {
     if(error) return console.log(error)
 
-    var program = new Program(sourceAddress, source)
-    program.replace_by_indices(begin, end, upgrade)
+    var program = new Program(address, source)
+
+    upgrades.reverse().forEach(upgrade => {
+      program.replace_by_indices(
+        upgrade.begin,
+        upgrade.end,
+        upgrade.grade,
+      )
+    })
 
     fs.writeFile(
-      sourceAddress,
+      address,
       program.source,
       err => { if(error) console.log(err) },
     )
@@ -322,6 +329,6 @@ const source = (address, callback) => {
 module.exports = {
   apply_boxes,
   apply_resize,
-  apply_upgrade,
+  apply_upgrades,
   source,
 }

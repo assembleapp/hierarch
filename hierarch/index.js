@@ -7,7 +7,7 @@ const {
   apply_boxes,
   apply_change,
   apply_resize,
-  apply_upgrade,
+  apply_upgrades,
   source,
 } = require("./parse")
 
@@ -26,12 +26,9 @@ responder.get("/source", (call, response) => {
 
 responder.post("/upgrade", (call, response) => {
   check_upgrade_sequence_collisions(call.body.upgrades)
+  apply_upgrades(call.body.address, call.body.upgrades)
 
-  call.body.upgrades.reverse().forEach(upgrade => {
-    apply_upgrade(upgrade.begin, upgrade.end, upgrade.grade)
-  })
-
-  source(call.query.address, s => response.send(s))
+  source(call.body.address, s => response.send(s))
 })
 
 const check_upgrade_sequence_collisions = (upgrades) => {
