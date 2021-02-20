@@ -182,24 +182,24 @@ class Box extends React.Component {
     var block = matches[0].captures.filter(x => x.name === "element")[0]
 
     // * query `(jsx_text)` opening and closing indices
-    var subquery = index.query(`(jsx_text) @child`, block.node)
     var indices = block.node.children
       .filter(x => x.type === "jsx_text")
-      .map(x => ({
-        begin: x.startIndex,
-        end: x.endIndex,
-      }))
+      .map((x, i) => {
+        var beginning_skip = index.display(x).search(/\S/)
+        var ending_skip = index.display(x).split('').reverse().join('').search(/\S/)
 
-    // * pass indices in on `changeArray` changes
-    var changes = changeArray.map((x, i) =>
-      Object.assign(indices[i], { grade: x })
-    )
+        return {
+          begin: x.startIndex + beginning_skip,
+          end: x.endIndex - ending_skip,
+          grade: changeArray[i]
+        }
+      })
 
     return fetch("http://0.0.0.0:4321/upgrade", {
       method: "POST",
       body: JSON.stringify({
         address,
-        upgrades: changes,
+        upgrades: indices,
       }),
       headers: {
         'Accept': 'application/json',
