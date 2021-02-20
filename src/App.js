@@ -7,11 +7,6 @@ import logo from './hierarch.svg'
 function App() {
   return (
     <Column>
-      <H1>Some big plans</H1>
-      ...by Assemble Company.
-
-      <H2>~ already running ~</H2>
-
       <Block>
         <Header>
           <Logo src={logo} alt="hierarch logo" />
@@ -30,48 +25,6 @@ function App() {
           </Div>
         </Header>
       </Block>
-
-      <H2>~ on our horizon ~</H2>
-      <Pair>
-        <Block>
-          <H3>Copper</H3>
-
-          <P>
-            Chromium rules our modern machines.
-            Copper's goal is a more malleable end-user layer,
-            making online programs more dynamic and mesmerizing.
-          </P>
-        </Block>
-
-        <Block>
-          <H3>Greenhouse</H3>
-
-          <P>
-            A booming garden and nursery helping machine kernels
-            reach rigorous uses and rich ends.
-            Inspired by code a couple decades old
-            on <Link address="https://kernel.org">Kernel.org</Link>.
-          </P>
-        </Block>
-      </Pair>
-
-      <H2>~ and our long roadmap ~</H2>
-      <San>
-        <Block>
-          No more `<Code>git</Code>`s in our codebases.
-        </Block>
-
-        <Block>
-          Process legal code and recommend changes.
-        </Block>
-
-        <Block>
-          Keep people's records more secure online.
-        </Block>
-      </San>
-
-      <H2>Your <S>money</S> help is needed.</H2>
-      Become a sponsor and help keep our program running.
 
       <Scope
         source="assemble-company.herokuapp.com/v1/graphql"
