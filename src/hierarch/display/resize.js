@@ -1,6 +1,9 @@
 import React from "react"
 import styled from "styled-components"
 
+import { HierarchScope } from "../index"
+import apply_resize from "../engine/apply_resize"
+
 class Resize extends React.Component {
     state = {
         height: null,
@@ -18,32 +21,35 @@ class Resize extends React.Component {
     }
 
     render = () => {
-        const Component = this.component
+      const Component = this.component
 
-        return (
+      return (
+        <HierarchScope.Consumer>
+          {scope => (
             <ResizeBox {...this.state}>
-                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={-1} y={-1} />
-                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={-1} y={1} />
-                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={1} y={-1} />
-                <Corner resize={dimensions => this.setState(dimensions)} recordSize={this.recordSize.bind(this)} x={1} y={1} />
-                <Component {...this.state} {...this.props} />
+              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={-1} y={-1} />
+              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={-1} y={1} />
+              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={1} y={-1} />
+              <Corner resize={dimensions => this.setState(dimensions)} recordSize={() => this.recordSize(scope.index, scope.address)} x={1} y={1} />
+              <Component {...this.state} {...this.props} />
             </ResizeBox>
-        )
+          )}
+        </HierarchScope.Consumer>
+      )
     }
 
-    recordSize = () => {
-        fetch("http://0.0.0.0:4321/resize", {
-            method: "POST",
-            body: JSON.stringify({
-                width: this.state.width,
-                height: this.state.height,
-                code: this.props.code,
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
+    recordSize = (index, address) => {
+      apply_resize(
+        index,
+        address,
+        this.props.code,
+        this.state.width,
+        this.state.height,
+      )
+      .then(() => {
+        if(window.assemble && window.assemble.repull)
+          window.assemble.repull()
+      })
     }
 }
 

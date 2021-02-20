@@ -4,8 +4,6 @@ const escape = require("escape-html")
 const responder = express.Router()
 
 const {
-  apply_change,
-  apply_resize,
   apply_upgrades,
   source,
 } = require("./parse")
@@ -33,12 +31,5 @@ responder.post("/upgrade", (call, response) => {
 const check_upgrade_sequence_collisions = (upgrades) => {
   // change.
 }
-
-// - - - Dumped; old addresses. begin cleaning up uses. - - - //
-
-responder.post("/resize", (call, response) => {
-    apply_resize(call.body)
-    response.send(JSON.stringify(call.body))
-})
 
 module.exports = responder
