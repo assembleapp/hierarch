@@ -102,9 +102,17 @@ const apply_resize = async (program, address, code, width, height) => {
   )
   `, css_node, 'css')
   if(query[0] && query[0].captures[1]) {
-    program.replace_by_node(query[0].captures[1].node, height)
+    upgrades = upgrades.concat({
+      begin: query[0].captures[1].node.startIndex,
+      end: query[0].captures[1].node.endIndex,
+      grade: height,
+    })
   } else {
-    program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nheight: ${height};`)
+    upgrades = upgrades.concat({
+      begin: css_string.startIndex + 1,
+      end: css_string.startIndex + 1,
+      grade: `\nheight: ${height};`,
+    })
   }
 
   var query = program.query(`
@@ -114,9 +122,17 @@ const apply_resize = async (program, address, code, width, height) => {
   )
   `, css_node, 'css')
   if(query[0] && query[0].captures[1]) {
-    program.replace_by_node(query[0].captures[1].node, width)
+    upgrades = upgrades.concat({
+      begin: query[0].captures[1].node.startIndex,
+      end: query[0].captures[1].node.endIndex,
+      grade: width,
+    })
   } else {
-    program.replace_by_indices(css_string.startIndex + 1, css_string.startIndex + 1, `\nwidth: ${width};`)
+    upgrades = upgrades.concat({
+      begin: css_string.startIndex + 1,
+      end: css_string.startIndex + 1,
+      grade: `\nwidth: ${width};`,
+    })
   }
   program.use_language(program.parsed.language)
 
