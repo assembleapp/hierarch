@@ -50,20 +50,24 @@ class Box extends React.Component {
                         }}
                     >
                         {children instanceof Array
-                        ? children.map(c => {
+                        ? children.map((c, i) => {
                             if(typeof(c) === 'string') {
-                                return <Change
+                                return (
+                                  <Change
+                                    key={i}
                                     focus={(e) => {
-                                        if(e && focus_count === 0) {
-                                            e.focus()
-                                            focus_count += 1
-                                        }
+                                      console.log('focusing?', focus_count, c)
+                                      if(e && focus_count === 0) {
+                                        e.focus()
+                                        focus_count += 1
+                                      }
                                     }}
                                     record={() => this.recordChanges(scope.address, scope.index).then(() => scope.signal('display', code))}
                                     escape={() => scope.signal('display', code)}
-                                >
+                                  >
                                     {c}
-                                </Change>
+                                  </Change>
+                                )
                             }
                             return c
                         })
