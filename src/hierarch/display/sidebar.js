@@ -12,61 +12,61 @@ import place from "../mockup/position.png"
 import dynamics from "../mockup/layout.png"
 
 const panes = {
-    size,
-    spacing,
-    symbols,
-    place,
-    dynamics,
+  size,
+  spacing,
+  symbols,
+  place,
+  dynamics,
 }
 
 class Sidebar extends React.Component {
-    state = {
-        scroll: 0,
-    }
+  state = {
+    scroll: 0,
+  }
 
-    render = () => (
-        <Place
-            place={this.props.place}
-            hold={this.props.hold}
-        >
-            <ScrollColumn>
-                <ScrollBox onChange={num => {
-                    console.log(num)
-                    this.setState({ scroll: num })
-                }} />
-                <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
+  render = () => (
+    <Place
+      place={this.props.place}
+      hold={this.props.hold}
+    >
+      <ScrollColumn>
+        <ScrollBox onChange={num => {
+          console.log(num)
+          this.setState({ scroll: num })
+        }} />
+        <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
 
-                {Object.keys(panes).map((pane, i) => (
-                    <Pane chosen={this.state.scroll === (i + 1)}>{pane}</Pane>
-                ))}
-            </ScrollColumn>
+        {Object.keys(panes).map((pane, i) => (
+          <Pane chosen={this.state.scroll === (i + 1)}>{pane}</Pane>
+        ))}
+      </ScrollColumn>
 
-            <Column>
-                <div>
-                    <span>Hierarch</span>
-                    <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
-                </div>
+      <Column>
+        <div>
+          <span>Hierarch</span>
+          <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+        </div>
 
-                {this.state.scroll === 0
-                ? this.props.children
-                : <img
-                    src={panes[Object.keys(panes)[this.state.scroll - 1]]}
-                    alt={Object.keys(panes)[this.state.scroll - 1]}
-                    />
-                }
-            </Column>
-        </Place>
-    )
+        {this.state.scroll === 0
+        ? this.props.children
+        : <img
+          src={panes[Object.keys(panes)[this.state.scroll - 1]]}
+          alt={Object.keys(panes)[this.state.scroll - 1]}
+          />
+        }
+      </Column>
+    </Place>
+  )
 }
 
 class ScrollBox extends React.Component {
-    render = () => (
-        <Scrollable onScroll={(e) =>
-            this.props.onChange(Math.floor(e.target.scrollTop / 10) % (Object.keys(panes).length + 1))
-        }>
-            <Scroller/>
-        </Scrollable>
-    )
+  render = () => (
+    <Scrollable onScroll={(e) =>
+      this.props.onChange(Math.floor(e.target.scrollTop / 10) % (Object.keys(panes).length + 1))
+    }>
+      <Scroller/>
+    </Scrollable>
+  )
 }
 
 const Pane = styled.span`
@@ -74,11 +74,11 @@ color: ${({ chosen }) => chosen ? '#3a3ad4' : '#d0d0d0'};
 `
 
 const Place = styled.div.attrs(p => ({
-    style: {
-        top: -20 + (p.place.y || 0) + 'px',
-        left: (p.place.hold ? -20 : 40) + (p.place.x || 0) + 'px',
-        overflowY: p.place.hold ? 'scroll' : 'hidden',
-    }
+  style: {
+    top: -20 + (p.place.y || 0) + 'px',
+    left: (p.place.hold ? -20 : 40) + (p.place.x || 0) + 'px',
+    overflowY: p.place.hold ? 'scroll' : 'hidden',
+  }
 }))`
 display: flex;
 flex-direction: row;
@@ -123,7 +123,7 @@ right: 0;
 bottom: 0;
 overflow-y: scroll;
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 `
 
