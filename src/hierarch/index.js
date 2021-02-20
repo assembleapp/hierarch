@@ -10,6 +10,7 @@ import Sidebar from "./display/sidebar"
 import makeProgram from "./engine/program"
 import apply_boxes from "./engine/apply_boxes"
 import Scope from "./engine/scope"
+import parse_hierarchy from "./engine/parse_hierarchy"
 
 const HierarchScope = React.createContext({
   address: null,
@@ -24,6 +25,7 @@ class Hierarch extends React.Component {
     address: "src/App.js",
     index: null,
     open: false,
+    hierarchy: [0,0,[],"",false],
     scope: {
       code: null,
       signal: "display",
@@ -40,11 +42,18 @@ class Hierarch extends React.Component {
     fetch(`http://0.0.0.0:4321/source?address=${this.state.address}`)
       .then(response => response.text())
       .then(response => makeProgram(response))
-      .then(program => this.setState({ index: program }))
+      .then(program => {
+        this.setState({ index: program })
+        parse_hierarchy(program, h => this.setState({ hierarchy: h }))
+      })
+  }
+
+  constructor(p) {
+    super(p)
+    this.pullSource()
   }
 
     componentDidMount() {
-      this.pullSource()
       if(!window.assemble || !window.assemble.repull) {
         window.assemble = {}
         window.assemble.repull = this.pullSource.bind(this)
@@ -158,7 +167,7 @@ class Hierarch extends React.Component {
                                 </Change.Board>
                             :
                                 <Hierarchy
-                                    index={this.state.index}
+                                    hierarchy={this.state.hierarchy}
                                     display={this.props.display}
                                 />
                             )

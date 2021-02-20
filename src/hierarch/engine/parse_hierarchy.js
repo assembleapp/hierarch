@@ -1,5 +1,3 @@
-import makeProgram from "./program"
-
 const parse_hierarchy = (program, callback) => {
   var blocks = pull_blocks(program)
 
