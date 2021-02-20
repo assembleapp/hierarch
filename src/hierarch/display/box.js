@@ -96,7 +96,16 @@ class Box extends React.Component {
                         }}
                     >
                         {children instanceof Array
-                        ? children.map((c, i) => (typeof(this.state.changes[i]) === 'string' ? this.state.changes[i] : c))
+                        ? (() => {
+                          var child_index = 0
+                          return children.map((c, i) => {
+                            if(typeof(c) === 'string' && this.state.changes[child_index]) {
+                              child_index += 1
+                              return this.state.changes[child_index - 1]
+                            }
+                            return c
+                          })
+                        })()
                         : (this.state.changes[0] || children)
                         }
                     </Original>
