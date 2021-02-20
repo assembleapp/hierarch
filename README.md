@@ -33,7 +33,7 @@ yarn
 
 # Run in parallel:
 node hierarch &
-yarn start
+yarn go
 ```
 
 In your browser, see <http://0.0.0.0:3000>.  

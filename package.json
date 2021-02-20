@@ -89,9 +89,9 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "go": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "bounds": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [
