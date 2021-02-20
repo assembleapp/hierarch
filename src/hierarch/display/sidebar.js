@@ -19,14 +19,6 @@ const panes = {
     dynamics,
 }
 
-const blocks = observable({})
-const expose = (c) => {
-    Object.keys(c).forEach(k => {
-        blocks[k] = c[k]
-    })
-}
-export { expose }
-
 class Sidebar extends React.Component {
     state = {
         scroll: 0,

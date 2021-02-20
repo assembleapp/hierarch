@@ -1,5 +1,4 @@
 import { P, Box, Code, Div, H1, S } from './hierarch/display/lens'
-import { expose } from './hierarch/display/sidebar'
 
 import Scope from './hierarch/engine/scope'
 import styled, { keyframes } from "styled-components"
@@ -185,10 +184,5 @@ const Margin = styled.div`
 margin-top: 2rem;
 text-align: center;
 `
-
-expose({
-  Link,
-  Header,
-})
 
 export default App;
