@@ -34,7 +34,6 @@ const source = (address, callback) => {
 }
 
 module.exports = {
-  apply_resize,
   apply_upgrades,
   source,
 }
