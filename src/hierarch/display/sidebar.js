@@ -101,15 +101,15 @@ const Place = styled.div.attrs(p => ({
 position: fixed;
 display: flex;
 flex-direction: column;
+::-webkit-scrollbar {
+    display: none;
+}
 `
 
 const MainBody = styled.div`
 display: flex;
 flex-direction: row;
 align-items: flex-start;
-::-webkit-scrollbar {
-    display: none;
-}
 width: auto;
 height: auto;
 `

@@ -129,8 +129,11 @@ class Hierarch extends React.Component {
             ? e.target.getAttribute("data-code")
             : null
 
-          if(code_key && this.state.scope.signal === "display")
-            this.signal("display", code_key)
+          if(
+            code_key
+            && ["display", "add_prior", "add_behind"].some(x => this.state.scope.signal === x)
+          )
+            this.signal(this.state.scope.signal, code_key)
         }}
       >
         {this.props.children}
