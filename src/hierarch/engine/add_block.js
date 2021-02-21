@@ -5,11 +5,24 @@ var add_ahead = (address, program, code, block_name) => {
   var block = choose_block(code, program)
 
   display_surroundings(program, block)
+  var number_leading_spaces =
+    program
+    .source
+    .slice(0, block.startIndex)
+    .split("\n")
+    .slice(-1)[0]
+    .length
+  var leading_spaces = ' '.repeat(number_leading_spaces)
 
   var upgrades = [{
     begin: block.startIndex,
     end: block.startIndex,
-    grade: ''
+    grade:
+    `<Box original={Div} code={${Math.random()}}>\n` +
+    `${leading_spaces}  click and change.\n` +
+    `${leading_spaces}</Box>\n` +
+    `\n` +
+    `${leading_spaces}`
   }]
 
   return push_upgrades(address, upgrades)
