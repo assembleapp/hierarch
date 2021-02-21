@@ -2,7 +2,7 @@
 
 # Hierarch
 
-Make pages, quick and easy.
+Make programs, quick and easy.
 
 Build pages using common and easy in-place changes,  
 producing clean code you can use in any place you like.
