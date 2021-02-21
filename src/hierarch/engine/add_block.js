@@ -24,6 +24,8 @@ var add_behind = (address, program, code, block_name) => {
   var lead = leading_spaces(program, block)
   var block_code = Math.random().toString()
 
+  var lagging_1 = program.source.slice(block.endIndex, block.endIndex+1)
+
   var upgrades = [{
     begin: block.endIndex,
     end: block.endIndex,
@@ -32,8 +34,8 @@ var add_behind = (address, program, code, block_name) => {
     `\n` +
     `${lead}<Box original={Div} code="${block_code}">\n` +
     `${lead}  click and change.\n` +
-    `${lead}</Box>\n` +
-    `${lead}`
+    `${lead}</Box>` +
+    (lagging_1 === "\n" ? '' : `\n${lead}`)
   }]
 
 
