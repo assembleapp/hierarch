@@ -19,8 +19,12 @@ function App() {
               change code by clicking and clacking.
             </P>
 
+            <Div>
+              click. clack!
+            </Div>
+
             <Link address="https://github.com/assembleapp/hierarch" target="_blank" rel="noopener noreferrer" >
-              Read our engine's code and raise issues.
+              Read our engine's code.
             </Link>
           </Div>
         </Header>
