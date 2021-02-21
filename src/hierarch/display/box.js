@@ -3,6 +3,9 @@ import styled, { css } from "styled-components"
 
 import Resize from "./resize"
 import apply_changes from "../engine/apply_changes"
+import apply_boxes from "../engine/apply_boxes"
+import { add_ahead, add_behind } from "../engine/add_block"
+
 import { HierarchScope } from "../index"
 
 class Box extends React.Component {
@@ -62,7 +65,21 @@ class Box extends React.Component {
             signal={scope.chosen}
             code={code}
             onClick={(e) => {
-              scope.signal('change', code)
+              if(scope.signal.signal === "display")
+                scope.signal('change', code)
+              if(scope.signal.signal === "add_prior") {
+                add_ahead(scope.address, scope.index, code, "BlockA")
+                  .then(() => apply_boxes(scope.index, scope.address))
+                  .then(() => apply_boxes(scope.index, scope.address))
+                // .then(() => scope.signal('change', code))
+              }
+              if(scope.signal.signal === "add_behind") {
+                add_behind(scope.address, scope.index, code, "BlockB")
+                  .then(() => apply_boxes(scope.index, scope.address))
+                  .then(() => apply_boxes(scope.index, scope.address))
+                // .then(() => scope.signal('change', code))
+              }
+
               if(scope.open) {
                 e.stopPropagation()
                 e.preventDefault()
