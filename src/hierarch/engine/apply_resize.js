@@ -1,3 +1,4 @@
+import push_upgrades from "./push_upgrades"
 
 const apply_resize = async (program, address, code, width, height) => {
   var upgrades = []
@@ -136,20 +137,7 @@ const apply_resize = async (program, address, code, width, height) => {
   }
   program.use_language(program.parsed.language)
 
-  return push_upgrades(upgrades, address)
-}
-
-const push_upgrades = (upgrades, address) => {
-  upgrades.sort((x, y) => x.begin < y.begin ? -1 : 1)
-
-  return fetch("http://0.0.0.0:4321/upgrade", {
-    method: "POST",
-    body: JSON.stringify({ address, upgrades }),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
+  return push_upgrades(address, upgrades)
 }
 
 export default apply_resize

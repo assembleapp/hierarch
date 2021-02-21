@@ -1,3 +1,5 @@
+import push_upgrades from "./push_upgrades"
+
 var add_ahead = (address, program, code, block_name) => {
   console.log("adding ahead", code)
   var block = choose_block(code, program)
@@ -35,20 +37,5 @@ var choose_block = (code, program) => {
   program.debug_query(matches)
   return matches[0].captures.filter(x => x.name === "element")[0]
 }
-
-var push_upgrades = (address, upgrades) => (
-  fetch("http://0.0.0.0:4321/upgrade", {
-    method: "POST",
-    body: JSON.stringify({ address, upgrades }),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(() => {
-    if(window.assemble && window.assemble.repull)
-      window.assemble.repull()
-  })
-)
 
 export { add_ahead, add_behind }

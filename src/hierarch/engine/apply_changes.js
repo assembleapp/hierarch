@@ -1,3 +1,5 @@
+import push_upgrades from "./push_upgrades"
+
 var apply_changes = (address, program, code, changeArray) => {
   console.log(code)
 
@@ -38,21 +40,7 @@ var apply_changes = (address, program, code, changeArray) => {
       }
     })
 
-  return fetch("http://0.0.0.0:4321/upgrade", {
-    method: "POST",
-    body: JSON.stringify({
-      address,
-      upgrades: indices,
-    }),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(() => {
-    if(window.assemble && window.assemble.repull)
-      window.assemble.repull()
-  })
+  return push_upgrades(address, indices)
 }
 
 export default apply_changes

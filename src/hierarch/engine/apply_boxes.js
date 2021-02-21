@@ -1,3 +1,5 @@
+import push_upgrades from "./push_upgrades"
+
 const apply_boxes = (program, address) => {
   var upgrades = []
 
@@ -77,7 +79,7 @@ const apply_boxes = (program, address) => {
   })
 
   if(upgrades.length > 0)
-    return push_upgrades(upgrades, address)
+    return push_upgrades(address, upgrades)
 
   // Plan B: add boxes.
   console.log("Plan B")
@@ -145,20 +147,7 @@ const apply_boxes = (program, address) => {
   })
 
   if(upgrades.length > 0)
-    return push_upgrades(upgrades, address)
-}
-
-const push_upgrades = (upgrades, address) => {
-  upgrades.sort((x, y) => x.begin < y.begin ? -1 : 1)
-
-  return fetch("http://0.0.0.0:4321/upgrade", {
-    method: "POST",
-    body: JSON.stringify({ address, upgrades }),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
+    return push_upgrades(address, upgrades)
 }
 
 export default apply_boxes
