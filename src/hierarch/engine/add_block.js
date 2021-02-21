@@ -1,37 +1,39 @@
 import push_upgrades from "./push_upgrades"
 
 var add_ahead = (address, program, code, block_name) => {
-  console.log("adding ahead", code)
   var block = choose_block(code, program)
-
-  display_surroundings(program, block)
-  var number_leading_spaces =
-    program
-    .source
-    .slice(0, block.startIndex)
-    .split("\n")
-    .slice(-1)[0]
-    .length
-  var leading_spaces = ' '.repeat(number_leading_spaces)
+  var lead = leading_spaces(program, block)
 
   var upgrades = [{
     begin: block.startIndex,
     end: block.startIndex,
     grade:
     `<Box original={Div} code={${Math.random()}}>\n` +
-    `${leading_spaces}  click and change.\n` +
-    `${leading_spaces}</Box>\n` +
+    `${lead}  click and change.\n` +
+    `${lead}</Box>\n` +
     `\n` +
-    `${leading_spaces}`
+    `${lead}`
   }]
 
   return push_upgrades(address, upgrades)
 }
 
 var add_behind = (address, program, code, block_name) => {
-  console.log("adding behind", code)
   var block = choose_block(code, program)
-  var upgrades = []
+  var lead = leading_spaces(program, block)
+
+  var upgrades = [{
+    begin: block.startIndex,
+    end: block.startIndex,
+    grade:
+    `\n` +
+    `\n` +
+    `${lead}<Box original={Div} code={${Math.random()}}>\n` +
+    `${lead}  click and change.\n` +
+    `${lead}</Box>\n` +
+    `${lead}`
+  }]
+
 
   return push_upgrades(address, upgrades)
 }
@@ -55,6 +57,18 @@ var choose_block = (code, program) => {
   ) @element`)
 
   return matches[0].captures.filter(x => x.name === "element")[0].node
+}
+
+var leading_spaces = (program, block) => {
+  var number_leading_spaces =
+    program
+    .source
+    .slice(0, block.startIndex)
+    .split("\n")
+    .slice(-1)[0]
+    .length
+
+  return ' '.repeat(number_leading_spaces)
 }
 
 var display_surroundings = (program, block) => {
