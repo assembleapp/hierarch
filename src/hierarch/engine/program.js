@@ -59,8 +59,8 @@ class Program {
       includedRanges: [{
         startIndex: begin,
         endIndex: end,
-        startPosition: getExtent(this.source.slice(0, begin)),
-        endPosition: getExtent(this.source.slice(0, end)),
+        startPosition: place_in_code(this.source.slice(0, begin)),
+        endPosition: place_in_code(this.source.slice(0, end)),
       }]
     })
   }
@@ -102,10 +102,11 @@ class Program {
 function spliceInput(input, startIndex, lengthRemoved, newText) {
   const oldEndIndex = startIndex + lengthRemoved;
   const newEndIndex = startIndex + newText.length;
-  const startPosition = getExtent(input.slice(0, startIndex));
-  const oldEndPosition = getExtent(input.slice(0, oldEndIndex));
+  const startPosition = place_in_code(input.slice(0, startIndex));
+  const oldEndPosition = place_in_code(input.slice(0, oldEndIndex));
   input = input.slice(0, startIndex) + newText + input.slice(oldEndIndex);
-  const newEndPosition = getExtent(input.slice(0, newEndIndex));
+  const newEndPosition = place_in_code(input.slice(0, newEndIndex));
+
   return [
     input,
     {
@@ -116,7 +117,7 @@ function spliceInput(input, startIndex, lengthRemoved, newText) {
   ];
 }
 
-function getExtent(text) {
+function place_in_code(text) {
   let row = 0
   let index;
   for (index = 0; index != -1; index = text.indexOf('\n', index)) {
