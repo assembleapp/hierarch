@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import Resize from "./resize"
 import apply_changes from "../engine/apply_changes"
@@ -19,7 +19,23 @@ class Box extends React.Component {
         outlineStyle: p.signal.signal === "display" ? "solid" : null,
         outlineColor: (p.signal.signal === "display" && p.signal.code === p.code) ? "red" : "blue",
       },
-    }))``
+    }))`
+    ${p => (p.signal.signal === "display" && p.signal.code === p.code) && css`{
+      &:before {
+        font-size: 1.6rem;
+        border: 2px solid #ccc3da;
+        border-radius: 50%;
+        display: block;
+        width: 1.2rem;
+        height: 1.2rem;
+        content: "+";
+        align-self: center;
+        color: #ccc3da;
+        text-align: center;
+        line-height: 1rem;
+      }
+    `}
+    `
 
     var focus_count = 0
 
