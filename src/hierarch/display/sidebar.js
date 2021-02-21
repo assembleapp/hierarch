@@ -5,6 +5,8 @@ import { mdiClose } from "@mdi/js"
 import { observable } from "mobx"
 import { Observer } from "mobx-react"
 
+import { HierarchScope } from "../index"
+
 import size from "../mockup/size.png"
 import spacing from "../mockup/spacing.png"
 import symbols from "../mockup/typography.png"
@@ -29,32 +31,48 @@ class Sidebar extends React.Component {
       place={this.props.place}
       hold={this.props.hold}
     >
-      <ScrollColumn>
-        <ScrollBox onChange={num => {
-          console.log(num)
-          this.setState({ scroll: num })
-        }} />
-        <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
+      <HierarchScope.Consumer>
+        {scope => (
+          <Heading>
+            <a href="#" onClick={() => scope.signal("add_prior", null)}>
+            + prior
+            </a>
+            |
+            <a href="#" onClick={() => scope.signal("add_behind", null)}>
+            + behind
+            </a>
+          </Heading>
+        )}
+      </HierarchScope.Consumer>
 
-        {Object.keys(panes).map((pane, i) => (
-          <Pane chosen={this.state.scroll === (i + 1)}>{pane}</Pane>
-        ))}
-      </ScrollColumn>
+      <MainBody>
+        <ScrollColumn>
+          <ScrollBox onChange={num => {
+            console.log(num)
+            this.setState({ scroll: num })
+          }} />
+          <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
 
-      <Column>
-        <div>
-          <span>Hierarch</span>
-          <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
-        </div>
+          {Object.keys(panes).map((pane, i) => (
+            <Pane chosen={this.state.scroll === (i + 1)}>{pane}</Pane>
+          ))}
+        </ScrollColumn>
 
-        {this.state.scroll === 0
-        ? this.props.children
-        : <img
-          src={panes[Object.keys(panes)[this.state.scroll - 1]]}
-          alt={Object.keys(panes)[this.state.scroll - 1]}
-          />
-        }
-      </Column>
+        <Column>
+          <div>
+            <span>Hierarch</span>
+            <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+          </div>
+
+          {this.state.scroll === 0
+          ? this.props.children
+          : <img
+            src={panes[Object.keys(panes)[this.state.scroll - 1]]}
+            alt={Object.keys(panes)[this.state.scroll - 1]}
+            />
+          }
+        </Column>
+      </MainBody>
     </Place>
   )
 }
@@ -80,6 +98,12 @@ const Place = styled.div.attrs(p => ({
     overflowY: p.place.hold ? 'scroll' : 'hidden',
   }
 }))`
+position: fixed;
+display: flex;
+flex-direction: column;
+`
+
+const MainBody = styled.div`
 display: flex;
 flex-direction: row;
 align-items: flex-start;
@@ -88,7 +112,6 @@ align-items: flex-start;
 }
 width: auto;
 height: auto;
-position: fixed;
 `
 
 const BaseColumn = styled.div`
@@ -125,6 +148,9 @@ overflow-y: scroll;
 ::-webkit-scrollbar {
   display: none;
 }
+`
+
+const Heading = styled.div`
 `
 
 const Close = styled.span`
