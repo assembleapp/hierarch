@@ -37,9 +37,13 @@ class Sidebar extends React.Component {
             <a href="#" onClick={() => scope.signal("add_prior", null)}>
             + prior
             </a>
-            |
+            &nbsp;|&nbsp;
             <a href="#" onClick={() => scope.signal("add_behind", null)}>
             + behind
+            </a>
+            &nbsp;|&nbsp;
+            <a href="#" onClick={() => scope.signal("display", null)}>
+            change
             </a>
           </Heading>
         )}
