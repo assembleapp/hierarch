@@ -12,6 +12,20 @@ class Box extends React.Component {
   render = () => {
     var { original, children, code, ...remainder } = this.props
 
+    var add_icon = `
+      font-size: 1.6rem;
+      border: 2px solid #ccc3da;
+      border-radius: 50%;
+      display: block;
+      width: 1.2rem;
+      height: 1.2rem;
+      content: "+";
+      align-self: center;
+      color: #ccc3da;
+      text-align: center;
+      line-height: 1rem;
+    `
+
     const Original = styled(original).attrs(p => ({
       "data-code": p.code,
       style: {
@@ -20,20 +34,11 @@ class Box extends React.Component {
         outlineColor: (p.signal.signal === "display" && p.signal.code === p.code) ? "red" : "blue",
       },
     }))`
-    ${p => (p.signal.signal === "display" && p.signal.code === p.code) && css`{
-      &:before {
-        font-size: 1.6rem;
-        border: 2px solid #ccc3da;
-        border-radius: 50%;
-        display: block;
-        width: 1.2rem;
-        height: 1.2rem;
-        content: "+";
-        align-self: center;
-        color: #ccc3da;
-        text-align: center;
-        line-height: 1rem;
-      }
+    ${p => (p.signal.signal === "add_prior" && p.signal.code === p.code)
+      && css`&:before {${add_icon}}
+    `}
+    ${p => (p.signal.signal === "add_behind" && p.signal.code === p.code)
+      && css`&:after {${add_icon}}
     `}
     `
 
