@@ -7,7 +7,7 @@ Make pages, quick and easy.
 Build pages using common and easy in-place changes,  
 producing clean code you can use in any place you like.
 
-Hierarch records changes in your source code as you make upgrades.
+Hierarch records upgrades in your source code as you make changes.
 
 ![Basic Use Case](./recordings/basic_use_case.gif)
 
