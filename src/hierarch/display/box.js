@@ -65,15 +65,15 @@ class Box extends React.Component {
             signal={scope.chosen}
             code={code}
             onClick={(e) => {
-              if(scope.signal.signal === "display")
+              if(scope.chosen.signal === "display")
                 scope.signal('change', code)
-              if(scope.signal.signal === "add_prior") {
+              if(scope.chosen.signal === "add_prior") {
                 add_ahead(scope.address, scope.index, code, "BlockA")
                   .then(() => apply_boxes(scope.index, scope.address))
                   .then(() => apply_boxes(scope.index, scope.address))
                 // .then(() => scope.signal('change', code))
               }
-              if(scope.signal.signal === "add_behind") {
+              if(scope.chosen.signal === "add_behind") {
                 add_behind(scope.address, scope.index, code, "BlockB")
                   .then(() => apply_boxes(scope.index, scope.address))
                   .then(() => apply_boxes(scope.index, scope.address))
@@ -131,7 +131,21 @@ class Box extends React.Component {
             signal={scope.chosen}
             code={code}
             onClick={(e) => {
-              scope.signal('change', code)
+              if(scope.chosen.signal === "display")
+                scope.signal('change', code)
+              if(scope.chosen.signal === "add_prior") {
+                add_ahead(scope.address, scope.index, code, "BlockA")
+                  .then(() => apply_boxes(scope.index, scope.address))
+                  .then(() => apply_boxes(scope.index, scope.address))
+                // .then(() => scope.signal('change', code))
+              }
+              if(scope.chosen.signal === "add_behind") {
+                add_behind(scope.address, scope.index, code, "BlockB")
+                  .then(() => apply_boxes(scope.index, scope.address))
+                  .then(() => apply_boxes(scope.index, scope.address))
+                // .then(() => scope.signal('change', code))
+              }
+
               if(scope.open) {
                 e.stopPropagation()
                 e.preventDefault()
