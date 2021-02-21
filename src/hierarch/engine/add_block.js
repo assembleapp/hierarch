@@ -3,7 +3,14 @@ import push_upgrades from "./push_upgrades"
 var add_ahead = (address, program, code, block_name) => {
   console.log("adding ahead", code)
   var block = choose_block(code, program)
-  var upgrades = []
+
+  display_surroundings(program, block)
+
+  var upgrades = [{
+    begin: block.startIndex,
+    end: block.startIndex,
+    grade: ''
+  }]
 
   return push_upgrades(address, upgrades)
 }
@@ -34,8 +41,13 @@ var choose_block = (code, program) => {
     (#eq? @closing-name "Box")
   ) @element`)
 
-  program.debug_query(matches)
-  return matches[0].captures.filter(x => x.name === "element")[0]
+  return matches[0].captures.filter(x => x.name === "element")[0].node
+}
+
+var display_surroundings = (program, block) => {
+  console.log(
+    program.source.slice(block.startIndex - 20, block.endIndex + 20)
+  )
 }
 
 export { add_ahead, add_behind }
