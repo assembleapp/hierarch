@@ -69,11 +69,11 @@ class Box extends React.Component {
                 scope.signal('change', code)
               if(scope.chosen.signal === "add_prior") {
                 add_ahead(scope.address, scope.index, code, "BlockA")
-                // .then(() => scope.signal('change', code))
+                  .then(block_code => scope.signal('change', block_code))
               }
               if(scope.chosen.signal === "add_behind") {
                 add_behind(scope.address, scope.index, code, "BlockB")
-                // .then(() => scope.signal('change', code))
+                  .then(block_code => scope.signal('change', block_code))
               }
 
               if(scope.open) {
@@ -131,11 +131,11 @@ class Box extends React.Component {
                 scope.signal('change', code)
               if(scope.chosen.signal === "add_prior") {
                 add_ahead(scope.address, scope.index, code, "BlockA")
-                // .then(() => scope.signal('change', code))
+                  .then(block_code => scope.signal('change', block_code))
               }
               if(scope.chosen.signal === "add_behind") {
                 add_behind(scope.address, scope.index, code, "BlockB")
-                // .then(() => scope.signal('change', code))
+                  .then(block_code => scope.signal('change', block_code))
               }
 
               if(scope.open) {

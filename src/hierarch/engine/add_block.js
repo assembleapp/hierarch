@@ -3,39 +3,41 @@ import push_upgrades from "./push_upgrades"
 var add_ahead = (address, program, code, block_name) => {
   var block = choose_block(code, program)
   var lead = leading_spaces(program, block)
+  var block_code = Math.random().toString()
 
   var upgrades = [{
     begin: block.startIndex,
     end: block.startIndex,
     grade:
-    `<Box original={Div} code="${Math.random()}">\n` +
+    `<Box original={Div} code="${block_code}">\n` +
     `${lead}  click and change.\n` +
     `${lead}</Box>\n` +
     `\n` +
     `${lead}`
   }]
 
-  return push_upgrades(address, upgrades)
+  return push_upgrades(address, upgrades).then(() => block_code)
 }
 
 var add_behind = (address, program, code, block_name) => {
   var block = choose_block(code, program)
   var lead = leading_spaces(program, block)
+  var block_code = Math.random().toString()
 
   var upgrades = [{
-    begin: block.startIndex,
-    end: block.startIndex,
+    begin: block.endIndex,
+    end: block.endIndex,
     grade:
     `\n` +
     `\n` +
-    `${lead}<Box original={Div} code="${Math.random()}">\n` +
+    `${lead}<Box original={Div} code="${block_code}">\n` +
     `${lead}  click and change.\n` +
     `${lead}</Box>\n` +
     `${lead}`
   }]
 
 
-  return push_upgrades(address, upgrades)
+  return push_upgrades(address, upgrades).then(() => block_code)
 }
 
 var choose_block = (code, program) => {

@@ -107,7 +107,7 @@ padding: 0 4rem;
 `
 
 const Logo = styled.img`
-height: 100%;
+height: 6rem;
 margin-right: 2rem;
 `
 
@@ -115,7 +115,6 @@ const Header = styled.header`
 display: flex;
 flex-direction: row;
 font-size: 1rem;
-height: 6rem;
 align-items: flex-end;
 `
 
