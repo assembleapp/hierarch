@@ -8,7 +8,7 @@ var add_ahead = (address, program, code, block_name) => {
     begin: block.startIndex,
     end: block.startIndex,
     grade:
-    `<Box original={Div} code={${Math.random()}}>\n` +
+    `<Box original={Div} code="${Math.random()}">\n` +
     `${lead}  click and change.\n` +
     `${lead}</Box>\n` +
     `\n` +
@@ -28,7 +28,7 @@ var add_behind = (address, program, code, block_name) => {
     grade:
     `\n` +
     `\n` +
-    `${lead}<Box original={Div} code={${Math.random()}}>\n` +
+    `${lead}<Box original={Div} code="${Math.random()}">\n` +
     `${lead}  click and change.\n` +
     `${lead}</Box>\n` +
     `${lead}`
