@@ -33,7 +33,7 @@ var choose_block = (code, program) => {
   ) @element`)
 
   program.debug_query(matches)
-  return matches.captures.filter(x => x.name === "element")[0]
+  return matches[0].captures.filter(x => x.name === "element")[0]
 }
 
 var push_upgrades = (address, upgrades) => (
