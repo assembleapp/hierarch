@@ -14,15 +14,14 @@ const HierarchScope = React.createContext({
   hierarchy: [0,0,[],"",false],
   index: null,
   signal: (s, code) => {},
-
-  open: false,
 })
 
 class Hierarch extends React.Component {
   state = {
+    open: false,
+
     address: "src/App.js",
     index: null,
-    open: false,
     hierarchy: [0,0,[],"",false],
     scope: {
       code: null,
@@ -112,8 +111,6 @@ class Hierarch extends React.Component {
         hierarchy: this.state.hierarchy,
         index: this.state.index,
         signal: this.signal,
-
-        open: this.state.open,
       }}
     >
       <Display

@@ -76,12 +76,10 @@ class Box extends React.Component {
                   .then(block_code => scope.signal('change', block_code))
               }
 
-              if(scope.open) {
-                e.stopPropagation()
-                e.preventDefault()
-                e.bubbles = false
-                return false
-              }
+              e.stopPropagation()
+              e.preventDefault()
+              e.bubbles = false
+              return false
             }}
           >
             {children instanceof Array
@@ -138,12 +136,10 @@ class Box extends React.Component {
                   .then(block_code => scope.signal('change', block_code))
               }
 
-              if(scope.open) {
-                e.stopPropagation()
-                e.preventDefault()
-                e.bubbles = false
-                return false
-              }
+              e.stopPropagation()
+              e.preventDefault()
+              e.bubbles = false
+              return false
             }}
           >
             {children instanceof Array
@@ -175,12 +171,11 @@ class Box extends React.Component {
             code={code}
             onClick={(e) => {
               scope.signal('resize', code)
-              if(scope.open) {
-                e.stopPropagation()
-                e.preventDefault()
-                e.bubbles = false
-                return false
-              }
+
+              e.stopPropagation()
+              e.preventDefault()
+              e.bubbles = false
+              return false
             }}
           />
         )
