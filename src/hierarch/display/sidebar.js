@@ -27,12 +27,12 @@ class Sidebar extends React.Component {
   }
 
   render = () => (
-    <Place
-      place={this.props.place}
-      hold={this.props.hold}
-    >
-      <HierarchScope.Consumer>
-        {scope => (
+    <HierarchScope.Consumer>
+      {scope => (
+        <Place
+          place={this.props.place}
+          hold={this.props.hold}
+        >
           <Heading>
             <a href="#" onClick={() => scope.signal("add_prior", null)}>
             + prior
@@ -46,38 +46,41 @@ class Sidebar extends React.Component {
             change
             </a>
           </Heading>
-        )}
-      </HierarchScope.Consumer>
 
-      <MainBody>
-        <ScrollColumn>
-          <ScrollBox onChange={num => {
-            console.log(num)
-            this.setState({ scroll: num })
-          }} />
-          <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
+          <MainBody>
+            <ScrollColumn>
+              <ScrollBox onChange={num => {
+                console.log(num)
+                this.setState({ scroll: num })
+              }} />
+              <Pane chosen={this.state.scroll === 0}>Hierarch</Pane>
+              <Pane chosen={this.state.scroll === 1}>code</Pane>
 
-          {Object.keys(panes).map((pane, i) => (
-            <Pane chosen={this.state.scroll === (i + 1)}>{pane}</Pane>
-          ))}
-        </ScrollColumn>
+              {Object.keys(panes).map((pane, i) => (
+                <Pane chosen={this.state.scroll === (i + 2)}>{pane}</Pane>
+              ))}
+            </ScrollColumn>
 
-        <Column>
-          <div>
-            <span>Hierarch</span>
-            <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
-          </div>
+            <Column>
+              <div>
+                <span>Hierarch</span>
+                <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
+              </div>
 
-          {this.state.scroll === 0
-          ? this.props.children
-          : <img
-            src={panes[Object.keys(panes)[this.state.scroll - 1]]}
-            alt={Object.keys(panes)[this.state.scroll - 1]}
-            />
-          }
-        </Column>
-      </MainBody>
-    </Place>
+              {this.state.scroll === 0
+              ? this.props.children
+                : this.state.scroll === 1
+                  ? <pre><code>{scope.index.source}</code></pre>
+                  : <img
+                    src={panes[Object.keys(panes)[this.state.scroll - 2]]}
+                    alt={Object.keys(panes)[this.state.scroll - 2]}
+                    />
+              }
+            </Column>
+          </MainBody>
+        </Place>
+      )}
+    </HierarchScope.Consumer>
   )
 }
 
