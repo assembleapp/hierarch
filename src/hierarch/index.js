@@ -1,23 +1,21 @@
 import React from "react"
 import styled from "styled-components"
 
-import Change from "./display/change"
-import Grid from "./display/grid"
-import Hierarchy from "./display/hierarchy"
 import Logo from "./display/logo"
 import Sidebar from "./display/sidebar"
 
 import makeProgram from "./engine/program"
 import apply_boxes from "./engine/apply_boxes"
-import Scope from "./engine/scope"
 import parse_hierarchy from "./engine/parse_hierarchy"
 
 const HierarchScope = React.createContext({
   address: null,
-  open: false,
-  index: null,
   chosen: { code: null, signal: null },
+  hierarchy: [0,0,[],"",false],
+  index: null,
   signal: (s, code) => {},
+
+  open: false,
 })
 
 class Hierarch extends React.Component {
@@ -110,10 +108,12 @@ class Hierarch extends React.Component {
     <HierarchScope.Provider
       value={{
         address: this.state.address,
-        index: this.state.index,
-        open: this.state.open,
         chosen: this.state.scope,
+        hierarchy: this.state.hierarchy,
+        index: this.state.index,
         signal: this.signal,
+
+        open: this.state.open,
       }}
     >
       <Display
@@ -144,38 +144,7 @@ class Hierarch extends React.Component {
             close={() => this.setState({ open: false })}
             display={(code) => this.signal("display", code)}
             place={this.state.mouse}
-          >
-            {this.state.scope.signal === 'grid'
-            ?
-              <Scope
-              {...JSON.parse(this.state.scope.code)}
-              >
-                {(model, upgrade) => (
-                  <Grid
-                  schema={JSON.parse(this.state.scope.code).schema}
-                  model={model}
-                  upgradeRecord={this.upgradeRecord(model, upgrade)}
-                  />
-                )}
-              </Scope>
-            : (
-              this.state.scope.signal === 'change'
-              ?
-                <Change.Board>
-                  <Change.Color name="background-color" />
-                  <Change.Color name="color" />
-                  <Change.Size name="font-size" />
-                  <Change.Size name="width" />
-                  <Change.Size name="height" />
-                </Change.Board>
-              :
-                <Hierarchy
-                  hierarchy={this.state.hierarchy}
-                  display={this.props.display}
-                />
-              )
-            }
-          </Sidebar>
+          />
         :
           <Corner>
             <Logo

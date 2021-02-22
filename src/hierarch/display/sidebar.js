@@ -6,6 +6,11 @@ import { observable } from "mobx"
 import { Observer } from "mobx-react"
 
 import { HierarchScope } from "../index"
+import Scope from "../engine/scope"
+
+import Change from "./change"
+import Grid from "./grid"
+import Hierarchy from "./hierarchy"
 
 import size from "../mockup/size.png"
 import spacing from "../mockup/spacing.png"
@@ -67,20 +72,50 @@ class Sidebar extends React.Component {
                 <Close onClick={() => this.props.close()}><Icon path={mdiClose} size={1} /></Close>
               </div>
 
-              {this.state.scroll === 0
-              ? this.props.children
-                : this.state.scroll === 1
-                  ? <pre><code>{scope.index.source}</code></pre>
-                  : <img
-                    src={panes[Object.keys(panes)[this.state.scroll - 2]]}
-                    alt={Object.keys(panes)[this.state.scroll - 2]}
-                    />
+              {this.state.scroll === 0 ? this.renderHierarch(scope)
+              : this.state.scroll === 1 ? <pre><code>{scope.index.source}</code></pre>
+              : <img
+                src={panes[Object.keys(panes)[this.state.scroll - 2]]}
+                alt={Object.keys(panes)[this.state.scroll - 2]}
+                />
               }
             </Column>
           </MainBody>
         </Place>
       )}
     </HierarchScope.Consumer>
+  )
+
+  renderHierarch = (scope) => (
+            scope.signal === 'grid'
+            ?
+              <Scope
+              {...JSON.parse(scope.code)}
+              >
+                {(model, upgrade) => (
+                  <Grid
+                  schema={JSON.parse(scope.code).schema}
+                  model={model}
+                  upgradeRecord={this.upgradeRecord(model, upgrade)}
+                  />
+                )}
+              </Scope>
+            : (
+              scope.signal === 'change'
+              ?
+                <Change.Board>
+                  <Change.Color name="background-color" />
+                  <Change.Color name="color" />
+                  <Change.Size name="font-size" />
+                  <Change.Size name="width" />
+                  <Change.Size name="height" />
+                </Change.Board>
+              :
+                <Hierarchy
+                  hierarchy={scope.hierarchy}
+                  display={this.props.display}
+                />
+              )
   )
 }
 
