@@ -172,11 +172,11 @@ class Scope extends React.Component {
     this.graph = graph(p.source, p.passcode)
     this.query = makeQuery(p.schema, p.order)
 
-    // if(window.source !== p.source || window.schema !== JSON.stringify(p.schema) || !window.model) {
+    if(window.source !== p.source || window.schema !== JSON.stringify(p.schema) || !window.model) {
         window.source = p.source
         window.schema = JSON.stringify(p.schema)
         window.model = makeModel(p.schema)
-    // }
+    }
 
     this.subscribe()
   }
