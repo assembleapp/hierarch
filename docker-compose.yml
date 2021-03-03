@@ -1,0 +1,12 @@
+version: "2.1"
+
+services:
+  hierarch:
+    build: .
+    image: assemble/hierarch
+    command: node hierarch
+    volumes:
+      - .:/hierarch
+      - /hierarch/node_modules
+    ports:
+      - 4321:4321
