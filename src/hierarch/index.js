@@ -36,7 +36,7 @@ class Hierarch extends React.Component {
   }
 
   pullSource = () => {
-    fetch(`http://0.0.0.0:4321/source?address=${this.state.address}`)
+    fetch(`http://${process.env.REACT_APP_HIERARCH_ADDRESS}/source?address=${this.state.address}`)
       .then(response => response.text())
       .then(response => makeProgram(response))
       .then(program => {
