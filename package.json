@@ -172,7 +172,6 @@
     "@mdi/js": "^5.8.55",
     "@mdi/react": "^1.4.0",
     "express-reload": "^1.2.0",
-    "react-table": "^7.6.2",
-    "tree-sitter": "^0.17.1"
+    "react-table": "^7.6.2"
   }
 }
