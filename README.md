@@ -41,6 +41,33 @@ Click the cube, then press spacebar and secondary-click your mouse.
 Click around your page and make changes,  
 keeping an eye on your code in `src/App.js`.
 
+## Run a packaged sandbox on a docker-enabled machine
+
+Use a `.env` file like so:
+
+```
+DOMAIN=raspberrypi.local
+HIERARCH_CHANNEL=4321
+PACKAGE_CHANNEL=3000
+```
+
+Launch one container, with ports matching the channels in `.env`
+
+```
+sudo docker run --env-file .env -p 3000:3000 -p 4321:4321 -it --rm assemble/hierarch yarn go
+```
+
+Launch a second process in the same container, making hierarch's magic run.
+
+```
+sudo docker exec suspicious_curie /usr/local/bin/node hierarch
+```
+
+The process will launch, reading `DOMAIN` and ...`_CHANNEL` values,
+and prepare a packaged webpage so consumers can play around in a sandbox online.
+When you're done, run `sudo docker kill suspicious_curie`
+and all changes will be erased.
+
 ## License
 
 During our build phase,  
