@@ -1,19 +1,7 @@
-const Parser = require("tree-sitter")
-const JavaScript = require("tree-sitter-javascript")
-const Css = require("tree-sitter-css")
-
-const languages = {
-  js: JavaScript,
-  css: Css,
-}
-
 class Program {
   constructor(name, source) {
     this.name = name
     this.source = source
-    this.parser = new Parser()
-    this.parser.setLanguage(JavaScript)
-    this.parsed = this.parser.parse(this.source)
   }
 
   replace_by_indices(begin, end, upgrade = "") {
@@ -27,7 +15,7 @@ class Program {
     ;([changed_source, change] = spliceInput(this.source, begin, end - begin, upgrade));
     // this.source = this.source.slice(0, begin) + upgrade + this.source.slice(end)
 
-    this.parsed.edit(change)
+
     this.source = changed_source
   }
 }
