@@ -54,7 +54,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) ||
   parseInt(process.env.PACKAGE_CHANNEL, 10) ||
   3000;
-const HOST = process.env.HOST || process.env.DOMAIN || '0.0.0.0';
+const HOST = process.env.HOST || '0.0.0.0';
 
 if (process.env.HOST) {
   console.log(
